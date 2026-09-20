@@ -13,8 +13,9 @@ see everything currently waiting on a human call.
 A fast, top-down action-roguelike. Combat flow in the family of Hades and Cult of the
 Lamb: short commitments, dash as the answer to everything, readable enemy telegraphs.
 
-**Undecided** — setting, tone, factions, who the player is and why.
-The working title suggests AI as subject matter; nothing is established.
+You are a robot, sent down by an AI to gather resources from a strange world and to find
+out what is there. The world is not empty. Tone, the AI's character, and what "down there"
+turns out to mean are the next things to write — see World and fiction.
 
 ## Core loop (first cut)
 
@@ -107,16 +108,26 @@ follows the lunge automatically.
 
 ## World and fiction
 
-**Undecided** — see Premise.
+The first place is **Rustwater Shelf**: a drained alkali basin under a dim violet sky.
+Mineral silt has set into terraces the colour of cold ash; the wreck of an earlier
+expedition lies half-sunk in it, plating peeled back and still faintly powered. The only
+real light is bioluminescent crystal blooming from the cracks — a cold mint green that
+pools on the silt. The robot's lamp is the second light source, and it is small.
+
+**Undecided** — the AI that sent the robot (voice, motive, whether it can be trusted),
+what the earlier expedition was, and what lives here. `world-builder` owns these next.
 
 ## Art direction
 
-2D, top-down, Universal Render Pipeline (2D renderer). Placeholder solid-colour shapes
-until a direction exists.
+Painted 2.5D in the manner of Hades: props and, later, characters are modelled and
+toon-rendered in Blender from a fixed 35°-tilted orthographic camera, then placed as sprites
+over a painted floor; gameplay stays on the flat plane with honest 2D footprints. One
+consistent key light is baked into every sprite. Glow is green; red belongs to enemy
+telegraphs and blue to the player, and scenery is kept desaturated so that contract holds.
+Details, palette and the rendering rig: `docs/ART.md`.
 
-**Undecided** — visual style, palette, whether sprites rotate or flip.
-Affects: how much of the art can be sourced (`asset-scout`) versus authored
-(`blender-artist`), and animation approach.
+**Assumed** — the camera tilt of 35° and the biome-1 palette. Not reviewed by you beyond
+"2.5D like Hades". Both are single values in the render script.
 
 ## Platform and input
 
