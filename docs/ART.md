@@ -119,7 +119,7 @@ side walls are geometry only until side faces exist at the 15 m length.
 The player is an animated humanoid android on the Quaternius universal rig (UAL2 Female
 Mannequin, CC0, `Tools/blender/src/Quaternius/UAL2/`), re-proportioned in Blender to a
 Bayonetta silhouette — long legs, narrow waist, long neck, heeled stance, helm-hair swept up,
-a visor line, an energy blade — and rendered through the same rig as everything else: 35°
+a visor slit, an energy blade — and rendered through the same rig as everything else: 35°
 billboard camera, toon steps, 0.018 m inverted-hull outline, `actor_rim` per frame. Attitude
 comes from silhouette and pose, never from anatomy; it has to read at 128 PPU.
 
@@ -143,18 +143,34 @@ pivot stays exact (0.5, 0.2239). 8 columns × 7 rows puts the sheet at **2048 ×
 the WebGL cap on both axes — and it is that cap, not the art, that fixes the frame width at
 256, so a blade at *full* extension does not fit. The strike frames are sampled a frame and a
 half off peak extension for that reason; widening the frame would cost a column and blow the
-height cap. Margins at v1 are 1.3 px sideways, 2.5 px below and 9.6 px above: re-pose the
-character and re-measure before assuming there is room.
+height cap. Margins are 2.8 px sideways, 4.4 px below and 11.6 px above: re-pose the character, or
+resize the helm, and re-measure before assuming there is room.
 
-**Two of the eight clips are not in the library.** The UAL2 pack in the repo is a 43-action
-subset, not the full 120+, and it has no run and no death. `lady_rig.py` constructs both and
-says so: the **run** is `Walk_Carry_Loop`'s lower body with the stride amplified, the carry's
-backward pelvis pitch cancelled, the torso pitched forward and an authored arm swing driven off
-the posed thigh angle; the **death** is `LayToIdle` — a get-up from supine — sampled backwards.
-The **hit** is `Idle_Shield_Break`, not `Hit_Knockback`, because that clip has no flinch in it:
-it is doubled over on its first frame and airborne by its third, so every sampling of it gave a
-knockdown identical to the death. If a future pack adds a real run, death or hit reaction,
-these three are the entries to replace.
+**Three of the eight clips are constructed.** The UAL2 pack in the repo is a 43-action subset,
+not the full 120+. Every one of the 43 was measured for stride amplitude, leg antiphase, ground
+contact and looping: exactly two are forward locomotion cycles, `Walk_Carry_Loop` (antiphase
+−0.96) and `Zombie_Walk_Fwd_Loop` (−0.68), and **both are walks**. There is no sprint, no jog
+and no death in the pack at all.
+
+- **run** — `Walk_Carry_Loop`'s lower body, stride amplified, the carry's backward pelvis pitch
+  cancelled, the lean taken at the waist so the back stays straight, arms driven off the posed
+  thigh angle so they stay opposed by construction, and the blade angled back at the wrist. The
+  part that makes it a run rather than a stretched walk is **knee drive**: the knee is folded in
+  proportion to how far the thigh is from vertical, which gives knee-up in front and heel-up
+  behind. Amplifying the hip swing alone exaggerates a walk's *reach*, which is the opposite of
+  what a run does, and it looked like diving.
+- **death** — `LayToIdle`, a get-up from supine, sampled backwards.
+- **hit** — `Idle_Shield_Break`, not `Hit_Knockback`: that clip has no flinch in it, being
+  doubled over on its first frame and airborne by its third, so every sampling of it gave a
+  knockdown identical to the death.
+
+The **idle** is half constructed too. `Idle_No_Loop` measures 3° of stride and 7 mm of hip
+travel over its whole length — it is a held pose, so a breath cycle is authored on top of it:
+chest, shoulder and weight-shift terms on one period that closes over the eight frames, and
+never on the pelvis, because the legs hang off the pelvis and the feet have to stay welded to
+the footprint pivot. It contributes +2.2 px of chest rise on top of the action's 1.4.
+
+If a future pack adds a real run, death, hit reaction or idle, these are the entries to replace.
 
 **Modular by construction.** In Blender the character is separate objects on one rig —
 `body`, `hair`, `outfit_top`, `outfit_bottom`, `weapon`. `--parts` renders each part alone
@@ -180,21 +196,33 @@ another. The tiling floor is the reason there is still headroom. Headless EEVEE 
 context; the render script falls back to Cycles CPU, which the emission-only shading makes
 equivalent.
 
-## The contrast rule vs. a black character — **Assumed**
+## The player's surface — and why it is not black
 
-The player android is gloss black, and the contrast rule asks actors to sit **25 L\*** from the
-floor behind them. Measured against the L\* 26.7 plate she does not: mean 31.1 (+4.3), p25 20.0
-(−6.8), median 27.3 (+0.6), p75 39.0 (+12.3). The rule is unreachable from either direction —
-clearing it downward needs a body at L\* ≈ 2, which is blacker than the outline and turns the
-character into a hole, and clearing it upward needs L\* ≈ 52, which is not a black character.
+The android was gloss black for one pass and it did not survive contact with the game's own
+scale. A 1.8 m figure is about 130 px tall under this camera; a hull whose three toon steps
+all landed between L\* 7 and L\* 27 had no readable interior, and what reached the screen was
+a silhouette holding a sword. The hull is now a **dark gloss slate** (`#444A58`) whose steps
+are solved backwards from the three values the surface has to hit — base L\* 22 on the flank,
+L\* 40 camera-facing, L\* 55 where the key catches shoulders, thighs and the helm crown. The
+torso shell is a further step lighter (`#646C7E`, ~L\* 45) so the torso never merges with the
+limbs. Measured on the shipped sheet, hull and panel pixels run p05 19 · p25 37 · p50 49 ·
+p75 52, which is those steps within a few points — `KEY_COL` is warm and pulls them slightly
+under target.
 
-What she separates by instead is the rim (L\* 49.2, **+22.1** over the surface behind it, so the
-18 L\* rim rule *does* pass), the 2.1% black outline, the copper collar and waist, and 7.1% of
-energy blue. `Tools/blender/out/preview_lady.png` is the check that matters and she reads
-cleanly on the plate. Treat the 25 L\* line as "actors of scenery-like tone"; a deliberately
-black actor is the exception and is covered by the rim rule instead. **To overrule:** lift
-`HULL`/`PANEL` in `Tools/blender/lady_rig.py` to a graphite around L\* 52 and she meets the
-letter of the rule, at the cost of not being a black android.
+**The contrast rule passes.** Against the L\* 26.7 plate the character measures mean 49.9
+(**+23.2**), median 51.5 (**+24.8**), p75 57.8 (**+31.1**), and the black outline sits 26.7
+below the floor. The rim band is L\* 69.0, **+19.0** over the surface behind it, against the
+18 the rule asks for.
 
-Player blue at hue ≈ 200 is 18.4% of her pixels and above 25% saturation. The hue ban in the
-contrast rule is on **scenery**; blue means the player, and this is the player.
+One trap is worth writing down, because it cost a render to find: **`actor_rim`'s strength is
+not portable between surfaces.** The lift is added in linear light, so the brighter the
+surface the more of it is needed to move the same distance in L\*. The same rim that measured
++22 L\* over the black hull measured **+5.5** over the slate one and had to be re-solved from
+0.15 to 0.42. Anything that changes an actor's base tone invalidates its `rim_amount`; the
+audit prints the delta, so check it.
+
+Player blue at hue ≈ 200 is about 17% of her pixels and above 25% saturation. The hue ban in
+the contrast rule is on **scenery**; blue means the player, and this is the player. The energy
+*lines* — limbs, spine, visor — are 5.1% of her opaque pixels against an 8% budget, measured
+with the rim band excluded, because the rim is player blue too but is a separate thing the
+rule requires of every actor rather than a marking on this one.
