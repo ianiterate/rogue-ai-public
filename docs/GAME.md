@@ -26,9 +26,14 @@ controller in hand before anything is stacked on it.
 ## Controls
 
 Controller-centric. Left stick moves and aims (aim is the last non-zero move
-direction, resolved at full 360°). Face buttons: **Dash** and **Attack**. Keyboard
-and mouse mapped as a secondary scheme; on-screen touch controls later for the browser
-build, feeding the same actions.
+direction, resolved at full 360°). Face buttons: **Dash** (south) and **Attack** (west).
+Keyboard is the secondary scheme: WASD / arrows, Space to dash, J to attack. The mouse
+does nothing in play — it is reserved for the on-screen controls and UI.
+
+**On-screen controls.** A virtual stick (bottom-left) and ATTACK / DASH buttons
+(bottom-right) drive the same actions. They appear on touch devices, and on any device
+with no gamepad connected; they hide the moment a gamepad connects. Portrait phones get
+a full-screen "turn your phone sideways" prompt instead of the controls until rotated.
 
 Dash cancels the *recovery* of an attack, never its startup or active frames. A short
 input buffer (~0.12 s) accepts a press slightly before it can be honoured.
