@@ -72,6 +72,13 @@ Saturation is not capped. Instead:
 - The wedge at 0.55 alpha is checked against both floor plates; the arc against the brightest
   plate and against copper. Per biome.
 
+## What blocks
+
+**What stands up blocks; what lies flat is walkable.** Every obstacle is an upright sprite with
+an outline and a shadow on the floor under it; every walkable element — lichen, grates, cables,
+cracks, inlays — is painted flat into the floor with no outline and no shadow. A player never
+has to test a prop to learn whether it is solid. The shadow is the tell: only solids cast one.
+
 ## Layering
 
 Floor −100 · decals −90 · blob shadows −80 · danger wedge −70 · slash arc −60 · aim pointer −50 ·
