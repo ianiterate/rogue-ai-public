@@ -81,12 +81,11 @@ them.
 
 ## Light and post
 
-A global multiply light at 1.0 leaves painted values exact. Glow is painted into the sprites;
-additive 2D lights only seat it — a small pool on the floor, foreshortened into an ellipse by
-the camera, which is correct. Player lamp 0.2 within 2 m; crystals 0.4 within 2.6 m. Bloom 0.30
-above threshold 1.15; vignette 0.22. Bloom is the largest frame cost on mobile and is switched
-off by the low-FX setting. The camera is clamped so the visible floor never leaves the painted
-32×22 plate field.
+One global light at 1.0, nothing else: painted values stay exact and every glow is paint in the
+sprite. Additive point lights and bloom were tried and removed — soft pools pulsing over
+painted art read as noise and added nothing to the Hades look, which is painted glow, not
+real-time glow. Vignette stays at 0.22. The camera is clamped so the visible floor never
+leaves the 32×22 plate field.
 
 ## WebGL caveats
 
