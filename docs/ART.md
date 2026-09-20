@@ -47,8 +47,9 @@ does that job, because a baked shadow would stand up with the billboard. Every r
 and reproducible; the manifest in `Tools/blender/biome1.py` is the source of truth, and
 `Tools/build_assets.sh` installs a kit only when the whole set rendered.
 
-The floor is a 4×4 m tiling plate drawn repeated over the room, plus a few hero inlays — the
-visible grid Hades has, at a fraction of the texture memory of a single painting.
+The floor is an 8×8 m sheet of four distinct 4 m plates, tiled over the room so the visible
+4 m grid is continuous while the ornament repeats only every 8 m, plus a few hero inlays — the
+grid Hades has, at a fraction of the texture memory of a single painting.
 
 All scenery and characters are our own work; nothing here needs attribution.
 

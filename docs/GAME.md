@@ -44,6 +44,12 @@ recovery — and a press during a swing's wind-up is queued, not dropped. Attack
 a dash produces a quick dash-strike that carries the dash's momentum: dash → strike → dash
 is the core rhythm.
 
+Movement is planted: the robot runs at 5.5 u/s (the 24 u room in about 4.4 s), reaches that
+speed and stops within a frame or two, and reverses without an arc — Hades' instant turns.
+The camera follows with a 0.12 s soft lag, enough to cushion a dash without making a stopped
+robot look like it slides. Decided from play-testing (2026-09-20): 7 u/s was too fast for
+the room and the 0.3 s camera lag read as drift.
+
 **Assumed** — the post-dash dash-strike window (attack pressed just *after* a dash still
 counts as a dash-strike) ships disabled, and the third hit's short uncancellable tail is off.
 Not reviewed by you. Both are single fields to turn on after a play-test.
@@ -101,10 +107,11 @@ the next ones off and finishes its swing through them.
 Death holds the frame for a beat, then the arena reloads fresh. Clearing the room brings the
 next wave after a short pause.
 
-**Assumed** — the numbers: chase 6 vs run 7, wind-up 0.28 s with the lunge in its last 0.14 s
+**Assumed** — the numbers: chase 5 vs run 5.5, wind-up 0.28 s with the lunge in its last 0.14 s
 at 18 u/s, active 0.10 s, damage 2 of 10, two concurrent attackers, stun budget 0.9 s per
 2.5 s, five enemies per wave. Not reviewed by you. All inspector fields; the wedge's reach
-follows the lunge automatically.
+follows the lunge automatically. Both sides' numbers live in one table in
+`ArenaSceneBuilder`.
 
 ## World and fiction
 
