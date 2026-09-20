@@ -35,8 +35,16 @@ does nothing in play — it is reserved for the on-screen controls and UI.
 without a gamepad you play on the keyboard. Portrait phones get a full-screen "turn your
 phone sideways" prompt instead of the controls until rotated.
 
-Dash cancels the *recovery* of an attack, never its startup or active frames. A short
-input buffer (~0.12 s) accepts a press slightly before it can be honoured.
+The flow is Hades': you are never locked. Dash cancels any phase of an attack. Moving
+cancels an attack's recovery, so recovery is only felt standing still. Attacks are a
+three-hit chain — each swing steps toward the aim, the third hits harder with a longer
+recovery — and a press during a swing's wind-up is queued, not dropped. Attacking during
+a dash produces a quick dash-strike that carries the dash's momentum: dash → strike → dash
+is the core rhythm.
+
+**Assumed** — the post-dash dash-strike window (attack pressed just *after* a dash still
+counts as a dash-strike) ships disabled, and the third hit's short uncancellable tail is off.
+Not reviewed by you. Both are single fields to turn on after a play-test.
 
 ## The run
 
