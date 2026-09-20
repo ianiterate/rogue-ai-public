@@ -30,8 +30,9 @@ direction, resolved at full 360°). Face buttons: **Dash** (south) and **Attack*
 Keyboard is the secondary scheme: WASD / arrows, Space to dash, J to attack. The mouse
 does nothing in play — it is reserved for the on-screen controls and UI.
 
-**On-screen controls.** A virtual stick (bottom-left) and ATTACK / DASH buttons
-(bottom-right) drive the same actions on touch devices only. Desktop never shows them:
+**On-screen controls.** A floating stick — it appears wherever the left thumb lands on
+the left half of the screen — and ATTACK / DASH buttons (bottom-right) drive the same
+actions on touch devices only. Desktop never shows them:
 without a gamepad you play on the keyboard. Portrait phones get a full-screen "turn your
 phone sideways" prompt instead of the controls until rotated.
 
@@ -84,6 +85,25 @@ above them from their first hit; the player's bar sits top-left.
 
 Deliberately not yet: a directional wipe on the arc, a red hurt vignette, an arc on enemy
 swings. Each is a small addition once the base read is judged by hand.
+
+## Enemies and pressure
+
+Chasers run just under the player's speed, so distance is earned, not free. An attack is a
+committed lunge: the enemy locks its aim, paints its landing lane on the floor, and in the
+last part of a short wind-up launches along it. Walking straight away does not escape it;
+stepping out of the lane early does, and a dash through the strike does.
+
+At most two enemies attack at once; the rest hold at arm's length and circle, so there is
+always one tell to read. Stagger is rationed: a few quick hits stun, then the enemy shrugs
+the next ones off and finishes its swing through them.
+
+Death holds the frame for a beat, then the arena reloads fresh. Clearing the room brings the
+next wave after a short pause.
+
+**Assumed** — the numbers: chase 6 vs run 7, wind-up 0.28 s with the lunge in its last 0.14 s
+at 18 u/s, active 0.10 s, damage 2 of 10, two concurrent attackers, stun budget 0.9 s per
+2.5 s, five enemies per wave. Not reviewed by you. All inspector fields; the wedge's reach
+follows the lunge automatically.
 
 ## World and fiction
 
