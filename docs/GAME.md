@@ -72,6 +72,19 @@ Not reviewed by you. Seeded generation is cheap and gives daily runs and shareab
 seeds; replay-exact physics on top of dynamic rigidbodies is not realistic and is not
 being pursued. Dropping seeded generation later is free.
 
+## Combat feedback
+
+Every hit is read four ways. A coloured arc drawn from the weapon's real hit shape shows
+each swing in its committed direction and freezes with the hit-stop; a small pointer on the
+player always shows where the next swing will go. Whoever is hit flashes white and throws a
+spark at the contact point; enemies shrink out rather than vanish. Sound is real: CC0 clips
+from Kenney for light and heavy swings, enemy hits, a distinctly different player-hurt hit,
+and deaths — nothing plays before the first press in a browser. Enemies show a health bar
+above them from their first hit; the player's bar sits top-left.
+
+Deliberately not yet: a directional wipe on the arc, a red hurt vignette, an arc on enemy
+swings. Each is a small addition once the base read is judged by hand.
+
 ## World and fiction
 
 **Undecided** — see Premise.
