@@ -20,6 +20,15 @@ The camera is orthographic rather than perspective on purpose. Hades' read comes
 foreshortening and upright walls, not from vanishing points, and orthographic keeps billboards
 stable, pivots on colliders and floor effects position-independent.
 
+## Geometry first
+
+The room's structure is real geometry, not sprites: perimeter walls are three-metre boxes,
+pillars are columns, and placeholder obstacles are boxes and prisms, all built by the scene
+builder and coloured in the palette (lit top face, front face, shadowed sides). Under the tilted
+camera every one shows its top edge and its front face, so height reads without any art at all.
+Height runs along −Z, toward the camera; the physics plane stays XY. Drawn sprites — props,
+characters, later wall dressing — sit on top of that structure as billboards.
+
 ## Rendering
 
 Two Blender rigs, selected per sprite:
