@@ -209,12 +209,20 @@ and `oga_surveyor_rig.py` hold the characters.
   model has shins, antennae and struts between 2 and 4 cm at this scale. The thin parts are
   thickened where that also helps the read — a 3 cm leg is 4 px and reads as wire — and the
   hull is matched to the model for the rest.
-- **Both carry a depth squash** (0.70 brute, 0.62 sentry) on the axis the camera never sees
-  end-on. Under the 35° tilt depth is screen height, and the footprint pivot pins the frame's
-  bottom edge 0.504 m below the standing line for *every* actor; a wide-hipped walker at 1.4 m
-  does not fit that. Growing the frame to 320 px was measured and rejected — with the pivot
-  held at 0.224 it sends 78% of the new pixels to the top, where 0.7 m is already going spare.
-  The cost is an outline thinner by that factor on camera-facing edges only.
+- **The Breaker carries a depth squash** (0.70) on the axis the camera never sees end-on.
+  Under the 35° tilt depth is screen height, and the footprint pivot pins the frame's bottom
+  edge 0.504 m below the standing line for *every* actor; a wide-hipped walker at 1.4 m does
+  not fit that. Growing the frame to 320 px was measured and rejected — with the pivot held at
+  0.224 it sends 78% of the new pixels to the top, where 0.7 m is already going spare. The cost
+  is an outline thinner by that factor on camera-facing edges only.
+
+  **The Surveyor carries none, and that is the more useful half of the lesson.** Depth reaches
+  the screen through cos 35° = 0.819 and height through sin 35° = 0.574, so *depth is worth more
+  screen height than height is* and squashing it is the one reliable way to make a character
+  look small. Squashed to 0.55 chasing a thin silhouette, the Surveyor stood 1.7 m in the world
+  and drew 0.67 m of screen against the Breaker's 1.78 m — the taller enemy was the smaller
+  sprite by two and a half times. Thin belongs in screen **X**, the one axis the tilt does not
+  touch.
 - **The scale is solved from the standing frames alone**, and the lift from every frame.
   Coupling the two makes the character's size depend on its death: tucking the Breaker's
   collapse in raised the global minimum, shrank the denominator, scaled the whole robot up, and
@@ -234,11 +242,40 @@ the sensor head points at the floor. Its death is `die3` recentred on its own ar
 that clip pivots the body 83° about its base and a 1.4 m body laid over sweeps its top out of a
 2.0 m frame — rotation, which cancelling drift cannot touch.
 
-**Measured on the shipped sheets**, against the L\* 26.7 plate: Breaker median 58.7 (**+32.0**),
-rim band +19.6; Surveyor median 58.6 (**+31.9**), rim band +18.2. Violet is 1.2% and 3.8% of
-opaque pixels against an 8% budget. Both sheets are 2048 × 1152, 32 frames, no empty frames, and
+**The two enemies split by value, and neither uses `drone_hull`.** That tone was built for a
+single hostile prop and it put both of these at L\* 63 on the actor ramp, where they came out
+chalky — closer in value to the floor's own lit ornament than to anything dangerous, and
+indistinguishable from each other. The Breaker is now **dark scrap alloy** (`#2A3A34`, steps
+solved to L\* 25 / 44 / 56) with copper rivet rows, a wide violet eye slit and violet vent glow
+under the chassis; the Surveyor is **cold pale alloy** (`#96A6B0`, L\* 34 / 48 / 60) with dark
+seams, a violet eye line and an emitter that is the brightest thing on its sheet. Both ramps
+come out of `oga_rig.solve_steps`, which inverts the toon graph's own arithmetic onto target
+L\* values, so "base 25, mid 44, lit 56" is a statement the file can be checked against.
+
+**`actor_rim` is solved per surface, and it had to be measured rather than derived.** The lift
+is added in linear light, so the same amount moves a dark surface much further in L\* than a
+pale one — the trap ART.md already records against the lady. `oga_rig.rim_for` gives the shape
+of the answer but solves against the *flank*, while the band the post-pass writes sits on the
+lit upper silhouette: that put the Breaker at 0.21 and measured +9.4 where the rule asks 18.
+The shipped numbers, 0.35 and 0.335, are interpolated between measured points.
+
+**Measured on the shipped sheets**, against the L\* 26.7 plate: Breaker median 52.1 (**+25.4**),
+rim band **+18.6**; Surveyor median 55.3 (**+28.6**), rim band **+18.0**. Violet is 0.7% and 4.3%
+of opaque pixels against an 8% budget; the hue ban is 0.00% and 0.80%. The Surveyor's silhouette
+measures **1.93 : 1** height-to-width against the Breaker's **0.99 : 1**, which is the split the
+two are meant to be told apart by. Both sheets are 2048 × 1152, 32 frames, no empty frames, and
 their pivot is 0.22390276 — the same float the lady's is, because `_actor_lift` re-solves each
 `cam_lift` from her camera height rather than restating it as a constant.
+
+**Two things the second pass changed in the rig rather than in a character.** `Char.refit` now
+takes its lift from the frames that are *on the ground* — the idle and the move — instead of
+from the lowest frame of the whole sheet: `die1` collapses the chassis below where the feet ever
+go, so the lift that kept the corpse off the plate was the lift that left the Breaker walking
+13 cm in the air. And the Surveyor's shoulders are moved **in edit mode, at the bind**, because
+that is the only place its width lives: its IK targets already sit 0.435 units off the
+centreline, so pulling on them moves the hands 0.09 against a 5.9-unit spread. The Breaker's
+bound now plants two of its eight frames — all six feet driven down, the chassis dropped 45 mm
+onto them — which is what makes it a lunging gait rather than a hop.
 
 **Modular by construction.** In Blender the character is separate objects on one rig —
 `body`, `hair`, `outfit_top`, `outfit_bottom`, `weapon`. `--parts` renders each part alone
