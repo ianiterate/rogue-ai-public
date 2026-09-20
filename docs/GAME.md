@@ -31,9 +31,9 @@ Keyboard is the secondary scheme: WASD / arrows, Space to dash, J to attack. The
 does nothing in play — it is reserved for the on-screen controls and UI.
 
 **On-screen controls.** A virtual stick (bottom-left) and ATTACK / DASH buttons
-(bottom-right) drive the same actions. They appear on touch devices, and on any device
-with no gamepad connected; they hide the moment a gamepad connects. Portrait phones get
-a full-screen "turn your phone sideways" prompt instead of the controls until rotated.
+(bottom-right) drive the same actions on touch devices only. Desktop never shows them:
+without a gamepad you play on the keyboard. Portrait phones get a full-screen "turn your
+phone sideways" prompt instead of the controls until rotated.
 
 Dash cancels the *recovery* of an attack, never its startup or active frames. A short
 input buffer (~0.12 s) accepts a press slightly before it can be honoured.
