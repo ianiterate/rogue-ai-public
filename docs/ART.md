@@ -90,10 +90,28 @@ has to test a prop to learn whether it is solid. The shadow is the tell: only so
 
 ## Layering
 
-Floor −100 · decals −90 · blob shadows −80 · danger wedge −70 · slash arc −60 · aim pointer −50 ·
-walls −10 · **props, player, enemies all at 0, sorted by Y** · spores 22 · sparks 25 · health bars
-30 · HUD 50 · touch controls 100. Tall props still fade to 45% while the player stands behind
-them.
+Floor −100 · decals −90 · wall base shade −85 · cast shadows −80 · contact shadows −79 · danger
+wedge −70 · slash arc −60 · aim pointer −50 · wall geometry −10 · drawn wall faces −9 · **props,
+player, enemies all at 0, sorted by Y** · spores 22 · sparks 25 · health bars 30 · HUD 50 · touch
+controls 100. Tall props still fade to 45% while the player stands behind them.
+
+## Shadows
+
+A shadow centred exactly under its caster is invisible: under the 35° tilt the caster's front
+face or billboard covers precisely its own footprint. So every blocker and actor carries two flat
+ellipses — a **cast** shadow (1.35 W × 1.0 D, near-black green at 0.55, pushed +0.22 W right and
+−0.18 D down, away from the upper-left key light) that pokes out from under the caster, and a
+tighter **contact** core (0.9 W × 0.7 D at 0.35) that shows in the gaps around legs and under
+the drone. Each wall run has a 0.35 m shade strip along its inside base so the walls sit on the
+floor. Never re-centre a shadow on its footprint.
+
+## Perimeter
+
+The wall ring encloses the 26 × 16 plate field exactly: north and south runs span x ±13, the
+side runs y ±7.5, corners are the end segments of the side walls — full 3 m at the north corners,
+lip height (0.4 m) at the south so nothing occludes the player. Only void (`#100D14`) lies
+beyond. The artist's north faces and the south lip faces are billboarded over the geometry; the
+side walls are geometry only until side faces exist at the 15 m length.
 
 ## Light and post
 
@@ -101,7 +119,7 @@ One global light at 1.0, nothing else: painted values stay exact and every glow 
 sprite. Additive point lights and bloom were tried and removed — soft pools pulsing over
 painted art read as noise and added nothing to the Hades look, which is painted glow, not
 real-time glow. Vignette stays at 0.22. The camera is clamped so the visible floor never
-leaves the 32×22 plate field.
+leaves the 26×16 plate field.
 
 ## WebGL caveats
 
