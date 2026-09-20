@@ -114,6 +114,55 @@ lip height (0.4 m) at the south so nothing occludes the player. Only void (`#100
 beyond. The artist's north faces and the south lip faces are billboarded over the geometry; the
 side walls are geometry only until side faces exist at the 15 m length.
 
+## Characters
+
+The player is an animated humanoid android on the Quaternius universal rig (UAL2 Female
+Mannequin, CC0, `Tools/blender/src/Quaternius/UAL2/`), re-proportioned in Blender to a
+Bayonetta silhouette — long legs, narrow waist, long neck, heeled stance, helm-hair swept up,
+a visor line, an energy blade — and rendered through the same rig as everything else: 35°
+billboard camera, toon steps, 0.018 m inverted-hull outline, `actor_rim` per frame. Attitude
+comes from silhouette and pose, never from anatomy; it has to read at 128 PPU.
+
+**Sheet contract.** One PNG per part under `Sheets/`, uniform frames packed row-major, and a
+sidecar with `sheet: true`, `frame_px`, `columns`, `frames`, `part`, and `clips` — each clip
+`{start, count}` plus either `fps` + `loop`, `stretch: true` (the clip spans the state's
+duration: dash), or `phase_frames: [startup, active, recovery]` (attacks; each phase's frames
+are spread over that phase of the `AttackProfile`). Every frame has the same footprint pivot,
+computed by `pivot_of` from the character's 1.0 × 0.8 × 1.8 m box, and the camera never moves
+between frames so the feet never swim. v1: 56 frames — idle 8 · run 12 · dash 5 · hit 3 ·
+death 8 · attack1 6 · attack2 6 · attack3 8 — one direction (+X = screen-right), mirrored
+with `flipX`. The importer slices the sheet from the sidecar; the builder wires the frames
+and the clip table onto `SheetAnimator`; `ClipSampler` (Sim, tested) picks the frame.
+
+**The frame is bigger than the footprint.** A prop's frame is its footprint; a character's is
+not, because a 1.1 m blade leaves the collider in every direction. v1 frames are **256 × 288
+px** against a footprint that would derive 128 × 216 — measured, not chosen: across the 56
+frames the art spans 2.00 m sideways and 2.19 m up-screen. `cam_lift` (0.105 m) re-centres the
+camera on the art rather than on the collider and `pivot_of` reads the same number, so the
+pivot stays exact (0.5, 0.2239). 8 columns × 7 rows puts the sheet at **2048 × 2016**, inside
+the WebGL cap on both axes — and it is that cap, not the art, that fixes the frame width at
+256, so a blade at *full* extension does not fit. The strike frames are sampled a frame and a
+half off peak extension for that reason; widening the frame would cost a column and blow the
+height cap. Margins at v1 are 1.3 px sideways, 2.5 px below and 9.6 px above: re-pose the
+character and re-measure before assuming there is room.
+
+**Two of the eight clips are not in the library.** The UAL2 pack in the repo is a 43-action
+subset, not the full 120+, and it has no run and no death. `lady_rig.py` constructs both and
+says so: the **run** is `Walk_Carry_Loop`'s lower body with the stride amplified, the carry's
+backward pelvis pitch cancelled, the torso pitched forward and an authored arm swing driven off
+the posed thigh angle; the **death** is `LayToIdle` — a get-up from supine — sampled backwards.
+The **hit** is `Idle_Shield_Break`, not `Hit_Knockback`, because that clip has no flinch in it:
+it is doubled over on its first frame and airborne by its third, so every sampling of it gave a
+knockdown identical to the death. If a future pack adds a real run, death or hit reaction,
+these three are the entries to replace.
+
+**Modular by construction.** In Blender the character is separate objects on one rig —
+`body`, `hair`, `outfit_top`, `outfit_bottom`, `weapon`. `--parts` renders each part alone
+with the others as holdouts, so per-part sheets composite correctly in any stacking order;
+the runtime stacks one `SpriteRenderer` layer per part with a tint. v1 renders all parts
+into the single `body` layer. Non-loop clips hold their last frame; death runs on unscaled
+time because `GameFlow` freezes the clock.
+
 ## Light and post
 
 One global light at 1.0, nothing else: painted values stay exact and every glow is paint in the
@@ -125,6 +174,27 @@ leaves the 26×16 plate field.
 ## WebGL caveats
 
 iOS Safari has no DXT, so textures decompress to RGBA32 there: every texture is capped at
-2048 px and the biome budget is 6 MB of PNG. The tiling floor is the reason that budget is
-comfortable. Headless EEVEE needs a GPU context; the render script falls back to Cycles CPU,
-which the emission-only shading makes equivalent.
+2048 px and the biome budget is **8 MB** of PNG. It was 6 MB and the player sheet moved it: one
+2048 × 1960 sheet is 1.9 MB of the kit's 4.7 MB on its own, and a second character will be
+another. The tiling floor is the reason there is still headroom. Headless EEVEE needs a GPU
+context; the render script falls back to Cycles CPU, which the emission-only shading makes
+equivalent.
+
+## The contrast rule vs. a black character — **Assumed**
+
+The player android is gloss black, and the contrast rule asks actors to sit **25 L\*** from the
+floor behind them. Measured against the L\* 26.7 plate she does not: mean 31.1 (+4.3), p25 20.0
+(−6.8), median 27.3 (+0.6), p75 39.0 (+12.3). The rule is unreachable from either direction —
+clearing it downward needs a body at L\* ≈ 2, which is blacker than the outline and turns the
+character into a hole, and clearing it upward needs L\* ≈ 52, which is not a black character.
+
+What she separates by instead is the rim (L\* 49.2, **+22.1** over the surface behind it, so the
+18 L\* rim rule *does* pass), the 2.1% black outline, the copper collar and waist, and 7.1% of
+energy blue. `Tools/blender/out/preview_lady.png` is the check that matters and she reads
+cleanly on the plate. Treat the 25 L\* line as "actors of scenery-like tone"; a deliberately
+black actor is the exception and is covered by the rim rule instead. **To overrule:** lift
+`HULL`/`PANEL` in `Tools/blender/lady_rig.py` to a graphite around L\* 52 and she meets the
+letter of the rule, at the cost of not being a black android.
+
+Player blue at hue ≈ 200 is 18.4% of her pixels and above 25% saturation. The hue ban in the
+contrast rule is on **scenery**; blue means the player, and this is the player.

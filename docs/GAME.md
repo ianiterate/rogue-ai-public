@@ -13,7 +13,8 @@ see everything currently waiting on a human call.
 A fast, top-down action-roguelike. Combat flow in the family of Hades and Cult of the
 Lamb: short commitments, dash as the answer to everything, readable enemy telegraphs.
 
-You are a robot, sent down by an AI to gather resources from a strange world and to find
+You are an android — a tall, poised humanoid unit in Bayonetta's silhouette, drawn in
+the Hades manner — sent down by an AI to gather resources from a strange world and to find
 out what is there. The world is not empty. Tone, the AI's character, and what "down there"
 turns out to mean are the next things to write — see World and fiction.
 
@@ -49,6 +50,18 @@ speed and stops within a frame or two, and reverses without an arc — Hades' in
 The camera follows with a 0.12 s soft lag, enough to cushion a dash without making a stopped
 robot look like it slides. Decided from play-testing (2026-09-20): 7 u/s was too fast for
 the room and the 0.3 s camera lag read as drift.
+
+The character is animated from a rendered sprite sheet: idle, run, dash, hit, death and
+one distinct swing per hit of the chain. The swing *is* the timing — each attack clip's
+wind-up, strike and follow-through frames are stretched over the attack's startup, active
+and recovery, so retuning a profile can never desync the art from the hitbox.
+
+**Assumed** — the player renders one side view mirrored for left/right (as Hades does);
+up/down aims read through the arc and the pointer. Four directions would triple the sheet
+and needs smaller frames on iOS. **Assumed** — customisation (hair, outfit, weapon, colours)
+is authored as architecture only: the character is modular on one rig and the runtime
+stacks per-part layers with tints, but v1 ships one look. Adding a variant is a render
+flag and a layer, not a rebuild.
 
 **Assumed** — the post-dash dash-strike window (attack pressed just *after* a dash still
 counts as a dash-strike) ships disabled, and the third hit's short uncancellable tail is off.
