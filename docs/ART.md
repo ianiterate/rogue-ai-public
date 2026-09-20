@@ -172,6 +172,74 @@ the footprint pivot. It contributes +2.2 px of chest rise on top of the action's
 
 If a future pack adds a real run, death, hit reaction or idle, these are the entries to replace.
 
+**Enemies use the same contract**, smaller: 32 frames, 8 × 4 — idle 6 · move 8 · attack 10
+(`phase_frames` brute [4, 2, 4], sentry [6, 1, 3]) · hit 2 · death 6 — one per type
+(`biome1_actor_brute_sheet`, `biome1_actor_sentry_sheet`). Each enemy follows the player's
+process, not the player's rig: a CC0 model that already *is* the thing — rigged and shipped
+with its own clips — restyled and re-proportioned in Blender and rendered through the
+same 35° toon rig, in the hostile palette: alloy, violet emissives, `RIM_HOSTILE`; never the player's blue or the wedge's
+red. The brute's lunge is the last wind-up frames; the sentry's bolt spawns on its release
+frame. The bolt itself is a one-frame billboard (`biome1_fx_bolt`, 0.6 × 0.3 m), flat-projected
+at 128 PPU so its pivot is the centre — a projectile turns about its middle.
+
+**Both are cast from the OGA Robot Enemy Pack** (CC0, `Tools/blender/src/OGA/RobotEnemyPack/`),
+surveyed headless into `Tools/blender/out/oga_survey.txt` before anything was built. The
+casting does not follow the source files' names, because two of the six are not what their
+names suggest: `rocket.blend` is a 158-triangle cylinder with no armature — the *projectile*,
+not a robot — and `roller.blend` is a featureless ball whose attack keys two bones.
+
+- **Breaker** ← `lobber`. The heaviest, most grounded chassis in the pack: six legs, 39 bones,
+  and the only three-segment articulated arm, which is what can carry a guard plate and swing it.
+  Its gun tube is cut down — the fiction says it no longer carries the tool.
+- **Surveyor** ← `blaster`. The only legless body in the pack, so it hover-drifts and has no
+  foot contact to slide. Its attack already *is* charge → release: the arm extends and holds
+  (speed 0.000 at source frame 16), then snaps at frame 22.
+
+`oga_rig.py` holds everything true of the pack — import by append, the +90° facing turn (every
+robot in it faces −Y, measured from the `eyetarget` bones), the holder Empty that carries scale
+and seating where no action can reach it, the IK helpers, and the outline. `oga_breaker_rig.py`
+and `oga_surveyor_rig.py` hold the characters.
+
+**Three things the pack forced, all of them stated rather than hidden.**
+
+- **The outline is 0.011–0.013 m on these two, not 0.018.** An inverted hull cannot be thicker
+  than half the thinnest thing it wraps: offset two faces of a plate by more than half its
+  thickness and they swap sides, the shell turns inside out, and only its backfaces are drawn,
+  so the sheet fills with black slivers thrown clear of the silhouette. A 2019 hard-surface
+  model has shins, antennae and struts between 2 and 4 cm at this scale. The thin parts are
+  thickened where that also helps the read — a 3 cm leg is 4 px and reads as wire — and the
+  hull is matched to the model for the rest.
+- **Both carry a depth squash** (0.70 brute, 0.62 sentry) on the axis the camera never sees
+  end-on. Under the 35° tilt depth is screen height, and the footprint pivot pins the frame's
+  bottom edge 0.504 m below the standing line for *every* actor; a wide-hipped walker at 1.4 m
+  does not fit that. Growing the frame to 320 px was measured and rejected — with the pivot
+  held at 0.224 it sends 78% of the new pixels to the top, where 0.7 m is already going spare.
+  The cost is an outline thinner by that factor on camera-facing edges only.
+- **The scale is solved from the standing frames alone**, and the lift from every frame.
+  Coupling the two makes the character's size depend on its death: tucking the Breaker's
+  collapse in raised the global minimum, shrank the denominator, scaled the whole robot up, and
+  pushed the *idle* back out through the edge the tuck had just pulled it inside.
+
+**What is constructed.** The Breaker's move is a **bound**, not the pack's walk: the source
+tripod gait moves its feet 1.53 units, a 0.193 m stride, and the contract's 8 frames at 12 fps
+under a 5 u/s chase asks for 3.33 m of ground per cycle — seventeen times that. A walk cannot
+be amplified across that gap, so the legs gather, the body surges, and the feet leave the floor
+for most of the cycle, which is both the only gait that covers multiple body lengths and the
+only one whose feet cannot be *seen* to slide. It does not close the gap; see the open question
+in GAME.md. Its idle is a weight-shift authored over a held pose (the source Body bone moves
+0.00 units vertically across 91 frames), and its strike is an authored downward arc, because
+the source swing is a pure horizontal thrust — 3.2 units forward, 0.02 of height. The
+Surveyor's move is the source drift **levelled from 45–50° to about 15°**; at the source angle
+the sensor head points at the floor. Its death is `die3` recentred on its own artwork, because
+that clip pivots the body 83° about its base and a 1.4 m body laid over sweeps its top out of a
+2.0 m frame — rotation, which cancelling drift cannot touch.
+
+**Measured on the shipped sheets**, against the L\* 26.7 plate: Breaker median 58.7 (**+32.0**),
+rim band +19.6; Surveyor median 58.6 (**+31.9**), rim band +18.2. Violet is 1.2% and 3.8% of
+opaque pixels against an 8% budget. Both sheets are 2048 × 1152, 32 frames, no empty frames, and
+their pivot is 0.22390276 — the same float the lady's is, because `_actor_lift` re-solves each
+`cam_lift` from her camera height rather than restating it as a constant.
+
 **Modular by construction.** In Blender the character is separate objects on one rig —
 `body`, `hair`, `outfit_top`, `outfit_bottom`, `weapon`. `--parts` renders each part alone
 with the others as holdouts, so per-part sheets composite correctly in any stacking order;

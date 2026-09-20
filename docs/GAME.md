@@ -108,23 +108,73 @@ swings. Each is a small addition once the base read is judged by hand.
 
 ## Enemies and pressure
 
-Chasers run just under the player's speed, so distance is earned, not free. An attack is a
-committed lunge: the enemy locks its aim, paints its landing lane on the floor, and in the
-last part of a short wind-up launches along it. Walking straight away does not escape it;
-stepping out of the lane early does, and a dash through the strike does.
+Two kinds so far, on the Hades pattern of a chaser and a caster, and the room only works
+with both: the chasers make you move, the caster punishes moving badly.
 
-At most two enemies attack at once; the rest hold at arm's length and circle, so there is
-always one tell to read. Stagger is rationed: a few quick hits stun, then the enemy shrugs
-the next ones off and finishes its swing through them.
+**Breaker** — the chaser. Runs just under the player's speed, so distance is
+earned, not free. Its attack is a committed lunge: it locks its aim, paints its landing lane
+on the floor, and in the last part of a short wind-up launches along it. Walking straight
+away does not escape it; stepping out of the lane early does, and a dash through the strike
+does.
+
+**Surveyor** — the caster. Holds six to nine units away, backs off when rushed,
+drifts closer when left alone. Its tell is longer than the Breaker's: it charges its emitter
+for 0.6 s while a thin lane shows where the bolt will go, locks the aim at the end of the
+charge, and fires a straight bolt that never turns. A sidestep with a little distance or a
+dash through it beats it; standing still does not. It is fragile — closing on it is the
+reward for reading the room.
+
+At most two enemies attack at once, of either kind; the rest hold at arm's length and
+circle, so there is always one tell to read. Stagger is rationed: a few quick hits stun,
+then the enemy shrugs the next ones off and finishes its swing through them. A stunned
+Surveyor drops its charge.
+
+**The opening is fair by rule.** Nothing moves until the player has pressed something, and
+then there is a beat (1.5 s) before any enemy leaves its spot; each new wave gets the same
+beat as it materialises. An enemy's first swing always comes after a chase, never off the
+spawn. On a phone held upright the "turn sideways" prompt holds the world. The first wave
+is three Breakers; the Surveyor arrives in the second.
 
 Death holds the frame for a beat, then the arena reloads fresh. Clearing the room brings the
 next wave after a short pause.
 
-**Assumed** — the numbers: chase 5 vs run 5.5, wind-up 0.28 s with the lunge in its last 0.14 s
-at 18 u/s, active 0.10 s, damage 2 of 10, two concurrent attackers, stun budget 0.9 s per
-2.5 s, five enemies per wave. Not reviewed by you. All inspector fields; the wedge's reach
-follows the lunge automatically. Both sides' numbers live in one table in
-`ArenaSceneBuilder`.
+Both enemies are animated from rendered sheets like the player: idle, move, one attack whose
+wind-up/strike/follow-through frames are stretched over the attack's real timing, hit, death.
+
+**Undecided** — **the Breaker's chase speed against its gait.** The move clip is 8 frames at
+12 fps, so one cycle lasts 0.667 s, and at the assumed 5 u/s chase that cycle has to cover
+**3.33 m of ground**. The source walk it is built from moves its feet 0.193 m per cycle, and a
+1.4 m six-legged machine cannot be made to stride seventeen times further — amplifying that far
+pulls the legs off the body. The shipped clip is a constructed *bound* with the feet clear of
+the floor for most of the cycle, which is the only gait whose feet cannot be seen to slip,
+and it hides the gap rather than closing it. Three ways out, and this one is a real choice
+rather than a rendering detail:
+
+1. **Drop the chase to roughly 1.5 u/s** and let the Breaker be a slow, heavy thing the player
+   outruns and has to choose to engage. Cheapest, and it changes what the enemy *is*.
+2. **Raise the move clip's fps** in the sidecar so the cycle is shorter than 0.667 s. Costs
+   nothing to render, but above about 20 fps an eight-frame cycle reads as a vibration.
+3. **Keep 5 u/s and accept a skate.** Defensible for a machine — it is not an animal, and
+   something that heavy moving that fast can read as driven rather than walked.
+
+This blocks nothing today: the sheet ships and plays at any of the three. It decides whether
+the Breaker reads as a bruiser you can outrun or a thing that runs you down.
+
+**Assumed** — the numbers: Breaker chase 5 vs run 5.5, wind-up 0.28 s with the lunge in its
+last 0.14 s at 18 u/s, active 0.10 s; Surveyor band 6–9 u (retreat under 5, approach over 10),
+charge 0.6 s, bolt 9 u/s with 11 u of reach, cooldown 2.2 s; damage 2 of 10 for both; two
+concurrent attackers; stun budget 0.9 s per 2.5 s; waves 3·0, 3·1, 4·1, 4·2, 5·2
+(Breakers·Surveyors); grace 1.5 s / 0.8 s. Not reviewed by you. All builder consts in one
+table in `ArenaSceneBuilder`; the lanes' reach follows the lunge and the bolt automatically.
+
+**Undecided** — what the machines were: the wreck's crew, the world's own machinery, or the
+AI's earlier attempt. Both fictions below are written to survive either answer.
+
+**Assumed** — the naming rule: the world's machines are named for the work they were built
+to do, one or two words, no honorifics (Breaker, Surveyor; free slots that already fit:
+Cutter, Hauler, Dredger, Rigger, Welder). Not reviewed by you. Cheap to change now, expensive
+after a dozen enemies, items and barks are written against it. In code the two are still
+`Brute`/`Sentry`; nothing on screen shows a type name yet.
 
 ## World and fiction
 
@@ -133,6 +183,14 @@ Mineral silt has set into terraces the colour of cold ash; the wreck of an earli
 expedition lies half-sunk in it, plating peeled back and still faintly powered. The only
 real light is bioluminescent crystal blooming from the cracks — a cold mint green that
 pools on the silt. The robot's lamp is the second light source, and it is small.
+
+**Breaker.** Built to open hulls, and still wearing the guard plate that braced the tool it
+no longer carries. It closes on anything standing and swings the plate instead: shoulder
+down, hips first, the same wind-up every time.
+
+**Surveyor.** It works from the edge of the light — emitter up, a reading held for about a
+second, then a bolt down the exact line it sighted. The line is fixed the moment the reading
+ends, so it fires at where you were measured, not where you have got to.
 
 **Undecided** — the AI that sent the robot (voice, motive, whether it can be trusted),
 what the earlier expedition was, and what lives here. `world-builder` owns these next.
