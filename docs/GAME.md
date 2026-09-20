@@ -119,15 +119,17 @@ what the earlier expedition was, and what lives here. `world-builder` owns these
 
 ## Art direction
 
-Painted 2.5D in the manner of Hades: props and, later, characters are modelled and
-toon-rendered in Blender from a fixed 35°-tilted orthographic camera, then placed as sprites
-over a painted floor; gameplay stays on the flat plane with honest 2D footprints. One
-consistent key light is baked into every sprite. Glow is green; red belongs to enemy
-telegraphs and blue to the player, and scenery is kept desaturated so that contract holds.
-Details, palette and the rendering rig: `docs/ART.md`.
+Isometric-feeling 2.5D in the manner of Hades. The game camera is tilted 35° over the flat
+physics plane: the floor recedes with a visible plate grid, walls stand three metres tall
+along the top and sides, and props and characters are upright sprites sorted by depth.
+Everything is modelled and toon-rendered in Blender — flat things straight down, upright
+things from the same 35° camera — and placed as sprites; gameplay keeps honest 2D footprints.
+The palette is saturated, Tartarus transposed to sci-fi: green alloy ruin, copper machinery,
+violet energy, mint crystal glow. Red belongs to enemy telegraphs and blue to the player;
+scenery is forbidden those hues. Details: `docs/ART.md`.
 
-**Assumed** — the camera tilt of 35° and the biome-1 palette. Not reviewed by you beyond
-"2.5D like Hades". Both are single values in the render script.
+**Assumed** — the specific palette values and the 35° tilt. Reviewed by you only as
+"isometric like Hades"; both are single values in the render script and the camera rig.
 
 ## Platform and input
 

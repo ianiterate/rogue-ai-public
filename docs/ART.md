@@ -4,69 +4,93 @@ Read `GAME.md` first; this file holds the specifics.
 
 ## The method
 
-Hades is 2.5D: three-dimensional props and characters rendered from a fixed, tilted camera
-over painted floors, with gameplay on the flat plane. We do the same, rendered ahead of time.
-Everything is modelled in Blender, toon-shaded, rendered from **one orthographic camera
-tilted 35° from vertical**, and placed in Unity as a sprite. Objects are pre-scaled by
-1/cos 35° in depth before rendering so the ground plane maps exactly 1:1 to world units; a
-sprite's pivot sits at the centre of its footprint, so where the sprite is placed is where
-its collider is. Colliders are authored shapes, never traced from the sprite's silhouette —
-the tilted silhouette of a tall prop would otherwise stop attacks on thin air.
+Hades is isometric 2.5D: painted, tilted rooms in which props and characters stand up. We do
+the same over a flat 2D physics plane. **The game camera is orthographic and tilted 35° from
+vertical.** Anything that lies on the floor — the floor itself, decals, blob shadows, the enemy
+danger wedge, the slash arc, the aim pointer — is a flat sprite or mesh that the camera
+foreshortens. Anything that stands — walls, props, the robot, the drones, health bars — is an
+upright billboard rotated to face the camera, with its pivot at the bottom centre of its
+footprint so the feet sit exactly on the collider. Colliders are authored shapes, never traced
+from a silhouette. Depth order comes from Y: every upright in-world sprite shares one sorting
+order and the renderer sorts them along the Y axis, so a robot behind a pillar is drawn behind
+it and in front of it when in front. There are no Z offsets anywhere: under the tilt, Z is
+screen rise.
 
-Sprites are 128 pixels per metre (the floor 64). Shading comes from a node graph rather than
-lamps — normal against a fixed key direction through a stepped ramp — so renders are
-deterministic and identical between EEVEE and Cycles. Outlines are an inverted hull 0.018 m
-thick. A contact shadow is rendered as a second pass and composited under each prop; that
-shadow is what makes things sit *in* the floor rather than on it.
+The camera is orthographic rather than perspective on purpose. Hades' read comes from
+foreshortening and upright walls, not from vanishing points, and orthographic keeps billboards
+stable, pivots on colliders and floor effects position-independent.
 
-All scenery is our own work; nothing here needs attribution.
+## Rendering
+
+Two Blender rigs, selected per sprite:
+
+| | flat | billboard |
+|---|---|---|
+| camera | straight down | tilted 35°, no pre-scale |
+| used for | floor plates, decals, blob shadow | walls, props, characters |
+| pixels per metre | 64 | 128 |
+| pivot | centre | bottom-centre of the footprint: `y = (frame/2 − H·sin35/2) / frame` with `frame = (D·cos35 + H·sin35)` padded to a multiple of 4 px |
+
+Shading is a node graph, not lamps — normal against a fixed key direction through a stepped
+ramp — so renders are deterministic and identical in EEVEE and Cycles. Outlines are an inverted
+hull 0.018 m thick. Upright sprites carry no baked shadow; one shared flat ellipse under each
+does that job, because a baked shadow would stand up with the billboard. Every render is seeded
+and reproducible; the manifest in `Tools/blender/biome1.py` is the source of truth, and
+`Tools/build_assets.sh` installs a kit only when the whole set rendered.
+
+The floor is a 4×4 m tiling plate drawn repeated over the room, plus a few hero inlays — the
+visible grid Hades has, at a fraction of the texture memory of a single painting.
+
+All scenery and characters are our own work; nothing here needs attribution.
 
 ## Biome 1 — Rustwater Shelf
 
-| Role | Colour | Rule |
-|---|---|---|
-| Floor base | `#2A2431` | most of the screen; L\* 14–26 |
-| Floor accent | `#3E3446` | drifts, terraces, worn paths; never more than a quarter of the floor |
-| Wall | `#574652` | inner shadow falls to `#1A151F` |
-| Glow | `#7BE8A4` | crystals, live machinery, all 2D lights |
-| Hazard | `#FF5A3C` | **the enemy danger wedge only** |
-| UI-safe | `#EDE7F2` | HUD text, bar highlights |
+Tartarus transposed to sci-fi.
 
-Key light `#FFF2D8` from the upper left (azimuth 135°, elevation 55°); fill `#4A5A96` at 0.3
-from the lower right; rim `#7BE8A4` at 0.22 from up-screen; contact shadow `#14101A` at 0.55,
-offset 0.10 m down-right, blurred 0.12 m.
+| Role | Colour |
+|---|---|
+| Alloy ruin lit / base / shadow | `#3F8F72` / `#2E6B58` / `#17392F` |
+| Floor plate / alternate / seam | `#274C41` / `#1E3B34` / `#12241F` |
+| Copper machinery / highlight | `#C8762E` / `#F2B15C` (vertical surfaces only) |
+| Energy violet / bright | `#C23BD6` / `#E45BFF` (glowing seams, at most 4% of floor pixels) |
+| Mint glow | `#7BE8A4` (crystals, all 2D lights) |
+| Hazard red | `#FF3A2E` — **the enemy danger wedge only** |
+| Player blue | `#7ED0FF` — the slash arc, the aim pointer, the robot's rim |
+| UI-safe | `#EDE7F2` |
 
-## The legibility contract
+## The contrast rule
 
-The dressing must never cost a combat read.
+Saturation is not capped. Instead:
 
-- Scenery saturation stays at or below 35%. Actors sit at 60–80%. Saturation means "this
-  moves and can hurt you".
-- Nothing on the floor wider than 3 m is brighter than L\* 40. Only crystals exceed the
-  UI-safe brightness, and they are small and static.
-- Red is reserved for the danger wedge; blue for the player and the slash arc. Glow is green.
-- The wedge at 0.55 alpha must be unmistakable over the darkest floor accent; the arc must pop
-  over the brightest one. Check both on every new biome.
+- Actors carry the outline and a rim light 18 L\* above their own base, and sit at least 25 L\*
+  from the floor behind them.
+- Flat surfaces stay within L\* 18–34; ornament brighter than L\* 45 covers less than 8% of the
+  floor. Vertical surfaces may reach L\* 55 and 60% saturation — they are at the frame's edge,
+  not under the fight.
+- Hues 0–25° and 200–230° are forbidden to scenery above 25% saturation: red means a strike is
+  coming, blue means you.
+- The wedge at 0.55 alpha is checked against both floor plates; the arc against the brightest
+  plate and against copper. Per biome.
 
 ## Layering
 
-Floor −100 · floor decals −90 · walls −70 · ground props −50 · spores −40 · danger wedge 2 ·
-enemies 5 · player 10 · aim pointer 15 · slash arc 20 · sparks 25 · health bars 30 · HUD 50 ·
-touch controls 100. Tall props draw at 12, above the player, and fade to 45% while the player
-stands behind them. There is no Y-sorting: it cannot coexist with the fixed actor ladder, and
-the fade is what Cult of the Lamb does visually.
+Floor −100 · decals −90 · blob shadows −80 · danger wedge −70 · slash arc −60 · aim pointer −50 ·
+walls −10 · **props, player, enemies all at 0, sorted by Y** · spores 22 · sparks 25 · health bars
+30 · HUD 50 · touch controls 100. Tall props still fade to 45% while the player stands behind
+them.
 
 ## Light and post
 
-A global multiply light at 1.0 leaves the painted floor exactly as rendered. Every other light
-is additive — crystals, the vent, a small lamp on the robot — so lights can only add glow.
-No 2D shadow casters: the baked contact shadow does that job for a fraction of the cost.
-Bloom and vignette come from the URP volume; bloom is the single largest frame cost on mobile
-and is switched off by the low-FX setting. The camera is confined to the 30×18 painting.
+A global multiply light at 1.0 leaves painted values exact. Glow is painted into the sprites;
+additive 2D lights only seat it — a small pool on the floor, foreshortened into an ellipse by
+the camera, which is correct. Player lamp 0.2 within 2 m; crystals 0.4 within 2.6 m. Bloom 0.30
+above threshold 1.15; vignette 0.22. Bloom is the largest frame cost on mobile and is switched
+off by the low-FX setting. The camera is clamped so the visible floor never leaves the painted
+32×22 plate field.
 
 ## WebGL caveats
 
-iOS Safari has no DXT, so textures decompress to RGBA32 there: the floor is capped at 2048 px
-and the biome budget is 6 MB of PNG, which becomes roughly 22 MB of texture memory in the
-worst case. Headless EEVEE needs a GPU context; the render script falls back to Cycles CPU,
+iOS Safari has no DXT, so textures decompress to RGBA32 there: every texture is capped at
+2048 px and the biome budget is 6 MB of PNG. The tiling floor is the reason that budget is
+comfortable. Headless EEVEE needs a GPU context; the render script falls back to Cycles CPU,
 which the emission-only shading makes equivalent.
