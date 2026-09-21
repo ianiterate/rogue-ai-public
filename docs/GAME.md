@@ -69,11 +69,37 @@ Not reviewed by you. Both are single fields to turn on after a play-test.
 
 ## The run
 
-**Undecided** — what a "run" is, how long it lasts, how it ends.
-Affects: save format, difficulty pacing, session length, UI.
+A run is **four rooms** (decided 2026-09-21). Each room is a fight: waves of Breakers and
+Surveyors, two waves per room, growing from three Breakers in the first to five Breakers and
+three Surveyors in the last. When the last wave falls, two things happen: a **reward** appears
+at the room's centre, and the **exit** — a door in the middle of the north wall — sinks into the
+floor. Walk through it and the next room is built on the spot: a fresh layout of the same kit
+(pillars, rock clusters, hull slabs, crystal spires) laid out by a seeded generator and checked
+by rule — every gap walkable, no spawn inside lunge reach of a blocker, the entry, every spawn
+and the exit provably connected — so a room can never be unplayable. You enter the new room
+from the south, where you came in. Health carries over; nothing else does yet.
 
-**Undecided** — permadeath, or resumable from a checkpoint.
-Affects: save format and versioning, tuning, how punishing failure can be.
+The first room is hand-authored — it is the tutorial room and stays the same every run.
+
+Rewards alternate: an **HP crystal** (mint; heals four of ten) in rooms one and three, a **Core
+Sample** (violet) in rooms two and four. Samples are counted on the HUD; they are the thing the
+run is for. Picking either up is optional; the door opens regardless.
+
+After the fourth room the exit leads to the surface: the run ends with a tally of rooms cleared
+and samples collected, and any press starts a new run. **Death ends the run** — the arena
+reloads as room one with a new seed. There is no checkpoint and nothing persists between runs
+yet.
+
+The fifth section is reserved for a **boss** (next iteration); the structure already has the slot.
+
+**Assumed** — rooms are all 24 × 14 (variable sizes need per-room camera framing); two waves per
+room with the table Breakers·Surveyors 3·0/3·1, 4·1/4·2, 4·2/5·2, 5·2/5·3; HP crystal heals 4;
+the door is a 3 u geometry gap at the north centre with no dressing yet; entry at (0, −5);
+generator picks 6–10 blockers and 8–12 decals per room. Not reviewed by you; all constants in
+`RunPlan` and `RoomGenerator`.
+
+**Undecided** — what Core Samples buy on the surface (the meta-goal the run feeds), and whether
+the boss room is a different biome. Affects: economy, the end-of-run screen, the second kit.
 
 ## Progression
 
