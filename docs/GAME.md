@@ -27,13 +27,34 @@ controller in hand before anything is stacked on it.
 
 ## Controls
 
-Controller-centric. Left stick moves and aims (aim is the last non-zero move
-direction, resolved at full 360°). Face buttons: **Dash** (south) and **Attack** (west).
-Keyboard is the secondary scheme: WASD / arrows, Space to dash, J to attack. The mouse
-does nothing in play — it is reserved for the on-screen controls and UI.
+Three schemes, picked by whatever you touched last. **Keyboard**: two hand positions are
+bound at once — arrows to move with **Z / X / C** for attack / Special / dash, or WASD with
+**J / K / L**; Space and Shift also dash. Aim is the last direction you moved, resolved at
+full 360°, and the pointer on the character shows it. **Gamepad**: left stick moves and
+aims, X attacks, Y Special, A dashes. **Touch**: the floating stick plus ATTACK, SPECIAL and
+DASH buttons. The mouse does nothing: trackpad aiming on laptops is miserable, so the desktop
+scheme is keyboard-only by decision (2026-09-21).
+
+Nobody should have to guess: a hint line sits at the bottom of the screen from the start of
+a run naming the buttons for your scheme; each item disappears once you have used it, and
+the line goes away two seconds after all three have been. It comes back, shortened, on the
+death card.
+
+**Two attacks.** The **Attack** is the three-hit chain (below). The **Special** is *Nova*: a
+full circle of blade around the character that hits everything within about two units once,
+throws it back hard (three times the chain's knockback), and costs a long recovery — the
+"get off me" button for when the Breakers close in. It has no cooldown; the recovery is the
+price. Dash cancels it like anything else; Attack pressed during its recovery starts the
+chain.
+
+**Assumed** — the two keyboard hand positions (arrows + Z X C, WASD + J K L) are both live
+rather than a chooser; Nova as the Special rather than a thrown blade: the chain already
+covers reach, and the pressure problem in the room is being surrounded. Its numbers (startup
+0.16 s, active 0.10 s, recovery 0.42 s, damage ×1.5, knockback ×3, radius 2.2) are builder
+consts. Not reviewed by you.
 
 **On-screen controls.** A floating stick — it appears wherever the left thumb lands on
-the left half of the screen — and ATTACK / DASH buttons (bottom-right) drive the same
+the left half of the screen — and ATTACK / SPECIAL / DASH buttons (bottom-right) drive the same
 actions on touch devices only. Desktop never shows them:
 without a gamepad you play on the keyboard. Portrait phones get a full-screen "turn your
 phone sideways" prompt instead of the controls until rotated.

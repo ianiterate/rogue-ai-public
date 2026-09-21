@@ -146,6 +146,36 @@ half off peak extension for that reason; widening the frame would cost a column 
 height cap. Margins are 2.8 px sideways, 4.4 px below and 11.6 px above: re-pose the character, or
 resize the helm, and re-measure before assuming there is room.
 
+**The special is a second sheet, not a ninth clip.** `biome1_actor_lady_sheet_b` — **8 frames,
+8 × 1, 2048 × 288** — holds **Nova**, a 360° blade sweep (`phase_frames` [3, 2, 3]). It exists as its
+own texture because the first sheet already fills 8 × 7 at 2048 × 2016 and an eighth row would be
+2304 px, past the cap on the axis with no slack left; sideways there is a whole new texture. Same
+rig module (`lady_rig_b` passes its own `Rig` to `lady_rig.build`, so the geometry cannot fork),
+same camera, same `cam_lift`, same `rim_amount`, **same pivot (0.5, 0.2239)** and the same **seed** —
+the seed drives the brush noise on her hull, and two sheets of one character with two seeds would
+make her surface crawl the moment the game cut from a swing to the special. Sheet A is byte-identical
+with sheet B present. Unity rebases the clip's `start`, which is 0 because it is the only clip here.
+
+**Nova is constructed, for a reason worth keeping.** The 43-action pack contains exactly one full
+turn — `Sword_Heavy_Combo` frames 26.5–43.4, a measured 360.0° of pelvis yaw with both ends facing
++X — and it is unusable: rendered, it is a *ground* spin, down on one knee by frame 24 and flat by
+43, with the blade circling overhead rather than sweeping and its one horizontal full-extension frame
+28 px outside a frame that cannot grow. `Sword_Regular_C` turns the body 190°, not 360°. So the idle
+supplies a standing, planted body, `root` supplies the turn, and the sweep, crouch, stance and blade
+are authored: yaw runs 0 → +58 (the coil) → −360, so the blade travels 418° over a 360° turn and
+frames 0 and 7 both face +X for `flipX`. The two strike frames are antipodal — the blade on exactly
+opposite ends of one diameter of the swept circle — which is how an arc closes on two frames.
+
+**The blade is 0.909 m on screen, not 1.1 m.** `BLADE_M` is 1.1 in the rig's own units and `seat`
+scales the whole figure by 0.826 to stand it at 1.8 m; the weapon rides that scale. Its point
+therefore reaches about 1.08 m from the centre line at a full sideways extension, against 1.00 m of
+half-frame — so a blade swung flat along screen X does not fit, and shortening it is not an option
+because the blade is the character. Nova angles it 35° toward the camera instead, which costs
+nothing: the camera is tilted only about X, so screen abscissa *is* world X and depth is free.
+cos 35° = 0.819 of the extension stays sideways. Measured over the eight frames the art reaches
+0.886 m, and margins are 14 px left, 14 px right, 15 px below and 58 px above, with zero alpha on
+all four frame edges.
+
 **Three of the eight clips are constructed.** The UAL2 pack in the repo is a 43-action subset,
 not the full 120+. Every one of the 43 was measured for stride amplitude, leg antiphase, ground
 contact and looping: exactly two are forward locomotion cycles, `Walk_Carry_Loop` (antiphase

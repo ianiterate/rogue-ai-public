@@ -8,5 +8,14 @@ build and the current design notes; the source lives elsewhere.
 - **Design:** [docs/GAME.md](docs/GAME.md) — what the game is right now, including what is
   still undecided.
 
-A gamepad is the intended input. Browsers only expose controllers after a first click or key
-press, so press something once and the pad will be picked up.
+## Controls
+
+| | Move | Attack | Special (Nova) | Dash |
+|---|---|---|---|---|
+| Keyboard (arrows) | arrow keys | Z | X | C / Space |
+| Keyboard (WASD) | W A S D | J | K | L / Shift |
+| Gamepad | left stick | X | Y | A |
+| Touch | floating stick | ATTACK | SPECIAL | DASH |
+
+You aim by moving: attacks go the way you last walked. Browsers only expose gamepads
+after a first click or key press, so press something once and the pad will be picked up.
