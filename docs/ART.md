@@ -92,7 +92,7 @@ has to test a prop to learn whether it is solid. The shadow is the tell: only so
 ## Layering
 
 Floor −100 · decals −90 · wall base shade −85 · cast shadows −80 · contact shadows −79 · danger
-wedge −70 · slash arc −60 · aim pointer −50 · wall geometry −10 · drawn wall faces −9 · **props,
+wedge −70 · slash arc −60 · health ring −56 (track) / −55 (fill) · aim pointer −50 · wall geometry −10 · drawn wall faces −9 · **props,
 player, enemies all at 0, sorted by Y** · spores 22 · sparks 25 · health bars 30 · HUD 50 · touch
 controls 100. Tall props still fade to 45% while the player stands behind them.
 

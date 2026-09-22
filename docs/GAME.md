@@ -124,8 +124,20 @@ the boss room is a different biome. Affects: economy, the end-of-run screen, the
 
 ## Progression
 
-**Undecided** — whether anything persists between runs, and what.
-Affects: economy shape, whether early runs are tutorials, long-term retention.
+Inside a run: **modules**. When a room's last wave falls, the world holds and you are offered
+two of eight upgrades — take one or skip — before the door opens (Hades' boons, scaled to the
+slice). Blade: *Edge* (+25 % damage), *Momentum* (the third hit throws harder and stuns),
+*Tempo* (faster wind-ups). Nova: *Reach* (a wider ring), *Shock* (the ring stuns). Dash:
+*Strike* (attacking straight out of a dash is a dash-strike), *Blink* (shorter dash cooldown).
+Hull: *Plating* (+3 max health, healed on the spot). Each once per run; the build shows on the
+HUD. This is what makes room three a different fight from room two with the same enemies.
+
+The goal is stated at the start: **the surface needs two Core Samples, four rooms down.** The
+end card says whether you brought them.
+
+**Assumed** — two-of-eight per room, the eight effects above, nothing persisting between runs.
+Not reviewed by you. **Undecided** — whether anything persists between runs and what the
+samples buy (economy shape, whether early runs are tutorials, retention).
 
 ## Simulation
 
@@ -148,7 +160,9 @@ player always shows where the next swing will go. Whoever is hit flashes white a
 spark at the contact point; enemies shrink out rather than vanish. Sound is real: CC0 clips
 from Kenney for light and heavy swings, enemy hits, a distinctly different player-hurt hit,
 and deaths — nothing plays before the first press in a browser. Enemies show a health bar
-above them from their first hit; the player's bar sits top-left.
+above them from their first hit. The player's health is a ring at her feet — blue, then
+orange under 60 %, then a pulsing red-orange under 30 % — because in the fight there is no
+time to look at a screen edge (playtest, 2026-09-21); the top-left bar stays for the number.
 
 Deliberately not yet: a directional wipe on the arc, a red hurt vignette, an arc on enemy
 swings. Each is a small addition once the base read is judged by hand.
@@ -207,11 +221,18 @@ rather than a rendering detail:
 This blocks nothing today: the sheet ships and plays at any of the three. It decides whether
 the Breaker reads as a bruiser you can outrun or a thing that runs you down.
 
-**Assumed** — the numbers: Breaker chase 5 vs run 5.5, wind-up 0.28 s with the lunge in its
+**Pacing ramps.** Playtesters said room one went from nothing to everything at once, and that
+the pace would suit a later room — so it does. Room one is two then three Breakers at 4.5 u/s
+with one attacker at a time and a slow attack cooldown; the Surveyor arrives in room two with
+two concurrent attackers; by room four Breakers run at 5.5 with the fastest cooldown. All of it
+is one table (`RunPlan.Difficulty`).
+
+**Assumed** — the numbers: Breaker chase 4.5 → 5.0 → 5.0 → 5.5 across the rooms, attack cooldown
+1.3 → 1.0 → 0.9 → 0.8 s, concurrent attackers 1 then 2, wave grace 1.2 → 0.8 → 0.8 → 0.6 s;
+waves 2·0/3·0, 3·1/4·1, 4·2/5·2, 5·2/5·3 (Breakers·Surveyors); base Breaker chase 5 vs run 5.5, wind-up 0.28 s with the lunge in its
 last 0.14 s at 18 u/s, active 0.10 s; Surveyor band 6–9 u (retreat under 5, approach over 10),
 charge 0.6 s, bolt 9 u/s with 11 u of reach, cooldown 2.2 s; damage 2 of 10 for both; two
-concurrent attackers; stun budget 0.9 s per 2.5 s; waves 3·0, 3·1, 4·1, 4·2, 5·2
-(Breakers·Surveyors); grace 1.5 s / 0.8 s. Not reviewed by you. All builder consts in one
+concurrent attackers; stun budget 0.9 s per 2.5 s; first-gesture grace 1.5 s. Not reviewed by you. All builder consts in one
 table in `ArenaSceneBuilder`; the lanes' reach follows the lunge and the bolt automatically.
 
 **Undecided** — what the machines were: the wreck's crew, the world's own machinery, or the
