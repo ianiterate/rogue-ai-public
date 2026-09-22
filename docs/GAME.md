@@ -90,7 +90,7 @@ Not reviewed by you. Both are single fields to turn on after a play-test.
 
 ## The run
 
-A run is **four rooms** (decided 2026-09-21). Each room is a fight: waves of Breakers and
+A run is **four rooms and a boss** (rooms decided 2026-09-21, the boss 2026-09-22). Each room is a fight: waves of Breakers and
 Surveyors, two waves per room, growing from three Breakers in the first to five Breakers and
 three Surveyors in the last. When the last wave falls, two things happen: a **reward** appears
 at the room's centre, and the **exit** — a door in the middle of the north wall — sinks into the
@@ -106,12 +106,27 @@ Rewards alternate: an **HP crystal** (mint; heals four of ten) in rooms one and 
 Sample** (violet) in rooms two and four. Samples are counted on the HUD; they are the thing the
 run is for. Picking either up is optional; the door opens regardless.
 
-After the fourth room the exit leads to the surface: the run ends with a tally of rooms cleared
+After the boss the exit leads to the surface: the run ends with a tally of rooms cleared
 and samples collected, and any press starts a new run. **Death ends the run** — the arena
 reloads as room one with a new seed. There is no checkpoint and nothing persists between runs
 yet.
 
-The fifth section is reserved for a **boss** (next iteration); the structure already has the slot.
+**The fifth section is the boss.** The Foreman waits in a
+sparse arena at the top of the shelf, and the fight is Hades' first boss transposed: it never
+stands still; up close a three-hit cleaver combo, each hit announced with a wedge; at mid range
+a fan of five bolts along five thin lanes; when crowded it blinks away; at two-thirds and at
+one-third health it calls two Breakers; below a third it lashes three telegraphed lines across
+the arena. Sixty health against our one or two a hit — "a ton". It never staggers, only
+flinches, so stun-locking is not a plan; reading it is. Its health is a big bar along the
+bottom of the screen with its name over it. The room clears when the Foreman and its Breakers
+are all down; the exit leads to the surface.
+
+**Assumed** — the numbers: 60 HP; combo wind-ups 0.35/0.25/0.25 s with 2 damage a hit; bolt fan
+after a 0.7 s tell, five bolts at 0°/±12°/±24° at 8 u/s; blink 6 u away after 1.5 s of being
+crowded, 0.3 s invulnerable; lash lines after a 1.0 s tell, 3 damage; phases at 66 % and 33 %
+with cooldowns ×0.85 and ×0.7; the boss bar at the bottom of the screen; adds must die for the
+clear; no module offer after the boss. Not reviewed by you. The boss arena is Biome 1 —
+whether the boss lives in a different biome is still **Undecided**.
 
 **Assumed** — rooms are all 24 × 14 (variable sizes need per-room camera framing); two waves per
 room with the table Breakers·Surveyors 3·0/3·1, 4·1/4·2, 4·2/5·2, 5·2/5·3; HP crystal heals 4;
@@ -135,7 +150,7 @@ There is no offer after the last room. Blade: *Edge* (+25 % damage), *Momentum* 
 Hull: *Plating* (+3 max health, healed on the spot). Each once per run; the build shows on the
 HUD. This is what makes room three a different fight from room two with the same enemies.
 
-The goal is stated at the start: **the surface needs two Core Samples, four rooms down.** The
+The goal is stated at the start: **the surface needs two Core Samples, four rooms and a Foreman down.** The
 end card says whether you brought them.
 
 **Assumed** — two-of-eight per room, the eight effects above, nothing persisting between runs.
@@ -239,13 +254,13 @@ concurrent attackers; stun budget 0.9 s per 2.5 s; first-gesture grace 1.5 s. No
 table in `ArenaSceneBuilder`; the lanes' reach follows the lunge and the bolt automatically.
 
 **Undecided** — what the machines were: the wreck's crew, the world's own machinery, or the
-AI's earlier attempt. Both fictions below are written to survive either answer.
+AI's earlier attempt. All three fictions below are written to survive either answer.
 
 **Assumed** — the naming rule: the world's machines are named for the work they were built
-to do, one or two words, no honorifics (Breaker, Surveyor; free slots that already fit:
+to do, one or two words, no honorifics (Breaker, Surveyor, Foreman; free slots that already fit:
 Cutter, Hauler, Dredger, Rigger, Welder). Not reviewed by you. Cheap to change now, expensive
-after a dozen enemies, items and barks are written against it. In code the two are still
-`Brute`/`Sentry`; nothing on screen shows a type name yet.
+after a dozen enemies, items and barks are written against it. In code they are still
+`Brute`/`Sentry`/`Warden`; only the boss shows its name on screen (bar and name card).
 
 ## World and fiction
 
@@ -262,6 +277,13 @@ down, hips first, the same wind-up every time.
 **Surveyor.** It works from the edge of the light — emitter up, a reading held for about a
 second, then a bolt down the exact line it sighted. The line is fixed the moment the reading
 ends, so it fires at where you were measured, not where you have got to.
+
+**Foreman.** It marked the work and never did it — which plate the Breakers opened, along
+which line, and what was fit to go up the way you came down — and it parted whatever was not,
+which is what the cleaver is for. It still works to that order: it stands clear and marks from
+a distance, steps out of reach when crowded, calls a pair of Breakers down when the room gets
+away from it, and when there is nothing left to call it burns three lines across the silt and
+makes the cut itself.
 
 **Undecided** — the AI that sent the robot (voice, motive, whether it can be trusted),
 what the earlier expedition was, and what lives here. `world-builder` owns these next.
