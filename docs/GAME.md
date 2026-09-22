@@ -124,9 +124,12 @@ the boss room is a different biome. Affects: economy, the end-of-run screen, the
 
 ## Progression
 
-Inside a run: **modules**. When a room's last wave falls, the world holds and you are offered
-two of eight upgrades — take one or skip — before the door opens (Hades' boons, scaled to the
-slice). Blade: *Edge* (+25 % damage), *Momentum* (the third hit throws harder and stuns),
+Inside a run: **modules**. When you walk through a cleared room's exit, the world holds and
+you are offered two of eight upgrades — take one or skip — before the next room fades in
+(Hades' boons, scaled to the slice). The offer sits at the exit rather than on the last hit
+because the take button is also the attack button, and playtesters were still pressing it
+when the wave died; the panel also ignores anything held or buffered and wants a fresh press.
+There is no offer after the last room. Blade: *Edge* (+25 % damage), *Momentum* (the third hit throws harder and stuns),
 *Tempo* (faster wind-ups). Nova: *Reach* (a wider ring), *Shock* (the ring stuns). Dash:
 *Strike* (attacking straight out of a dash is a dash-strike), *Blink* (shorter dash cooldown).
 Hull: *Plating* (+3 max health, healed on the spot). Each once per run; the build shows on the

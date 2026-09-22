@@ -26,7 +26,7 @@
       <div id="unity-loading">
         <h1>rogue-ai</h1>
         <div id="unity-bar"><div id="unity-bar-fill"></div></div>
-        <div id="unity-hint">gamepad · keyboard (WASD, J, Space) · touch</div>
+        <div id="unity-hint">gamepad · keyboard (arrows + Z X C, or WASD + J K L) · touch</div>
       </div>
       <div id="unity-warning"></div>
     </div>
@@ -74,10 +74,10 @@
       var buildUrl = "Build";
       var config = {
         arguments: [],
-        dataUrl: buildUrl + "/49db9ca81f07888f1cdf4261e6270922.data.unityweb",
+        dataUrl: buildUrl + "/dfb680fe6c622fd3ee89d145b48df83f.data.unityweb",
         frameworkUrl: buildUrl + "/eac00d70734be6a7f4dc10128e8bea30.framework.js.unityweb",
-        codeUrl: buildUrl + "/7b5c60f87b805733d33d3522cfe1a8b9.wasm.unityweb",
-        symbolsUrl: buildUrl + "/d7e287ade6b5f17be49d55931c0f88fe.symbols.json.unityweb",
+        codeUrl: buildUrl + "/9e5d37c29cfeedfec6f9fdd6db773b59.wasm.unityweb",
+        symbolsUrl: buildUrl + "/b334bcbdccd64f45f425b459dbec4bc1.symbols.json.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "ianiterate",
         productName: "rogue-ai",
@@ -87,7 +87,7 @@
         devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
       };
       var script = document.createElement("script");
-      script.src = buildUrl + "/9fffde342c334bf62ec5a4cbb776bdd5.loader.js";
+      script.src = buildUrl + "/92d06880885b1ba531f9f6c9e1e48a79.loader.js";
       script.onload = function () {
         createUnityInstance(canvas, config, function (progress) {
           document.querySelector("#unity-bar-fill").style.width = 100 * progress + "%";
