@@ -74,9 +74,9 @@
       var buildUrl = "Build";
       var config = {
         arguments: [],
-        dataUrl: buildUrl + "/ff0c7afe38b0bd3cc18f582949485abd.data.unityweb",
+        dataUrl: buildUrl + "/69f3098f77d2813b8ec8f9f5f1eec9fe.data.unityweb",
         frameworkUrl: buildUrl + "/eac00d70734be6a7f4dc10128e8bea30.framework.js.unityweb",
-        codeUrl: buildUrl + "/2ee59877b20337201181b4cfac7b39b4.wasm.unityweb",
+        codeUrl: buildUrl + "/47a8a6b6ad74e270172fab2edacb6530.wasm.unityweb",
         symbolsUrl: buildUrl + "/3671a18c1aa7a9631cbded38669b0ce8.symbols.json.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "ianiterate",
@@ -87,7 +87,7 @@
         devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
       };
       var script = document.createElement("script");
-      script.src = buildUrl + "/335475bfcf9bac7a646500e726e170bb.loader.js";
+      script.src = buildUrl + "/92fa111aee259f335258662acfc2f9b3.loader.js";
       script.onload = function () {
         createUnityInstance(canvas, config, function (progress) {
           document.querySelector("#unity-bar-fill").style.width = 100 * progress + "%";
