@@ -65,7 +65,8 @@ Tartarus transposed to sci-fi.
 | Energy violet / bright | `#C23BD6` / `#E45BFF` (glowing seams, at most 4% of floor pixels) |
 | Mint glow | `#7BE8A4` (crystals, all 2D lights) |
 | Hazard red | `#FF3A2E` — **the enemy danger wedge only** |
-| Player blue | `#7ED0FF` — the slash arc, the aim pointer, the robot's rim |
+| Player blue | `#7ED0FF` — the slash arc, the aim pointer, the health ring, her energy lines and rim |
+| Player gold | `#B8901E` / `#E0B93A` / `#F5D96A` — her hull, and nothing else: the one warm bright body in a cold pale room (playtest 2026-09-23: slate blended with the enemies) |
 | UI-safe | `#EDE7F2` |
 
 ## The contrast rule
@@ -336,25 +337,28 @@ equivalent.
 The android was gloss black for one pass and it did not survive contact with the game's own
 scale. A 1.8 m figure is about 130 px tall under this camera; a hull whose three toon steps
 all landed between L\* 7 and L\* 27 had no readable interior, and what reached the screen was
-a silhouette holding a sword. The hull is now a **dark gloss slate** (`#444A58`) whose steps
-are solved backwards from the three values the surface has to hit — base L\* 22 on the flank,
-L\* 40 camera-facing, L\* 55 where the key catches shoulders, thighs and the helm crown. The
-torso shell is a further step lighter (`#646C7E`, ~L\* 45) so the torso never merges with the
-limbs. Measured on the shipped sheet, hull and panel pixels run p05 19 · p25 37 · p50 49 ·
-p75 52, which is those steps within a few points — `KEY_COL` is warm and pulls them slightly
-under target.
+a silhouette holding a sword. The second pass made her dark gloss slate (steps L\* 22 / 40 /
+55), which read — and then playtesters said she blended with the enemies, whose alloy sits at
+L\* 50–55. So the hull is now **warm gold**, the one warm bright body in a cold pale room: steps
+solved backwards to L\* **45 / 60 / 72** (measured 44–45 · 60–61 · 71–72 on hull pixels), the
+torso shell a deeper gold-bronze (`#9E7428`, ~L\* 39 / 53 / 64) so the torso never merges with
+the limbs, and the head — helm *and* skull — dark slate so the silhouette keeps one dark shape
+on top. Copper joints stay but nearly vanish against gold (4 L\* apart); the waist band and
+collar still read. Red was the other suggestion and is refused: red is the wedge's, and a red
+player would read as a hazard.
 
-**The contrast rule passes.** Against the L\* 26.7 plate the character measures mean 49.9
-(**+23.2**), median 51.5 (**+24.8**), p75 57.8 (**+31.1**), and the black outline sits 26.7
-below the floor. The rim band is L\* 69.0, **+19.0** over the surface behind it, against the
-18 the rule asks for.
+**The contrast rule passes by a wide margin.** Against the L\* 26.7 plate she measures median
+**+40.5** (sheet B +36.8) where the enemies sit at +25 to +29, and the black outline is 26.7
+below the floor. The rim band is **+19.8** (B +20.8) over the surface behind it, against the
+18 the rule asks for — it reads cream rather than blue on gold, which is what adding blue to
+yellow in linear light does.
 
 One trap is worth writing down, because it cost a render to find: **`actor_rim`'s strength is
 not portable between surfaces.** The lift is added in linear light, so the brighter the
 surface the more of it is needed to move the same distance in L\*. The same rim that measured
-+22 L\* over the black hull measured **+5.5** over the slate one and had to be re-solved from
-0.15 to 0.42. Anything that changes an actor's base tone invalidates its `rim_amount`; the
-audit prints the delta, so check it.
++22 L\* over the black hull measured **+5.5** over the slate one, and the slate's 0.42 gave only
++11.3 over gold: it is now **0.66**. Anything that changes an actor's base tone invalidates its
+`rim_amount`; the audit prints the delta, so check it.
 
 Player blue at hue ≈ 200 is about 17% of her pixels and above 25% saturation. The hue ban in
 the contrast rule is on **scenery**; blue means the player, and this is the player. The energy
