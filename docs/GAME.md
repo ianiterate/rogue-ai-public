@@ -61,8 +61,10 @@ phone sideways" prompt instead of the controls until rotated.
 
 The flow is Hades': you are never locked. Dash cancels any phase of an attack. Moving
 cancels an attack's recovery, so recovery is only felt standing still. Attacks are a
-three-hit chain — each swing takes a small step toward the aim (playtesters found the
-original lunge dragged them forward, 2026-09-23, so it is now ~0.4 m), the third hits harder
+three-hit chain — each swing steps ~0.6 m toward the aim with a blade that reaches ~1.8 m (playtesters found
+the original 1.5 m lunge dragged them forward, and its removal made the game much harder — the
+lunge had been carrying the blade onto the target — so reach went up and the step came back at
+half, 2026-09-23), the third hits harder
 with a longer recovery — and a press during a swing's wind-up is queued, not dropped. Attacking during
 a dash produces a quick dash-strike that carries the dash's momentum: dash → strike → dash
 is the core rhythm.
