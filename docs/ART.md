@@ -315,6 +315,23 @@ the runtime stacks one `SpriteRenderer` layer per part with a tint. v1 renders a
 into the single `body` layer. Non-loop clips hold their last frame; death runs on unscaled
 time because `GameFlow` freezes the clock.
 
+## The Landing (hub)
+
+The surface is the Fabricator's colour space, and the palette rule flips there: **cold pale
+alloy** (`#B9C7D0` steps, dark seams) and the player's blue `#7ED0FF` as the only emissive —
+**no violet, no copper glow, no red**; the audit fails a hub piece on either. Five set-pieces in
+the kit style (`biome1_hub_*`): the assembly line (flat 6 × 2) with its gantry (2 × 1 × 2.6),
+the Lens (a 6-frame breathing iris on a sheet, its core the brightest blue in the room), the
+Fabricator's bench with a holo panel, the shaft (flat 3 × 3 iris hatch, lit rim, grey
+chevrons), and the beacon mast as four state sprites (off / lit / tuned / firing) sharing one
+frame and pivot so the state swap never moves. The lady's sheet C carries `assemble`: her parts
+converging into idle frame 0 over twelve frames, the blue lines lighting last.
+
+**Assumed** — the hub keeps the shelf's floor plate tinted `#9FB8C4`, which still shows the
+plate's violet seams and leaves it teal rather than blue-white; a hub floor variant is the fix.
+The pale pieces sit above the L\* 55 cap for vertical scenery by design: up here she is set apart
+by hue (gold against cold), not by brightness.
+
 ## Light and post
 
 One global light at 1.0, nothing else: painted values stay exact and every glow is paint in the

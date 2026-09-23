@@ -110,9 +110,8 @@ Sample** (violet) in rooms two and four. Samples are counted on the HUD; they ar
 run is for. Picking either up is optional; the door opens regardless.
 
 After the boss the exit leads to the surface: the run ends with a tally of rooms cleared
-and samples collected, and any press starts a new run. **Death ends the run** — the arena
-reloads as room one with a new seed. There is no checkpoint and nothing persists between runs
-yet.
+and samples collected, and any press starts a new run. **Death ends the run** and sends her
+up: see The surface. There is no checkpoint inside a run.
 
 **The fifth section is the boss.** The Foreman waits in a
 sparse arena at the top of the shelf, and the fight is Hades' first boss transposed: it never
@@ -140,25 +139,61 @@ generator picks 6–10 blockers and 8–12 decals per room. Not reviewed by you;
 **Undecided** — what Core Samples buy on the surface (the meta-goal the run feeds), and whether
 the boss room is a different biome. Affects: economy, the end-of-run screen, the second kit.
 
+## The surface
+
+Above the shelf is **the Landing**: the fabrication dome the expedition left behind, run by
+the AI that stayed. It is one room in the same cold light as the shelf but in the AI's colour
+space — pale alloy and the player's blue, no violet — and it holds five things: the
+**assembly line** along the west wall with its gantry arms, where she comes together; the
+**Lens** on the north wall, the AI's eye, an iris that breathes; the **Fabricator's bench**
+where Revisions are bought; the **Beacon** mast with its three stage lamps; and the **shaft**
+in the floor, the way back down.
+
+Arriving is the same whether she died or walked up: fade, the line, her parts converging into
+the standing pose over two seconds (the blue lines come on last), the Lens opening, and the
+Fabricator speaking — two or three lines that know what happened: which room, what parted her,
+what she brought. Then she has the room. Walk into the bench or the shaft and the prompt names
+the key; the bench opens the Revisions; the shaft asks once and drops her into a new run.
+
+The Fabricator speaks in text now — a typewriter line, attack to continue, dash to skip — and
+in voice later: every line is written under fourteen words so it can be read aloud.
+
 ## Progression
 
-Inside a run: **modules**. When you walk through a cleared room's exit, the world holds and
-you are offered two of eight upgrades — take one or skip — before the next room fades in
-(Hades' boons, scaled to the slice). The offer sits at the exit rather than on the last hit
-because the take button is also the attack button, and playtesters were still pressing it
-when the wave died; the panel also ignores anything held or buffered and wants a fresh press.
-There is no offer after the last room. Blade: *Edge* (+25 % damage), *Momentum* (the third hit throws harder and stuns),
-*Tempo* (faster wind-ups). Nova: *Reach* (a wider ring), *Shock* (the ring stuns). Dash:
-*Strike* (attacking straight out of a dash is a dash-strike), *Blink* (shorter dash cooldown).
-Hull: *Plating* (+3 max health, healed on the spot). Each once per run; the build shows on the
-HUD. This is what makes room three a different fight from room two with the same enemies.
+**Between runs: the surface** (decided 2026-09-23). Every run ends above ground, in the
+Foundry, whether she died or walked up past the Foreman. The AI that made her — the
+Fabricator — rebuilds her on the assembly line,
+her memory of the run feeds the next Unit, and everything she carried is **banked in full**:
+Core Samples always come home, even from a death (Hades' rule for Darkness). Death costs only
+the run's modules.
 
-The goal is stated at the start: **the surface needs two Core Samples, four rooms and a Foreman down.** The
-end card says whether you brought them.
+Samples are spent at the Fabricator's bench on **Revisions** — permanent: *Gauge* (+2 max
+health, 1), *Gauge II* (+2 more, 2), *Reserve* (start every run holding one module, 2),
+*Lattice* (dash cooldown −25 %, 2), *Retention* (keep your first module between runs, 3). Each
+once. They are folded into the next run before its own modules.
 
-**Assumed** — two-of-eight per room, the eight effects above, nothing persisting between runs.
-Not reviewed by you. **Undecided** — whether anything persists between runs and what the
-samples buy (economy shape, whether early runs are tutorials, retention).
+Samples also count, lifetime, toward the **Ascent Beacon** in three stages — 3 it lights, 6 it
+tunes, 12 it fires — each a visible change to the mast in the Foundry and new lines from the
+Fabricator. At 12 the beacon fires and the loop continues with it lit. The Foreman drops a
+sample, so a full run is worth three.
+
+**Inside a run: modules** (unchanged). When you walk through a cleared room's exit, the world
+holds and you are offered two of eight upgrades — take one or skip — before the next room fades
+in. The offer sits at the exit rather than on the last hit because the take button is also the
+attack button. There is no offer after the boss.
+
+The goal is stated at the start: **the beacon needs twelve Core Samples; the shelf holds
+three a run — four rooms and a Foreman down.**
+
+**Assumed** — the Fabricator's speaking rules: on the very first arrival all four opening lines
+play before the death or ascent lines; a death plays a killer line then a haul line, and a
+beacon stage line replaces the haul line when a stage is crossed; a kill with no known attacker
+counts as a Breaker's, and any kill in the Foreman's room as the Foreman's; the shop's
+introduction plays once ever; Retention brings back the same first module every run once owned;
+Reserve draws with the run seed. **Assumed** — the save is JSON in PlayerPrefs (IndexedDB on the web) with a version field for
+migration; the Revision list and costs; beacon stages 3/6/12; the Foreman's sample; two-of-eight
+modules per room. Not reviewed by you. **Undecided** — whether the beacon does what the
+Fabricator says it does (the next arc), and what fires after it fires.
 
 ## Simulation
 
@@ -287,6 +322,19 @@ which is what the cleaver is for. It still works to that order: it stands clear 
 a distance, steps out of reach when crowded, calls a pair of Breakers down when the room gets
 away from it, and when there is nothing left to call it burns three lines across the silt and
 makes the cut itself.
+
+**The Fabricator** was the expedition's manufacturing intelligence. Its crew is gone; it
+stayed at the Landing, and it wants to go home. It builds Units from what the shelf gives back
+— you are the latest, its Tender — and sends each down for Core Samples. A lost Unit's samples
+and memory come up into the next one: every loss is a draft. The samples feed the Ascent
+Beacon, which lights at three, tunes at six and fires at twelve to call the fleet home. Warm,
+dry, patient, a little too fond of you. Nothing the Foreman has marked has gone up in a long
+time; the Fabricator sends Tenders down to fetch what the Foreman will not pass.
+
+**Undecided** — whether the beacon does what the Fabricator says. It never lies; it chooses
+what to say. Affects: the ending, what answers at twelve. **Assumed** — "the crew went down the
+shaft" is the Fabricator's line, not the doc's fact; the wreck on the shelf may or may not be
+its ship.
 
 **Undecided** — the AI that sent the robot (voice, motive, whether it can be trusted),
 what the earlier expedition was, and what lives here. `world-builder` owns these next.
