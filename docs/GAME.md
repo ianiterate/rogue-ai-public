@@ -147,7 +147,10 @@ space — pale alloy and the player's blue, no violet — and it holds five thin
 **assembly line** along the west wall with its gantry arms, where she comes together; the
 **Lens** on the north wall, the AI's eye, an iris that breathes; the **Fabricator's bench**
 where Revisions are bought; the **Beacon** mast with its three stage lamps; and the **shaft**
-in the floor, the way back down.
+in the floor, the way back down. Around them the dome is dressed as a workshop: parts crates by
+the line (the spares are unfinished cold alloy — gold is hers alone once she is poured), a rack
+of frames on the east wall, a cable spool, blue wall lamps, cable trays along the south — on a
+floor of its own, cold blue-grey plates with a single guide line.
 
 Arriving is the same whether she died or walked up: fade, the line, her parts converging into
 the standing pose over two seconds (the blue lines come on last), the Lens opening, and the
@@ -155,8 +158,12 @@ Fabricator speaking — two or three lines that know what happened: which room, 
 what she brought. Then she has the room. Walk into the bench or the shaft and the prompt names
 the key; the bench opens the Revisions; the shaft asks once and drops her into a new run.
 
-The Fabricator speaks in text now — a typewriter line, attack to continue, dash to skip — and
-in voice later: every line is written under fourteen words so it can be read aloud.
+The Fabricator speaks — a typewriter line, attack to continue, dash to skip — and is **voiced**:
+every line without a run-specific number has a clip, generated offline with Piper TTS from a
+CC0 voice and put through a deterministic machine treatment (pitch down two semitones, an old
+PA's band, a short metallic reverb). Lines that name a number stay text. Every line is under
+fourteen words so the voice reads clean. **Assumed** — the voice (a neutral US male carried
+toward the machine by the treatment) and the treatment itself; both are one script to re-run.
 
 ## Progression
 
@@ -185,7 +192,9 @@ attack button. There is no offer after the boss.
 The goal is stated at the start: **the beacon needs twelve Core Samples; the shelf holds
 three a run — four rooms and a Foreman down.**
 
-**Assumed** — the Fabricator's speaking rules: on the very first arrival all four opening lines
+**Assumed** — the death card shows the room reached and the samples carried (the spoken lines
+no longer name numbers); the draft count is not shown anywhere now. **Assumed** — the
+Fabricator's speaking rules: on the very first arrival all four opening lines
 play before the death or ascent lines; a death plays a killer line then a haul line, and a
 beacon stage line replaces the haul line when a stage is crossed; a kill with no known attacker
 counts as a Breaker's, and any kill in the Foreman's room as the Foreman's; the shop's
@@ -362,7 +371,19 @@ and audio become available).
 
 ## Audio
 
-**Undecided** — nothing established.
+Decided 2026-09-23. **Combat sound** is real and reactive: CC0 Kenney clips for light and
+heavy swings, enemy hits, a distinct player-hurt hit, the Surveyor's shot, deaths — nothing
+plays before the first press in a browser. **The Fabricator is voiced** — every script line has
+a clip (Piper TTS, CC0 voice, a machine treatment). **Music** is one loop per place, crossfaded
+over about a second as the scene changes: the shelf, the Foreman's room, the Landing; an
+**ambience bed** under each (the drained basin's wind and faint machinery below; the dome's hum
+and fabrication ticks above). Music ducks under a voice line and comes back after it. All of it
+is gesture-gated for the web and preloaded.
+
+**Assumed** — one loop per place rather than layered or adaptive music; the crossfade and duck
+times; CC0-only sourcing for the tracks (the specific tracks are recorded in
+`Assets/ThirdParty/ATTRIBUTION.md`). Not reviewed by you. **Undecided** — whether the boss gets
+its own track or a variation of the shelf's, and a sound for the beacon firing.
 
 ---
 

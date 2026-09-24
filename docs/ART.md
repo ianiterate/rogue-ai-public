@@ -327,10 +327,17 @@ chevrons), and the beacon mast as four state sprites (off / lit / tuned / firing
 frame and pivot so the state swap never moves. The lady's sheet C carries `assemble`: her parts
 converging into idle frame 0 over twelve frames, the blue lines lighting last.
 
-**Assumed** — the hub keeps the shelf's floor plate tinted `#9FB8C4`, which still shows the
-plate's violet seams and leaves it teal rather than blue-white; a hub floor variant is the fix.
-The pale pieces sit above the L\* 55 cap for vertical scenery by design: up here she is set apart
-by hue (gold against cold), not by brightness.
+The Landing has its own floor now — `biome1_floor_plate_landing`, an 8 × 8 m sheet of four
+cold blue-grey plates (L\* ~23, ornament 0.16 %: one blue guide line, a hatch outline, a grid
+stamp, one plain), no violet, tile-proven — and six dressing pieces in the same palette (crates,
+rack, spool, wall lamp with a `mount_z_m` sidecar key so it hangs on the wall, cable tray that
+butts into runs). The pale pieces sit above the L\* 55 cap for vertical scenery by design: up
+here she is set apart by hue (gold against cold), not by brightness.
+
+**Known kit bug (2026-09-24, not fixed):** `FILL_STRENGTH` never reaches `toon_material` — it
+multiplies by white — so a top face gets key plus full fill and everything solved with
+`albedo_for_lit` renders bluer than its target. The Landing floor is solved against the real
+light; fixing the graph would re-render every sprite, so it waits for its own pass.
 
 ## Light and post
 
