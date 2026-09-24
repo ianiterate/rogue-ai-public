@@ -40,12 +40,13 @@ a run naming the buttons for your scheme; each item disappears once you have use
 the line goes away two seconds after all three have been. It comes back, shortened, on the
 death card.
 
-**Two attacks.** The **Attack** is the three-hit chain (below). The **Special** is *Nova*: a
+**Two attacks.** The **Attack** is the three-hit chain (below). The **Special** is the
+weapon's (see Weapons). With the sword it is *Nova*: a
 full circle of blade around the character that hits everything within about two units once,
 throws it back hard (three times the chain's knockback), and costs a long recovery — the
 "get off me" button for when the Breakers close in. It has no cooldown; the recovery is the
 price. Dash cancels it like anything else; Attack pressed during its recovery starts the
-chain.
+chain. With the lance the Special throws it, and a second press calls it back.
 
 **Assumed** — the two keyboard hand positions (arrows + Z X C, WASD + J K L) are both live
 rather than a chooser; Nova as the Special rather than a thrown blade: the chain already
@@ -118,12 +119,13 @@ sparse arena at the top of the shelf, and the fight is Hades' first boss transpo
 stands still; up close a three-hit cleaver combo, each hit announced with a wedge; at mid range
 a fan of five bolts along five thin lanes; when crowded it blinks away; at two-thirds and at
 one-third health it calls two Breakers; below a third it lashes three telegraphed lines across
-the arena. Sixty health against our one or two a hit — "a ton". It never staggers, only
+the arena. Thirty health against our one to three a hit — about forty-five seconds without
+modules, for either weapon (halved from sixty, 2026-09-24). It never staggers, only
 flinches, so stun-locking is not a plan; reading it is. Its health is a big bar along the
 bottom of the screen with its name over it. The room clears when the Foreman and its Breakers
 are all down; the exit leads to the surface.
 
-**Assumed** — the numbers: 60 HP; combo wind-ups 0.35/0.25/0.25 s with 2 damage a hit; bolt fan
+**Assumed** — the numbers: 30 HP (phases at 19 and 9); combo wind-ups 0.35/0.25/0.25 s with 2 damage a hit; bolt fan
 after a 0.7 s tell, five bolts at 0°/±12°/±24° at 8 u/s; blink 6 u away after 1.5 s of being
 crowded, 0.3 s invulnerable; lash lines after a 1.0 s tell, 3 damage; phases at 66 % and 33 %
 with cooldowns ×0.85 and ×0.7; the boss bar at the bottom of the screen; adds must die for the
@@ -146,17 +148,19 @@ the AI that stayed. It is one room in the same cold light as the shelf but in th
 space — pale alloy and the player's blue, no violet — and it holds five things: the
 **assembly line** along the west wall with its gantry arms, where she comes together; the
 **Lens** on the north wall, the AI's eye, an iris that breathes; the **Fabricator's bench**
-where Revisions are bought; the **Beacon** mast with its three stage lamps; and the **shaft**
-in the floor, the way back down. Around them the dome is dressed as a workshop: parts crates by
-the line (the spares are unfinished cold alloy — gold is hers alone once she is poured), a rack
-of frames on the east wall, a cable spool, blue wall lamps, cable trays along the south — on a
-floor of its own, cold blue-grey plates with a single guide line.
+where Revisions are bought; the **Armoury**, the rack of frames on the east wall, where the
+weapons are; the **Beacon** mast with its three stage lamps; and the **shaft** in the floor,
+the way back down. Around them the dome is dressed as a workshop: parts crates by the line (the
+spares are unfinished cold alloy — gold is hers alone once she is poured), a cable spool, blue
+wall lamps, cable trays along the south — on a floor of its own, cold blue-grey plates with a
+single guide line.
 
 Arriving is the same whether she died or walked up: fade, the line, her parts converging into
 the standing pose over two seconds (the blue lines come on last), the Lens opening, and the
 Fabricator speaking — two or three lines that know what happened: which room, what parted her,
-what she brought. Then she has the room. Walk into the bench or the shaft and the prompt names
-the key; the bench opens the Revisions; the shaft asks once and drops her into a new run.
+what she brought. Then she has the room. Walk into the bench, the rack or the shaft and the
+prompt names the key; the bench opens the Revisions; the rack opens the Armoury; the shaft asks
+once and drops her into a new run. The status line at the top names what she will carry down.
 
 The Fabricator speaks — a typewriter line, attack to continue, dash to skip — and is **voiced**:
 every line without a run-specific number has a clip, generated offline with Piper TTS from a
@@ -179,6 +183,31 @@ health, 1), *Gauge II* (+2 more, 2), *Reserve* (start every run holding one modu
 *Lattice* (dash cooldown −25 %, 2), *Retention* (keep your first module between runs, 3). Each
 once. They are folded into the next run before its own modules.
 
+### Weapons
+
+She carries one weapon down the shaft. The Fabricator made her for the **sword**. The
+**Coring Lance** was the expedition's tool for pulling cores from the shelf; she buys it at
+the **Armoury**, the rack of frames on the Landing's east wall. Its thrusts reach twice as
+far as the sword's. Its Special throws it through every enemy in a line, and she fights
+unarmed until she recalls it. She can switch weapons at the rack before any descent. Once
+bought, the lance is hers for good.
+
+The numbers are in `docs/design/weapons.md` and in code in `MoveSets`: the lance's chain is
+the sword's with +0.04 s startup and +0.05 s recovery a hit, a 2.0 × 0.8 m box reaching 0.6 to
+2.6 m, a 1/1/2 chain like the sword's; the throw deals 2 to everything on a 9 m line (12 with
+Reach) and sticks in a wall; the recall deals 1 on the way back and pulls what it hits toward
+her; while it is out she has two quick jabs of 1. A thrust draws a blue line on the floor out to
+its tip, since the lance itself stops a metre short of where it can land. The run takes the weapon the save says she
+carries at the descent; nothing mid-run can change it. Every run module works with both.
+
+**Assumed** — the lance costs 4 Core Samples, and buying it equips it. Not reviewed by you.
+Each is one constant. **Assumed** — the Armoury is the rack as a station of its own, not a row
+on the Fabricator's bench. **Assumed** — the recall is a second press of Special (latched if
+pressed in the 0.35 s after the throw), it ignores walls on the way back, and it pulls rather
+than pushes; the thrown lance sticks where a wall stops it. **Assumed** — the lance's box is
+2.0 × 0.8 at 1.6 m rather than the brief's 1.2 × 0.9 at 2.0, which left a blind spot a Breaker
+in contact stands in; unarmed jabs deal 1. Not reviewed by you; each is a constant or a flag.
+
 Samples also count, lifetime, toward the **Ascent Beacon** in three stages — 3 it lights, 6 it
 tunes, 12 it fires — each a visible change to the mast in the Foundry and new lines from the
 Fabricator. At 12 the beacon fires and the loop continues with it lit. The Foreman drops a
@@ -187,7 +216,14 @@ sample, so a full run is worth three.
 **Inside a run: modules** (unchanged). When you walk through a cleared room's exit, the world
 holds and you are offered two of eight upgrades — take one or skip — before the next room fades
 in. The offer sits at the exit rather than on the last hit because the take button is also the
-attack button. There is no offer after the boss.
+attack button. There is no offer after the boss. Each card is labelled with the button it
+changes — CHAIN, SPECIAL, DASH, HULL — and reads true for either weapon: Momentum works on the
+last hit of whichever chain is in hand, Reach and Shock on whichever Special.
+
+**Assumed** — Edge multiplies chain damage by 1.6, not a quarter: damage rounds to the nearest
+even whole number at .5, so ×1.25 turned every 1 back into 1 and did nothing; ×1.6 makes both
+weapons' chains 2/2/3, and its card says so: "Chain hits deal 2, the last one 3". The
+categories were BLADE and NOVA. Not reviewed by you.
 
 The goal is stated at the start: **the beacon needs twelve Core Samples; the shelf holds
 three a run — four rooms and a Foreman down.**

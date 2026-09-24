@@ -157,6 +157,34 @@ the seed drives the brush noise on her hull, and two sheets of one character wit
 make her surface crawl the moment the game cut from a swing to the special. Sheet A is byte-identical
 with sheet B present. Unity rebases the clip's `start`, which is 0 because it is the only clip here.
 
+**The Lance is two more sheets of the same body.** `biome1_actor_lady_sheet_d` — **56 frames,
+8 × 7, 2048 × 2016** — and `_e` — **22 frames, 8 × 3, 2048 × 864** — hold every clip she needs
+while carrying the coring lance: `idle`, `run`, `dash`, `hit`, `death`, `attack1/2/3` on D and
+`special` (an overhand throw, the lance leaves the hand on the first active frame), `recall` (a
+six-frame catch), `unarmed1/2` (two jabs, no lance) on E. They are loaded as their own chain, not
+concatenated onto A–C: the game swaps sprite set and clip table when the weapon changes. Same rig
+module through `lady_rig.build(..., rig_cls)`, same camera, `cam_lift`, rim, **pivot (0.5, 0.2239)**
+and **seed 7301**; with the weapon hidden D and E render pixel-identical to A, which is what makes
+the cut from `recall` back into `idle` seamless, and A–C stay byte-identical with D and E present.
+The lance itself is 2.2 m, a bronze shaft with one player-blue line and a leaf head in the blade's
+blue, angled toward the camera on strike frames the way Nova angles the sword. The thrown lance is a
+flat 96 × 16 sprite, `biome1_fx_lance`, head to +X, the bolt's convention. Cost: 3.3 MB of PNG
+against the 8 MB biome budget (see WebGL caveats).
+
+**The lance's reach is not on the sheet.** The frame is ±1.0 m around her and the tip stops at
+0.95 m, the sword's distance, while the thrust's hitbox reaches 2.6 m. The far end of a thrust is
+sold by a floor streak along the box, drawn on the active frames and fading through the recovery,
+the way the sword's arc sells its sweep. **Assumed**: while the lance is thrown she uses D's `idle`
+and `run`, so she still looks armed between the throw and the recall; unarmed locomotion clips
+would be a third sheet and a re-render of nothing else. Costs one sheet to change.
+
+**Constructed, not sampled.** UAL2 has no thrust and `Melee_Hook` sampled is a diving haymaker
+that leaves the frame, so the thrusts, the throw's follow-through and both jabs are posed on the rig
+like Nova. A kit bug found on the way: `ual2_rig.taper(axis="Y")` builds inside-out shapes (the
+boots and pauldrons on A–C lack their outline and shade from the wrong side); the lance recomputes
+its own normals, and fixing the taper re-renders every character, so it waits for the
+`FILL_STRENGTH` pass.
+
 **Nova is constructed, for a reason worth keeping.** The 43-action pack contains exactly one full
 turn — `Sword_Heavy_Combo` frames 26.5–43.4, a measured 360.0° of pelvis yaw with both ends facing
 +X — and it is unusable: rendered, it is a *ground* spin, down on one knee by frame 24 and flat by
@@ -351,8 +379,8 @@ leaves the 26×16 plate field.
 
 iOS Safari has no DXT, so textures decompress to RGBA32 there: every texture is capped at
 2048 px and the biome budget is **8 MB** of PNG. It was 6 MB and the player sheet moved it: one
-2048 × 1960 sheet is 1.9 MB of the kit's 4.7 MB on its own, and a second character will be
-another. The tiling floor is the reason there is still headroom. Headless EEVEE needs a GPU
+2048 × 1960 sheet is 1.9 MB of the kit's 4.7 MB on its own, the two lance sheets are another
+3.3 MB, and a second character will be more. The tiling floor is the reason there is still headroom. Headless EEVEE needs a GPU
 context; the render script falls back to Cycles CPU, which the emission-only shading makes
 equivalent.
 
