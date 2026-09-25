@@ -165,6 +165,15 @@ what she brought. Then she has the room. Walk into the bench, the rack or the sh
 prompt names the key; the bench opens the Revisions; the rack opens the Armoury; the shaft asks
 once and drops her into a new run. The status line at the top names what she will carry down.
 
+The Landing points the way. Once she has control, a card says what the visit is for:
+spend, or go down for more. A station she has never opened, or can now buy from, carries a
+floating label (REVISIONS NEW, LANCE AFFORDABLE). If she passes one she can afford, the
+Fabricator points her to it; with nothing to buy, it points at the shaft. **Assumed:** each
+nudge plays once a visit, after eight or twenty seconds, bench before rack, as a caption she
+keeps walking through rather than a line that stops her. **Assumed:** the card holds five
+seconds, and the shaft carries no label of its own. The strings and the rules are in
+`docs/design/landing_guidance.md`; each timing is one constant.
+
 The Fabricator speaks — a typewriter line, attack to continue, dash to skip — and is **voiced**:
 every line without a run-specific number has a clip, generated offline with Piper TTS from a
 CC0 voice and put through a deterministic machine treatment (pitch down two semitones, an old
