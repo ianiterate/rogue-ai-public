@@ -29,7 +29,10 @@ controller in hand before anything is stacked on it.
 
 Three schemes, picked by whatever you touched last. **Keyboard**: two hand positions are
 bound at once — arrows to move with **Z / X / C** for attack / Special / dash, or WASD with
-**J / K / L**; Space and Shift also dash. Aim is the last direction you moved, resolved at
+**J / K / L**; Space and Shift also dash. Bindings are by physical key position (the US
+names above); the on-screen labels follow your keyboard layout, so AZERTY shows ZQSD and W
+for attack (read from the browser's layout map in Chrome and Edge, guessed from the browser
+language elsewhere, `?layout=azerty|qwertz|qwerty` to force it). Aim is the last direction you moved, resolved at
 full 360°, and the pointer on the character shows it. **Gamepad**: left stick moves and
 aims, X attacks, Y Special, A dashes. **Touch**: the floating stick plus ATTACK, SPECIAL and
 DASH buttons. The mouse does nothing: trackpad aiming on laptops is miserable, so the desktop
