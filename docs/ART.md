@@ -171,12 +171,18 @@ blue, angled toward the camera on strike frames the way Nova angles the sword. T
 flat 96 × 16 sprite, `biome1_fx_lance`, head to +X, the bolt's convention. Cost: 3.3 MB of PNG
 against the 8 MB biome budget (see WebGL caveats).
 
-**The lance's reach is not on the sheet.** The frame is ±1.0 m around her and the tip stops at
-0.95 m, the sword's distance, while the thrust's hitbox reaches 2.6 m. The far end of a thrust is
-sold by a floor streak along the box, drawn on the active frames and fading through the recovery,
-the way the sword's arc sells its sweep. **Assumed**: while the lance is thrown she uses D's `idle`
-and `run`, so she still looks armed between the throw and the recall; unarmed locomotion clips
-would be a third sheet and a re-render of nothing else. Costs one sheet to change.
+**The lance's reach is on sheet F.** The 256 px frame is ±1.0 m around a centred pivot, so D's
+thrusts foreshortened the lance to a 0.95 m tip while the hitbox reached 2.6 m. Sheet
+`biome1_actor_lady_sheet_f` breaks the symmetry instead of the cap: **384 × 288 frames, 5 columns
+(1920 px), pivot x 0.35**, which gives 1.9 m of room in front of her and the same 1.0 m behind. Unity
+honours a pivot and frame size per sheet (the importer slices from each sidecar; `flipX` mirrors about
+the pivot), and on the Blender side `pivot_x` is an optional per-entry field that shifts the camera
+only when set, so A–E re-render byte-identical. F holds `thrust1/2/3` (the tip at **+1.90 m** on every
+active frame, the grip solved toward the butt), `charge` (2 frames, a coil, loop) and `spin` (8 frames,
+Nova's yaw construction with the lance level; the back half-turn foreshortened to fit the 1.0 m
+behind her). 30 frames, 1.5 MB. D's `attack1–3` and E's `unarmed1/2` are now dead frames, kept
+because re-rendering D and E buys nothing. **Assumed**: while the lance is thrown (about a second)
+she uses D's `idle` and `run`.
 
 **Constructed, not sampled.** UAL2 has no thrust and `Melee_Hook` sampled is a diving haymaker
 that leaves the frame, so the thrusts, the throw's follow-through and both jabs are posed on the rig
@@ -395,8 +401,9 @@ leaves the 26×16 plate field.
 
 iOS Safari has no DXT, so textures decompress to RGBA32 there: every texture is capped at
 2048 px and the biome budget is **8 MB** of PNG. It was 6 MB and the player sheet moved it: one
-2048 × 1960 sheet is 1.9 MB of the kit's 4.7 MB on its own, the two lance sheets are another
-3.3 MB, and a second character will be more. The tiling floor is the reason there is still headroom. Headless EEVEE needs a GPU
+the player alone is 7.8 MB across six sheets (A 2.2, B 0.3, C 0.4, D 2.4, E 0.9, F 1.5) and the
+whole Biome 1 tree is 17.8 MB of PNG, so the 8 MB figure is the *per-character* line now, not the
+biome's; on iOS every byte of that decompresses to RGBA32. The tiling floor is the reason there is still headroom. Headless EEVEE needs a GPU
 context; the render script falls back to Cycles CPU, which the emission-only shading makes
 equivalent.
 

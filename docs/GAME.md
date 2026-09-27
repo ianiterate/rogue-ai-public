@@ -49,7 +49,7 @@ full circle of blade around the character that hits everything within about two 
 throws it back hard (knockback ×3; the chain's first two hits shove at ×0.5), and costs a long recovery — the
 "get off me" button for when the Breakers close in. It has no cooldown; the recovery is the
 price. Dash cancels it like anything else; Attack pressed during its recovery starts the
-chain. With the lance the Special throws it, and a second press calls it back.
+chain. With the lance the Special throws it, and it comes back on its own.
 
 **Assumed** — the two keyboard hand positions (arrows + Z X C, WASD + J K L) are both live
 rather than a chooser; Nova as the Special rather than a thrown blade: the chain already
@@ -87,7 +87,7 @@ the old one, and **swinging no longer brakes a chase**: hits one and two thrown 
 run, never faster than it. Hits one and two **shove half as far** (knockback ×0.5 and ×0.55, about
 0.7 m), so the target is still in reach for the next; the finisher still throws. The sword's blade
 is **taller**, 1.6 × 1.4 m reaching 0.35–1.95 m (was 1.5 × 1.1), because the 35° camera squashes
-up and down on screen; the lance's is 2.0 × 1.1 (was 0.8 across). The dash itself still goes where
+up and down on screen; the lance's is 2.0 × 1.4, as wide as the sword's. The dash itself still goes where
 the stick says. Numbers and the chase model: `docs/design/slash.md`; in code `AimAssist`,
 `ChainStep`, `MoveSets`.
 
@@ -255,27 +255,39 @@ once. They are folded into the next run before its own modules.
 ### Weapons
 
 She carries one weapon down the shaft. The Fabricator made her for the **sword**. The
-**Coring Lance** was the expedition's tool for pulling cores from the shelf; she buys it at
-the **Armoury**, the rack of frames on the Landing's east wall. Its thrusts reach twice as
-far as the sword's. Its Special throws it through every enemy in a line, and she fights
-unarmed until she recalls it. She can switch weapons at the rack before any descent. Once
-bought, the lance is hers for good.
+**Coring Lance**, the expedition's tool, is bought at the **Armoury** on the Landing's east
+wall. It thrusts quick and long. Hold Attack to charge; release to spin it full circle. Its
+Special throws it through everything in a line; it comes back on its own, sooner if
+she presses Attack. She is never unarmed. She can switch weapons at the rack before any
+descent. Once bought, the lance is hers for good.
 
-The numbers are in `docs/design/weapons.md` and in code in `MoveSets`: the lance's chain is
-the sword's with +0.04 s startup and +0.05 s recovery a hit, a 2.0 × 0.8 m box reaching 0.6 to
-2.6 m, a 1/1/2 chain like the sword's; the throw deals 2 to everything on a 9 m line (a quarter
-further with Reach) and sticks in a wall; the recall deals 1 on the way back and pulls what it hits toward
-her; while it is out she has two quick jabs of 1. A thrust draws a blue line on the floor out to
-its tip, since the lance itself stops a metre short of where it can land. The run takes the weapon the save says she
-carries at the descent; nothing mid-run can change it. Every run module works with both.
+The numbers are in `docs/design/weapons.md`, `docs/design/spear.md` and in code in `MoveSets`:
+the lance's thrusts have the sword's cadence (the finisher's tail 0.34 s against the sword's
+0.38) in a 2.0 × 1.4 m box reaching 0.6 to 2.6 m, a 1/1/2 chain like the sword's. Attack held
+0.3 s after a thrust's press is a charge she can walk in at 60 %; let go — or held to 2 s — it
+is a spin that deals 2 to everything within 2.6 m of her and stuns for 0.4 s, and the next
+press is thrust one again. The throw deals 2 to everything on a 9 m line (a quarter further
+with Reach) and sticks in a wall; it turns for home on its own 0.6 s after the throw (longer
+with Reach, as far as the range grows) or 0.15 s after it stops, whichever is first, and an
+Attack or Special press from 0.15 s after the throw calls it sooner. The return deals 1 on the
+way back and pulls what it hits toward her. While it is out she moves and dashes as ever, and
+Attack is the recall rather than a thrust. A thrust draws a blue line on the floor out to its
+tip; the spin draws a ring. The run takes the weapon the save says she carries at the
+descent; nothing mid-run can change it. Every run module works with both.
 
 **Assumed** — the lance costs 4 Core Samples, and buying it equips it. Not reviewed by you.
 Each is one constant. **Assumed** — the Armoury is the rack as a station of its own, not a row
-on the Fabricator's bench. **Assumed** — the recall is a second press of Special (latched if
-pressed in the 0.35 s after the throw), it ignores walls on the way back, and it pulls rather
-than pushes; the thrown lance sticks where a wall stops it. **Assumed** — the lance's box is
-2.0 × 0.8 at 1.6 m rather than the brief's 1.2 × 0.9 at 2.0, which left a blind spot a Breaker
-in contact stands in; unarmed jabs deal 1. Not reviewed by you; each is a constant or a flag.
+on the Fabricator's bench. **Assumed** — the returning lance ignores walls and pulls rather
+than pushes; the thrown lance sticks where a wall stops it. Each is a flag.
+
+**Assumed** — the spear's numbers: thrusts at the sword's cadence, box 2.0 × 1.4; spin radius
+2.6, 2 damage, stun 0.4. Cheap: `MoveSets` constants. **Assumed** — hold 0.30 s to charge, walk
+at 60 %, and the spin fires by itself at 2.0 s. Cheap. **Assumed** — the throw returns on its
+own at 0.6 s (scaled by Reach) or 0.15 s after it stops; Attack or Special recalls it from
+0.15 s; the catch beat is 0.2 s. Cheap. **Assumed** — Reach does not grow the spin, and Shock
+does not stun with it; Edge and Tempo do apply. One line each in `Effective`. **Assumed** — an
+Attack pressed while the lance flies home becomes thrust one if she catches it within the
+input buffer. Cheap. None of these reviewed by you.
 
 Samples also count, lifetime, toward the **Ascent Beacon** in three stages — 3 it lights, 6 it
 tunes, 12 it fires — each a visible change to the mast in the Foundry and new lines from the
@@ -287,7 +299,9 @@ module or marked room after it, the world holds and you are offered two of eight
 take one or skip — before the next room fades in. The offer sits at the exit rather than on the last hit because the take button is also the
 attack button. There is no offer after the boss. Each card is labelled with the button it
 changes — CHAIN, SPECIAL, DASH, HULL — and reads true for either weapon: Momentum works on the
-last hit of whichever chain is in hand, Reach and Shock on whichever Special.
+last hit of whichever chain is in hand, Reach and Shock on whichever Special. Edge and Tempo
+also reach the lance's spin; Momentum, Reach and Shock do not (it is neither the last hit nor
+a Special).
 
 **Assumed** — Edge multiplies chain damage by 1.6, not a quarter: damage rounds to the nearest
 even whole number at .5, so ×1.25 turned every 1 back into 1 and did nothing; ×1.6 makes both
