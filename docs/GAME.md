@@ -46,7 +46,7 @@ death card.
 **Two attacks.** The **Attack** is the three-hit chain (below). The **Special** is the
 weapon's (see Weapons). With the sword it is *Nova*: a
 full circle of blade around the character that hits everything within about two units once,
-throws it back hard (three times the chain's knockback), and costs a long recovery — the
+throws it back hard (knockback ×3; the chain's first two hits shove at ×0.5), and costs a long recovery — the
 "get off me" button for when the Breakers close in. It has no cooldown; the recovery is the
 price. Dash cancels it like anything else; Attack pressed during its recovery starts the
 chain. With the lance the Special throws it, and a second press calls it back.
@@ -65,13 +65,42 @@ phone sideways" prompt instead of the controls until rotated.
 
 The flow is Hades': you are never locked. Dash cancels any phase of an attack. Moving
 cancels an attack's recovery, so recovery is only felt standing still. Attacks are a
-three-hit chain — each swing steps ~0.6 m toward the aim with a blade that reaches ~1.8 m (playtesters found
+three-hit chain — each swing steps ~0.6 m toward the aim with a blade that reaches ~1.95 m (playtesters found
 the original 1.5 m lunge dragged them forward, and its removal made the game much harder — the
 lunge had been carrying the blade onto the target — so reach went up and the step came back at
 half, 2026-09-23), the third hits harder
 with a longer recovery — and a press during a swing's wind-up is queued, not dropped. Attacking during
 a dash produces a quick dash-strike that carries the dash's momentum: dash → strike → dash
 is the core rhythm.
+
+**The slash finds its target** (2026-09-27, from play: dash + Nova beat the chain, because the
+chain needed perfect aim and Surveyors outran it; the ruling was to improve the slash and leave
+Nova alone). Every chain hit, the dash-strike and the lance's thrusts use **aim assist**: the
+swing bends onto the best enemy within 3.2 m and 55° of the stick — never one behind her — and
+goes down the stick if there is none. Inside 22.5° of the stick every target counts as straight
+ahead and the nearer wins; outside it, angle decides. Hits two and three **track** the enemy the
+chain last struck while it is within 3.5 m and not behind the stick. A chain hit with a target
+takes a **closing step** instead of its short step: fast enough to bring the target to the middle
+of the blade by the end of the swing, leading where it is moving, never more than 1.2 m (1.6 m
+for the finisher); a target already there gets a planted swing. Without a target the step is
+the old one, and **swinging no longer brakes a chase**: hits one and two thrown at a run keep the
+run, never faster than it. Hits one and two **shove half as far** (knockback ×0.5 and ×0.55, about
+0.7 m), so the target is still in reach for the next; the finisher still throws. The sword's blade
+is **taller**, 1.6 × 1.4 m reaching 0.35–1.95 m (was 1.5 × 1.1), because the 35° camera squashes
+up and down on screen; the lance's is 2.0 × 1.1 (was 0.8 across). The dash itself still goes where
+the stick says. Numbers and the chase model: `docs/design/slash.md`; in code `AimAssist`,
+`ChainStep`, `MoveSets`.
+
+**Assumed** — aim assist's 22.5° dead band applies to every control scheme, not only the
+keyboard's eight directions; cheap to split per scheme. **Assumed** — tracking gives up at 90° off
+the stick, not the plan's 100° (100° could swing her at something behind her). **Assumed** —
+closing steps come up to speed at her run's acceleration (220 u/s², not the lunge's 90) and lead
+the target's velocity; without them hits land at the tip of the blade rather than its middle.
+Not reviewed by you; all cheap.
+
+**Undecided** — whether Nova keeps its 0.42 s recovery instead of cancelling into another Nova on
+its first recovery frame (which loops it every 0.26 s). Kept as it is by your ruling; it blocks
+nothing, and it sets the ceiling on Nova spam.
 
 Movement is planted: the robot runs at 5.5 u/s (the 24 u room in about 4.4 s), reaches that
 speed and stops within a frame or two, and reverses without an arc — Hades' instant turns.
@@ -118,6 +147,14 @@ three samples are reachable on every run without a marked room; a fourth is only
 one. Samples are counted on the HUD; they are the thing the run is for. Picking a reward up is
 optional; the doors open regardless. The plan is the run seed's, never the player's.
 
+**The plates stay up** (2026-09-27, from play: they read as under the door and vanished while
+deciding). Each door's plate is 0.9 m, hung 0.35 m up the panel's face so it sits in the middle
+of the strip of face the camera shows, and it is drawn over everything standing in the room —
+a Breaker at the door cannot cover it. When the panel sinks the plate stays where it hung, lit
+over the open doorway, until you walk through: the choice is made with the doors open, so the
+sign has to be there then. **Assumed** — the size, the mount and drawing over the actors (under
+the station labels, enemy bars and HUD). Not reviewed by you; three constants.
+
 **Assumed** — the door rules (`docs/design/doors_and_depth.md` §1): the two doors never match;
 room one's doors are always a sample against a module or a Refit (70/30); room two's never hold
 a plain sample; room three's always hold one; exactly one HP door a run, at room two's or room
@@ -157,7 +194,7 @@ whether the boss lives in a different biome is still **Undecided**.
 **Assumed** — rooms are all 24 × 14 (variable sizes need per-room camera framing); two waves per
 room with the table Breakers·Surveyors 3·0/3·1, 4·1/4·2, 4·2/5·2, 5·2/5·3; HP crystal heals 4;
 each door is a 3 u geometry gap in the north wall (two at ±6 in rooms one to three, one at the
-centre in room four) with a 1.2 m reward plate on its face; entry at (0, −5);
+centre in room four) with a 0.9 m reward plate on its face; entry at (0, −5);
 generator picks 6–10 blockers and 8–12 decals per room. Not reviewed by you; all constants in
 `RunPlan` and `RoomGenerator`.
 
@@ -392,10 +429,18 @@ is one table (`RunPlan.Difficulty`).
 **Assumed** — the numbers: Breaker chase 4.5 → 5.0 → 5.0 → 5.5 across the rooms, attack cooldown
 1.3 → 1.0 → 0.9 → 0.8 s, concurrent attackers 1 then 2, wave grace 1.2 → 0.8 → 0.8 → 0.6 s;
 waves 2·0/3·0, 3·1/4·1, 4·2/5·2, 5·2/5·3 (Breakers·Surveyors); base Breaker chase 5 vs run 5.5, wind-up 0.28 s with the lunge in its
-last 0.14 s at 18 u/s, active 0.10 s; Surveyor band 6–9 u (retreat under 5, approach over 10),
+last 0.14 s at 18 u/s, active 0.10 s; Surveyor band 6–9 u (retreat under 5, approach over 10,
+backing off at 3.2 × the room's pace),
 charge 0.6 s, bolt 9 u/s with 11 u of reach, cooldown 2.2 s; damage 2 of 10 for both; two
 concurrent attackers; stun budget 0.9 s per 2.5 s; first-gesture grace 1.5 s. Not reviewed by you. All builder consts in one
 table in `ArenaSceneBuilder`; the lanes' reach follows the lunge and the bolt automatically.
+
+**Assumed** — the Surveyor backs off at 3.2 (was 4; 2.9–3.5 across the rooms) and its hurtbox is a
+0.6 m circle (was 0.45, the Breaker's), to match the hovering body's footprint. An enemy tweak
+made alongside the slash, outside your "improve the slash, leave Nova" ruling: at 4 it outran
+the chain's step, and at 0.45 players aimed at the body and missed the circle under it. Its band,
+wind-up and bolts are unchanged; incidentally Nova now reaches a Surveyor 0.15 m further. Not
+reviewed by you; one builder const each (`docs/design/slash.md` §5).
 
 **Undecided** — what the machines were: the wreck's crew, the world's own machinery, or the
 AI's earlier attempt. All three fictions below are written to survive either answer.

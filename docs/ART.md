@@ -345,17 +345,19 @@ time because `GameFlow` freezes the clock.
 
 ## Door markers
 
-Six 1.2 × 1.2 m plates, `biome1_marker_{module,refit,hard,boss,sample,repair}`, tell the player what
-the room behind a door pays. They are one family: a framed hex or diamond plate with a dark face, a
-pale frame and one accent — player blue (module), copper (refit), red `#FF3050` (a marked room),
-red-violet (the Foreman), the pickups' own violet and mint (sample, repair). Each accent sits on the
-plate's dark face, never on the wall paint: red on the wall green is equal in brightness and cannot
-win the contrast rule. **They hang on the door face, not over the lintel.** The camera cannot scroll
-north, so only the bottom 2.2 m of the north wall is ever on screen and a plate at lintel height
-(2.4 m) would never be seen; `mount_z_m` is 0.1 and the plate is a child of the door panel, so it
-sinks with it and is gone once the door is open. The pivot is the plate's bottom edge, placed at
-(door x, y 7), the wall's inner face. The seam is based on the same face for the same reason.
-Renders are byte-reproducible (`marker_kit.py`, seeds 9101–9106).
+Six plates, `biome1_marker_{module,refit,hard,boss,sample,repair}`, tell the player what the room
+behind a door pays. Rendered at 1.2 m and drawn at **0.9 m**, they are one family: a framed hex or
+diamond plate with a dark face, a pale frame and one accent — player blue (module), copper (refit),
+red `#FF3050` (a marked room), red-violet (the Foreman), the pickups' own violet and mint (sample,
+repair). Each accent sits on the plate's dark face, never on the wall paint: red on the wall green is
+equal in brightness and cannot win the contrast rule. **They hang on the door face, not over the
+lintel.** The camera cannot scroll north, so only the bottom 2.2 m of the north wall is ever on
+screen and a plate at lintel height would never be seen; `mount_z_m` is **0.35**, which centres the
+plate in the visible band. The plate is the sign for the room behind, so it **stays up when the door
+opens** and draws above actors (`RoomSorting.DoorMarker` 26): the player decides after the doors
+open, and must be able to read it then. The pivot is the plate's bottom edge, placed at (door x, y 7),
+the wall's inner face. The seam is lifted from the same face. Renders are byte-reproducible
+(`marker_kit.py`, seeds 9101–9106).
 
 ## The Landing (hub)
 
