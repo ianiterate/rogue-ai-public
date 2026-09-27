@@ -78,7 +78,10 @@ chain needed perfect aim and Surveyors outran it; the ruling was to improve the 
 Nova alone). Every chain hit, the dash-strike and the lance's thrusts use **aim assist**: the
 swing bends onto the best enemy within 3.2 m and 55° of the stick — never one behind her — and
 goes down the stick if there is none. Inside 22.5° of the stick every target counts as straight
-ahead and the nearer wins; outside it, angle decides. Hits two and three **track** the enemy the
+ahead and the nearer wins; outside it, angle decides. The lance's **throw** has its own, narrower
+assist: 35° of the stick and the throw's full range, so a line of enemies is threaded through the
+nearest. Nova and the spin are rings and go down the stick. Thrown things now **point where they
+fly** on screen, foreshortened by the camera's tilt, so a spear thrown south reads as a spear. Hits two and three **track** the enemy the
 chain last struck while it is within 3.5 m and not behind the stick. A chain hit with a target
 takes a **closing step** instead of its short step: fast enough to bring the target to the middle
 of the blade by the end of the swing, leading where it is moving, never more than 1.2 m (1.6 m
