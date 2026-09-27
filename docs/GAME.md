@@ -99,9 +99,8 @@ Not reviewed by you. Both are single fields to turn on after a play-test.
 
 A run is **four rooms and a boss** (rooms decided 2026-09-21, the boss 2026-09-22). Each room is a fight: waves of Breakers and
 Surveyors, two waves per room, growing from three Breakers in the first to five Breakers and
-three Surveyors in the last. When the last wave falls, two things happen: a **reward** appears
-at the room's centre, and the **exit** — a door in the middle of the north wall — sinks into the
-floor. Walk through it and the next room is built on the spot: a fresh layout of the same kit
+three Surveyors in the last. When the last wave falls, a reward appears and the **doors** in
+the north wall sink into the floor. Walk through one and the next room is built on the spot: a fresh layout of the same kit
 (pillars, rock clusters, hull slabs, crystal spires) laid out by a seeded generator and checked
 by rule — every gap walkable, no spawn inside lunge reach of a blocker, the entry, every spawn
 and the exit provably connected — so a room can never be unplayable. You enter the new room
@@ -109,9 +108,29 @@ from the south, where you came in. Health carries over; nothing else does yet.
 
 The first room is hand-authored — it is the tutorial room and stays the same every run.
 
-Rewards alternate: an **HP crystal** (mint; heals four of ten) in rooms one and three, a **Core
-Sample** (violet) in rooms two and four. Samples are counted on the HUD; they are the thing the
-run is for. Picking either up is optional; the door opens regardless.
+**Doors** (decided 2026-09-27). The first room pays an HP crystal (mint; heals four of ten),
+then a module. Rooms one to three open **two doors**, each marked with what the room behind it
+pays: a **module** (blue-white chip), a **Core Sample** (violet crystal), an **HP crystal**
+(mint), a **Refit** (copper chip), or a **marked room** (the Foreman's red seam: more machines,
+pays a module and a sample). The HUD names both, left door first: `MODULE OR SAMPLE`. Room four
+has one door, the Foreman's. A sample always waits behind a door into rooms two and four, so
+three samples are reachable on every run without a marked room; a fourth is only ever behind
+one. Samples are counted on the HUD; they are the thing the run is for. Picking a reward up is
+optional; the doors open regardless. The plan is the run seed's, never the player's.
+
+**Assumed** — the door rules (`docs/design/doors_and_depth.md` §1): the two doors never match;
+room one's doors are always a sample against a module or a Refit (70/30); room two's never hold
+a plain sample; room three's always hold one; exactly one HP door a run, at room two's or room
+three's doors, even odds; no marked room behind room one's doors, so the first marked room can
+be room three; the free slots weigh module 50, Refit 20, marked 30. A Refit door pays a module
+offer instead when nothing held can be raised — nothing held, or everything Epic. A **marked
+room** adds one Breaker and one Surveyor to each wave at the next room's difficulty, with no
+step past room four (a marked room four is harder by head count only). Doors at ±6 m on the
+26 m wall; a two-door room keeps its blockers and spawns 1 m off each door's lane rather than
+the single door's 3.5 m, which covered the whole north half. "Marked room" is the name; HARD is
+the fallback. Not reviewed by you. Each is a constant, a weight or a table entry.
+**Undecided** — an elite enemy in marked rooms instead of more enemies. Waits on the third
+enemy; blocks nothing.
 
 After the boss the exit leads to the surface: the run ends with a tally of rooms cleared
 and samples collected, and any press starts a new run. **Death ends the run** and sends her
@@ -137,7 +156,8 @@ whether the boss lives in a different biome is still **Undecided**.
 
 **Assumed** — rooms are all 24 × 14 (variable sizes need per-room camera framing); two waves per
 room with the table Breakers·Surveyors 3·0/3·1, 4·1/4·2, 4·2/5·2, 5·2/5·3; HP crystal heals 4;
-the door is a 3 u geometry gap at the north centre with no dressing yet; entry at (0, −5);
+each door is a 3 u geometry gap in the north wall (two at ±6 in rooms one to three, one at the
+centre in room four) with a 1.2 m reward plate on its face; entry at (0, −5);
 generator picks 6–10 blockers and 8–12 decals per room. Not reviewed by you; all constants in
 `RunPlan` and `RoomGenerator`.
 
@@ -206,8 +226,8 @@ bought, the lance is hers for good.
 
 The numbers are in `docs/design/weapons.md` and in code in `MoveSets`: the lance's chain is
 the sword's with +0.04 s startup and +0.05 s recovery a hit, a 2.0 × 0.8 m box reaching 0.6 to
-2.6 m, a 1/1/2 chain like the sword's; the throw deals 2 to everything on a 9 m line (12 with
-Reach) and sticks in a wall; the recall deals 1 on the way back and pulls what it hits toward
+2.6 m, a 1/1/2 chain like the sword's; the throw deals 2 to everything on a 9 m line (a quarter
+further with Reach) and sticks in a wall; the recall deals 1 on the way back and pulls what it hits toward
 her; while it is out she has two quick jabs of 1. A thrust draws a blue line on the floor out to
 its tip, since the lance itself stops a metre short of where it can land. The run takes the weapon the save says she
 carries at the descent; nothing mid-run can change it. Every run module works with both.
@@ -225,9 +245,9 @@ tunes, 12 it fires — each a visible change to the mast in the Foundry and new 
 Fabricator. At 12 the beacon fires and the loop continues with it lit. The Foreman drops a
 sample, so a full run is worth three.
 
-**Inside a run: modules** (unchanged). When you walk through a cleared room's exit, the world
-holds and you are offered two of eight upgrades — take one or skip — before the next room fades
-in. The offer sits at the exit rather than on the last hit because the take button is also the
+**Inside a run: modules**. When you walk through the exit of the first room, and of every
+module or marked room after it, the world holds and you are offered two of eight upgrades —
+take one or skip — before the next room fades in. The offer sits at the exit rather than on the last hit because the take button is also the
 attack button. There is no offer after the boss. Each card is labelled with the button it
 changes — CHAIN, SPECIAL, DASH, HULL — and reads true for either weapon: Momentum works on the
 last hit of whichever chain is in hand, Reach and Shock on whichever Special.
@@ -237,8 +257,37 @@ even whole number at .5, so ×1.25 turned every 1 back into 1 and did nothing; �
 weapons' chains 2/2/3, and its card says so: "Chain hits deal 2, the last one 3". The
 categories were BLADE and NOVA. Not reviewed by you.
 
+**Rarity, Refit and synergies** (decided 2026-09-27). Modules come in three **rarities**:
+Common, Rare and Epic. The card shows the rarity by colour (copper, mint, gold) and by the word
+RARE or EPIC before its button. Edge's chain goes from 2/2/3 at Common to 3/3/4 at Epic on the
+sword (3/3/5 on the lance). The first room never deals an Epic, and marked rooms deal rarer
+cards. A **Refit** — a copper kit on a Refit room's floor — stops the world and raises one held
+module a step; Plating heals the extra points. Four pairs are **synergies**, live while both are
+held at any rarity: **Aftershock** (Momentum + Shock: the finisher's stun reaches every enemy
+within 1.5 m of what it hit), **Ram** (Blink + Strike: the strike out of a dash stuns for half a
+second; its damage is unchanged), **Cadence** (Tempo + Blink: a dash mid-chain keeps your place
+in it) and **Salvage** (Reach + Plating: a Special that hits repairs 1, twice a room). A card
+that would complete one says so on a third line, `+ AFTERSHOCK with MOMENTUM`, and the HUD's
+module row names the live ones after the modules. The Fabricator remarks, once ever, on the
+first two doors, the first marked room cleared, the first pair and the first Refit.
+
+**Assumed** — rarity weights 75/25/0 at room one's offer and for Reserve, 70/25/5 in module
+rooms, 40/45/15 in marked rooms; every tier's numbers (`docs/design/doors_and_depth.md` §3):
+Edge ×1.6/×2.2/×2.6, Momentum knockback ×1.5/×2/×2.5 and stun 0.5/0.7/0.9 s, Tempo
+×0.8/×0.7/×0.6, Reach ×1.25/×1.4/×1.6, Shock 0.6/0.75/0.9 s, Strike 0.12/0.2/0.3 s, Blink
+0.25/0.22/0.19 s with Lattice multiplying it afterwards and a 0.16 s floor, Plating +3/+5/+8.
+Reach is now a scale, so its Common ring shrinks from 2.8 to exactly a quarter further (2.75 m).
+A dash-strike through Strike's window takes no chain slot (the chain goes on from where it
+was). Ram stuns rather than deals 2, which was faster and safer than the chain; Salvage is
+capped at two a room, which uncapped out-healed an enemy's hits. Edge never touches the
+dash-strike. Retention keeps the rarity the first module was **taken** at, never what a Refit
+made of it. The Refit is a choose-one panel. The tier colours; Common prints no rarity word.
+The four new Fabricator lines are not yet voiced. Not reviewed by you. The numbers are the
+sim-designer's; the wording is in `docs/design/depth_text.md`. **Undecided** — whether weapons
+get their own module pools. Blocks nothing yet.
+
 The goal is stated at the start: **the beacon needs twelve Core Samples; the shelf holds
-three a run — four rooms and a Foreman down.**
+three a run, a fourth behind a marked room — four rooms and a Foreman down.**
 
 **Assumed** — the death card shows the room reached and the samples carried (the spoken lines
 no longer name numbers); the draft count is not shown anywhere now. **Assumed** — the
@@ -249,7 +298,7 @@ counts as a Breaker's, and any kill in the Foreman's room as the Foreman's; the 
 introduction plays once ever; Retention brings back the same first module every run once owned;
 Reserve draws with the run seed. **Assumed** — the save is JSON in PlayerPrefs (IndexedDB on the web) with a version field for
 migration; the Revision list and costs; beacon stages 3/6/12; the Foreman's sample; two-of-eight
-modules per room. Not reviewed by you. **Undecided** — whether the beacon does what the
+modules at room one's exit and at every module and marked room's. Not reviewed by you. **Undecided** — whether the beacon does what the
 Fabricator says it does (the next arc), and what fires after it fires.
 
 ## Simulation
