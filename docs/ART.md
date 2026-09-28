@@ -59,8 +59,10 @@ Tartarus transposed to sci-fi.
 
 | Role | Colour |
 |---|---|
-| Alloy ruin lit / base / shadow | `#3F8F72` / `#2E6B58` / `#17392F` |
-| Floor plate / alternate / seam | `#274C41` / `#1E3B34` / `#12241F` |
+| Alloy ruin lit / base / shadow | `#3F8F72` / `#2E6B58` / `#17392F` — **standing things only**: walls, pillars, slabs |
+| Ash floor plate / alternate / seam | `#2B3439` / `#252C31` / `#131618` (L\* 21 / 18 / 7; hue 207 at 21% saturation — the silt "the colour of cold ash") |
+| Ash paint / stain / bevel | `#374046` / `#1D2225` / `#3E484F` — every walkable decal (conduits, grate, cable, crack lips) is painted in these, within 8 L\* of the plate |
+| Basalt rock lit / base / shadow | `#787467` / `#575868` / `#373849` (warm lit top, cool violet-grey body: neither the floor nor the alloy) |
 | Copper machinery / highlight | `#C8762E` / `#F2B15C` (vertical surfaces only) |
 | Energy violet / bright | `#C23BD6` / `#E45BFF` (glowing seams, at most 4% of floor pixels) |
 | Mint glow | `#7BE8A4` (crystals, all 2D lights) |
@@ -69,17 +71,32 @@ Tartarus transposed to sci-fi.
 | Player gold | `#B8901E` / `#E0B93A` / `#F5D96A` — her hull, and nothing else: the one warm bright body in a cold pale room (playtest 2026-09-23: slate blended with the enemies) |
 | UI-safe | `#EDE7F2` |
 
+## The value ladder (2026-09-28)
+
+The room is three value bands and two temperatures, and hue says what a thing *is*: the
+**floor is cold ash** (L\* 16–26, under 25% saturation), **everything that stands is green alloy
+or copper** (L\* 32–58) or basalt grey with a warm top, and **actors sit on top** (≥ 25 L\*
+over the floor). The audit gates the kit on it: every blocker's median L\* is at least 12 over
+the plate *and* its hue at least 40° from the floor's; every walkable decal is within 8 L\* of
+the plate with no outline and no bevel. Measured on the shipped kit: pillars +21/+27, slabs
++32, rocks +25, spires +28/+47, north wall +14, side walls +25, conduits −4/+6.
+
+**Assumed** — the ash hexes, the +12 / 40° gates and the 8 L\* paint ceiling; each is one
+constant in `biome1.py` and the audit prints the delta. Reviewed by you only as "ash floor,
+alloy verticals".
+
 ## The contrast rule
 
 Saturation is not capped. Instead:
 
 - Actors carry the outline and a rim light 18 L\* above their own base, and sit at least 25 L\*
   from the floor behind them.
-- Flat surfaces stay within L\* 18–34; ornament brighter than L\* 45 covers less than 8% of the
-  floor. Vertical surfaces may reach L\* 55 and 60% saturation — they are at the frame's edge,
+- Flat surfaces stay within L\* 16–26 (ornament to 34); ornament brighter than L\* 45 covers
+  less than 8% of the floor. Vertical surfaces may reach L\* 55 and 60% saturation — they are at the frame's edge,
   not under the fight.
 - Hues 0–25° and 200–230° are forbidden to scenery above 25% saturation: red means a strike is
-  coming, blue means you.
+  coming, blue means you. The ash floor sits at hue 207 and 21% saturation — under the bar,
+  which is what makes an ash floor legal at all.
 - The wedge at 0.55 alpha is checked against both floor plates; the arc against the brightest
   plate and against copper. Per biome.
 
@@ -89,10 +106,12 @@ Saturation is not capped. Instead:
 an outline and a shadow on the floor under it; every walkable element — lichen, grates, cables,
 cracks, inlays — is painted flat into the floor with no outline and no shadow. A player never
 has to test a prop to learn whether it is solid. The shadow is the tell: only solids cast one.
+Every upright also carries a 0.15 m **base band** at its shadow step (0.25 m on the walls), so
+it visibly sits on the floor instead of floating over it.
 
 ## Layering
 
-Floor −100 · decals −90 · wall base shade −85 · cast shadows −80 · contact shadows −79 · danger
+Floor −100 · **floor light −95** · decals −90 · wall base shade −85 · cast shadows −80 · contact shadows −79 · danger
 wedge −70 · slash arc −60 · health ring −56 (track) / −55 (fill) · aim pointer −50 · wall geometry −10 · drawn wall faces −9 · **props,
 player, enemies all at 0, sorted by Y** · spores 22 · sparks 25 · health bars 30 · HUD 50 · touch
 controls 100. Tall props still fade to 45% while the player stands behind them.
@@ -101,19 +120,24 @@ controls 100. Tall props still fade to 45% while the player stands behind them.
 
 A shadow centred exactly under its caster is invisible: under the 35° tilt the caster's front
 face or billboard covers precisely its own footprint. So every blocker and actor carries two flat
-ellipses — a **cast** shadow (1.35 W × 1.0 D, near-black green at 0.55, pushed +0.22 W right and
-−0.18 D down, away from the upper-left key light) that pokes out from under the caster, and a
-tighter **contact** core (0.9 W × 0.7 D at 0.35) that shows in the gaps around legs and under
-the drone. Each wall run has a 0.35 m shade strip along its inside base so the walls sit on the
-floor. Never re-centre a shadow on its footprint.
+ellipses — a **cast** shadow (1.35 W × 1.0 D, ash-black `#0C1013` at 0.70, pushed +0.22 W right
+and −0.18 D down, away from the upper-left key light) that pokes out from under the caster, and a
+tighter **contact** core (0.9 W × 0.7 D at 0.45) that shows in the gaps around legs and under
+the drone. Each wall run has a 0.35 m contact strip (0.45) along its inside base. Never re-centre
+a shadow on its footprint. (Alphas raised from 0.55 / 0.35 / 0.30 on 2026-09-28: on the dark
+ash floor the old values were the faint tail the doc warns about.)
 
 ## Perimeter
 
 The wall ring encloses the 26 × 16 plate field exactly: north and south runs span x ±13, the
 side runs y ±7.5, corners are the end segments of the side walls — full 3 m at the north corners,
 lip height (0.4 m) at the south so nothing occludes the player. Only void (`#100D14`) lies
-beyond. The artist's north faces and the south lip faces are billboarded over the geometry; the
-side walls are geometry only until side faces exist at the 15 m length.
+beyond. The artist's north faces, the south lip faces and the **side faces** (`wall_side_w/e`,
+1 × 15 × 3 m, cap panels on the 2 m lattice, copper clamps and straps, one mint lamp each) are
+billboarded over the geometry. A side face is laid only when its render fits the run within 3%
+in both axes; a stand-in is never stretched. **Assumed** — the side face stands 3 m along its
+whole length, including the south corner the geometry keeps at lip height; if it occludes the
+player there, the fix is a second, shorter render.
 
 ## Characters
 
@@ -391,19 +415,43 @@ light; fixing the graph would re-render every sprite, so it waits for its own pa
 
 ## Light and post
 
-One global light at 1.0, nothing else: painted values stay exact and every glow is paint in the
-sprite. Additive point lights and bloom were tried and removed — soft pools pulsing over
-painted art read as noise and added nothing to the Hades look, which is painted glow, not
-real-time glow. Vignette stays at 0.22. The camera is clamped so the visible floor never
-leaves the 26×16 plate field.
+One global light per room — white at 1.0 in room one, then tinted colder and dimmed by room
+(room four `(0.84, 0.91, 1.0)` at 0.86, the Foreman's room `(0.86, 0.90, 1.0)` at 0.84; the
+Landing a faint cool white at 1.0) — and **one static floor lightmap**, nothing that moves.
+The tint is on the light rather than in the shade because a multiply shade over an L\* 21 floor
+has almost no room to darken, and a cold shade colour pushes blue back up. Painted values
+stay exact and every glow is paint in the sprite. Additive point lights and bloom were tried
+and removed — soft pools pulsing over painted art read as noise; bloom is **off** in the volume
+(it had quietly stayed at 0.30 until 2026-09-28).
+
+The lightmap (`FloorLightmap`, 20 px/m, baked in under 2 ms at room build) is what gives an
+orthographic room depth, since there is no vanishing point to do it: a 1.6 m occlusion band
+inside every wall (0.45 at the wall, corners multiply), a 2.2 m cast shadow south of the north
+wall offset 0.5 m east for the upper-left key with a lit gap under each door, a 14 × 8 m pool
+where the shade drops to zero, a 0.10 field shade everywhere outside it, and a near/far grade
+(south 6% darker and warmer, north 4% lighter and cooler). The pool's +8% lift is a sprite
+Light2D on the global light's multiply style, so it also lifts an actor standing in it; on a
+device with no float light texture the lift silently vanishes and only the shade remains.
+Each room seeds its own pool offset (±2 × ±1 m), scale (0.9–1.1) and warmth (colder by room,
+room four −0.6 with edges ×1.15, the Foreman's room edges ×1.3 and pool ×1.2); the Landing is
+cold, mintless and mild (edges ×0.7). Decals at −90 sit above the light and are not shaded.
+
+Post: colour adjustments contrast +12 and saturation +8, vignette 0.28 in the void colour. The
+audit measures sprites before post, so no target double counts. A second particle emitter puts
+thirty slow, dim (≤ 0.06) mint motes in the north third of the room so the far half has air.
+The camera is clamped so the visible floor never leaves the 26×16 plate field.
+
+**Assumed** — every number above; each is one constant in `FloorLightmap`, `RoomGenerator` or
+`ProjectBootstrap`. The 0.10 field shade and the boss warmth were the engineer's calls, not
+yours.
 
 ## WebGL caveats
 
 iOS Safari has no DXT, so textures decompress to RGBA32 there: every texture is capped at
 2048 px and the biome budget is **8 MB** of PNG. It was 6 MB and the player sheet moved it: one
 the player alone is 7.8 MB across six sheets (A 2.2, B 0.3, C 0.4, D 2.4, E 0.9, F 1.5) and the
-whole Biome 1 tree is 17.8 MB of PNG, so the 8 MB figure is the *per-character* line now, not the
-biome's; on iOS every byte of that decompresses to RGBA32. The tiling floor is the reason there is still headroom. Headless EEVEE needs a GPU
+whole Biome 1 tree is 17.8 MB of PNG, so the 8 MB figure is the *per-group* line now — each character's sheet family, and the
+environment kit (4.3 MB) — not the biome's; `build_assets.sh` refuses to install a group over it; on iOS every byte of that decompresses to RGBA32. The tiling floor is the reason there is still headroom. Headless EEVEE needs a GPU
 context; the render script falls back to Cycles CPU, which the emission-only shading makes
 equivalent.
 

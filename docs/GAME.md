@@ -517,9 +517,13 @@ physics plane: the floor recedes with a visible plate grid, walls stand three me
 along the top and sides, and props and characters are upright sprites sorted by depth.
 Everything is modelled and toon-rendered in Blender — flat things straight down, upright
 things from the same 35° camera — and placed as sprites; gameplay keeps honest 2D footprints.
-The palette is saturated, Tartarus transposed to sci-fi: green alloy ruin, copper machinery,
-violet energy, mint crystal glow. Red belongs to enemy telegraphs and blue to the player;
-scenery is forbidden those hues. Details: `docs/ART.md`.
+The palette is saturated, Tartarus transposed to sci-fi: a cold ash floor under green alloy
+ruin, copper machinery, violet energy, mint crystal glow (2026-09-28: the floor went from alloy
+green to ash so that hue itself says what blocks — everything that stands is metal or rock,
+everything walkable is ash). A static floor lightmap darkens the walls and corners and pools
+light at the centre of every room; each room seeds its own pool and one hero floor seal, and
+dresses its side walls. Red belongs to enemy telegraphs and blue to the player; scenery is
+forbidden those hues. Details: `docs/ART.md`.
 
 **Assumed** — the specific palette values and the 35° tilt. Reviewed by you only as
 "isometric like Hades"; both are single values in the render script and the camera rig.
