@@ -74,10 +74,10 @@
       var buildUrl = "Build";
       var config = {
         arguments: [],
-        dataUrl: buildUrl + "/f5a32ba468e3209a6224cfab5863d953.data.unityweb",
+        dataUrl: buildUrl + "/9f9acc6b790c220a39b3e7e2fd57ffc7.data.unityweb",
         frameworkUrl: buildUrl + "/8dd15ebc189487b25efbe6cdd1b197b5.framework.js.unityweb",
-        codeUrl: buildUrl + "/6d61d322eb3549c5f306bcee969cd2a1.wasm.unityweb",
-        symbolsUrl: buildUrl + "/c013389b00a6801feb51876062d135e2.symbols.json.unityweb",
+        codeUrl: buildUrl + "/7d368404cba923fa6cea2a71f1c442e6.wasm.unityweb",
+        symbolsUrl: buildUrl + "/888b9e7bd30eec9d5ab5abc4337f97ac.symbols.json.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "ianiterate",
         productName: "rogue-ai",
@@ -87,7 +87,7 @@
         devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
       };
       var script = document.createElement("script");
-      script.src = buildUrl + "/30a143400e8cf9ee8d05c1b87cf41717.loader.js";
+      script.src = buildUrl + "/f15f4097f375b4fa0f38d866c714ce1c.loader.js";
       script.onload = function () {
         createUnityInstance(canvas, config, function (progress) {
           document.querySelector("#unity-bar-fill").style.width = 100 * progress + "%";

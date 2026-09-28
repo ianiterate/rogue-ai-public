@@ -132,9 +132,9 @@ Not reviewed by you. Both are single fields to turn on after a play-test.
 
 ## The run
 
-A run is **four rooms and a boss** (rooms decided 2026-09-21, the boss 2026-09-22). Each room is a fight: waves of Breakers and
-Surveyors, two waves per room, growing from three Breakers in the first to five Breakers and
-three Surveyors in the last. When the last wave falls, a reward appears and the **doors** in
+A run is **four rooms and a boss** (rooms decided 2026-09-21, the boss 2026-09-22). Each room is a fight: two waves of
+Breakers and Surveyors, and, once the beacon is lit, Welders in rooms three and four, growing from
+two Breakers in the first room to eight machines a wave in the last. When the last wave falls, a reward appears and the **doors** in
 the north wall sink into the floor. Walk through one and the next room is built on the spot: a fresh layout of the same kit
 (pillars, rock clusters, hull slabs, crystal spires) laid out by a seeded generator and checked
 by rule — every gap walkable, no spawn inside lunge reach of a blocker, the entry, every spawn
@@ -147,7 +147,8 @@ The first room is hand-authored — it is the tutorial room and stays the same e
 then a module. Rooms one to three open **two doors**, each marked with what the room behind it
 pays: a **module** (blue-white chip), a **Core Sample** (violet crystal), an **HP crystal**
 (mint), a **Refit** (copper chip), or a **marked room** (the Foreman's red seam: more machines,
-pays a module and a sample). The HUD names both, left door first: `MODULE OR SAMPLE`. Room four
+pays a module and a sample; marked rooms appear only once the beacon is lit, because the Foreman
+marks a room only after it has heard the beacon). The HUD names both, left door first: `MODULE OR SAMPLE`. Room four
 has one door, the Foreman's. A sample always waits behind a door into rooms two and four, so
 three samples are reachable on every run without a marked room; a fourth is only ever behind
 one. Samples are counted on the HUD; they are the thing the run is for. Picking a reward up is
@@ -165,19 +166,23 @@ the station labels, enemy bars and HUD). Not reviewed by you; three constants.
 room one's doors are always a sample against a module or a Refit (70/30); room two's never hold
 a plain sample; room three's always hold one; exactly one HP door a run, at room two's or room
 three's doors, even odds; no marked room behind room one's doors, so the first marked room can
-be room three; the free slots weigh module 50, Refit 20, marked 30. A Refit door pays a module
+be room three; the free slots weigh module 50, Refit 20, marked 30, or module 70, Refit 30 and no
+marked room while the beacon is dark. A Refit door pays a module
 offer instead when nothing held can be raised — nothing held, or everything Epic. A **marked
 room** adds one Breaker and one Surveyor to each wave at the next room's difficulty, with no
-step past room four (a marked room four is harder by head count only). Doors at ±6 m on the
+step past room four (a marked room four is harder by head count only); once the beacon is tuned,
+its last wave fields an **elite** in place of that extra Surveyor (see Enemies and pressure). Doors at ±6 m on the
 26 m wall; a two-door room keeps its blockers and spawns 1 m off each door's lane rather than
 the single door's 3.5 m, which covered the whole north half. "Marked room" is the name; HARD is
 the fallback. Not reviewed by you. Each is a constant, a weight or a table entry.
-**Undecided** — an elite enemy in marked rooms instead of more enemies. Waits on the third
-enemy; blocks nothing.
 
-After the boss the exit leads to the surface: the run ends with a tally of rooms cleared
-and samples collected, and any press starts a new run. **Death ends the run** and sends her
-up: see The surface. There is no checkpoint inside a run.
+After the boss, the exit leads up. The world holds on the **ascent tally**: rooms cleared,
+marked rooms, the samples she carries and where they came from, the modules she held, and the
+beacon's count with this run's samples added. Any press takes her up to the Landing.
+**Assumed** — the tally's lines and their order, and that a press counts only after half a second
+and only if it began after the card appeared, so an attack still held from the fight cannot skip
+it (`docs/design/beacon_and_unlocks.md` §5). Not reviewed by you; view-side and cheap.
+**Death ends the run** and sends her up: see The surface. There is no checkpoint inside a run.
 
 **The fifth section is the boss.** The Foreman waits in a
 sparse arena at the top of the shelf, and the fight is Hades' first boss transposed: it never
@@ -194,18 +199,25 @@ are all down; the exit leads to the surface.
 after a 0.7 s tell, five bolts at 0°/±12°/±24° at 8 u/s; blink 6 u away after 1.5 s of being
 crowded, 0.3 s invulnerable; lash lines after a 1.0 s tell, 3 damage; phases at 66 % and 33 %
 with cooldowns ×0.85 and ×0.7; the boss bar at the bottom of the screen; adds must die for the
-clear; no module offer after the boss. Not reviewed by you. The boss arena is Biome 1 —
-whether the boss lives in a different biome is still **Undecided**.
+clear; no module offer after the boss. Not reviewed by you. The boss arena is Biome 1.
 
 **Assumed** — rooms are all 24 × 14 (variable sizes need per-room camera framing); two waves per
-room with the table Breakers·Surveyors 3·0/3·1, 4·1/4·2, 4·2/5·2, 5·2/5·3; HP crystal heals 4;
+room with the table Breakers·Surveyors·Welders 2·0·0/3·0·0 and 3·1·0/4·1·0, then, while the beacon
+is dark, 4·2·0/5·2·0 and 5·2·0/5·3·0, and once it is lit, 4·2·1/5·2·1 and 5·2·1/4·2·2. Room four's
+last wave is capped at eight so that a marked one still puts at most two machines on each of the
+five spawn points (`docs/design/welder.md` §2). HP crystal heals 4;
 each door is a 3 u geometry gap in the north wall (two at ±6 in rooms one to three, one at the
 centre in room four) with a 0.9 m reward plate on its face; entry at (0, −5);
 generator picks 6–10 blockers and 8–12 decals per room. Not reviewed by you; all constants in
 `RunPlan` and `RoomGenerator`.
 
-**Undecided** — what Core Samples buy on the surface (the meta-goal the run feeds), and whether
-the boss room is a different biome. Affects: economy, the end-of-run screen, the second kit.
+**Decided 2026-09-28** — the boss room is **the Foreman's yard**, a variant kit on the Biome 1
+pipeline rather than a second biome: its own floor (darker ash scored with copper cut lines and
+marked hexes), plating walls, stacked cut plates and a cleaver rack for blockers, a crane hook in
+the foreground, and the Foreman's red-violet as its only emissive. The shelf's palette rules hold
+there except that violet and mint are absent. Details: `docs/ART.md`, "the Foreman's yard".
+**Assumed** — a variant kit, not a folder of its own; a second biome would need the catalogue,
+the generator and `build_assets.sh` made per-biome (listed in ART.md).
 
 ## The surface
 
@@ -253,10 +265,14 @@ her memory of the run feeds the next Unit, and everything she carried is **banke
 Core Samples always come home, even from a death (Hades' rule for Darkness). Death costs only
 the run's modules.
 
-Samples are spent at the Fabricator's bench on **Revisions** — permanent: *Gauge* (+2 max
-health, 1), *Gauge II* (+2 more, 2), *Reserve* (start every run holding one module, 2),
-*Lattice* (dash cooldown −25 %, 2), *Retention* (keep your first module between runs, 3). Each
-once. They are folded into the next run before its own modules.
+Samples are spent at the Fabricator's bench on **Revisions**, which are permanent. Tier I is
+there from the start: *Gauge* (+2 max health, 1), *Gauge II* (+2 more, 2), *Reserve* (start every run
+holding one module, 2), *Lattice* (dash cooldown −25 %, 2), *Retention* (keep your first module
+between runs, 3). Tier II sits below it, locked and greyed until the beacon is tuned: *Capacitor* (the Special recovers a
+quarter sooner, 2), *Cladding* (the first hit she takes in each room deals nothing, 4), *Failsafe*
+(once a run, a hit that would destroy her leaves her at 1 health, 3), *Patchwork* (the Foreman drops
+two samples, 4). Each is bought once. They are folded into the next run before its own modules.
+The bench and the rack together cost 27 samples.
 
 ### Weapons
 
@@ -295,10 +311,32 @@ does not stun with it; Edge and Tempo do apply. One line each in `Effective`. **
 Attack pressed while the lance flies home becomes thrust one if she catches it within the
 input buffer. Cheap. None of these reviewed by you.
 
-Samples also count, lifetime, toward the **Ascent Beacon** in three stages — 3 it lights, 6 it
-tunes, 12 it fires — each a visible change to the mast in the Foundry and new lines from the
-Fabricator. At 12 the beacon fires and the loop continues with it lit. The Foreman drops a
-sample, so a full run is worth three.
+Samples also count, lifetime, toward the **Ascent Beacon** in three stages: 3 lights it, 6
+tunes it, 12 fires it. Each stage is a visible change to the mast on the Landing, a new line from
+the Fabricator, and **new content below** (decided):
+
+- **Dark** (under 3): the shelf as it first is, with no marked rooms and no Welders.
+- **Lit** (3): marked rooms enter the doors, because the Foreman marks a room only once it has
+  heard the beacon. Welders join the waves of rooms three and four.
+- **Tuned** (6): tier II of the Revisions opens, and each marked room's last wave fields an elite.
+- **Fired** (12): the ending arc plays once, then the loop continues with everything open. The
+  status line reads BEACON FIRED, and samples keep buying Revisions.
+
+A run keeps the stage it had at the descent. The Foreman drops a sample, two with Patchwork, so a
+full run is worth three, or four with Patchwork.
+
+**Assumed** — which stage opens what. While the beacon is dark, the door slots that marked rooms
+would take go to module 70 and Refit 30. The tier II effects and prices are Capacitor 2, Cladding 4,
+Failsafe 3 and Patchwork 4; the brief had 3 for the first two, and they moved because Cladding is
+worth more health per sample than anything else on the bench. Capacitor is read as a shorter Special
+tail, because no Special has a charge. Failsafe is the once-a-run save rather than a faster lance
+return. Tier II is hidden, not greyed, until the beacon is tuned. A player who wins every run fires
+the beacon in four to six runs and owns everything in seven to twelve
+(`docs/design/beacon_and_unlocks.md` §3.5). Not reviewed by you. Each is a constant or one
+comparison, but a Revision's name is permanent once a build that sells it ships.
+
+**Undecided** — what samples buy once all 27 are spent. It blocks nothing for the first seven to
+fifteen runs. Affects: the Landing's objective card, and whether the bank still shows.
 
 **Inside a run: modules**. When you walk through the exit of the first room, and of every
 module or marked room after it, the world holds and you are offered two of eight upgrades —
@@ -344,7 +382,7 @@ sim-designer's; the wording is in `docs/design/depth_text.md`. **Undecided** —
 get their own module pools. Blocks nothing yet.
 
 The goal is stated at the start: **the beacon needs twelve Core Samples; the shelf holds
-three a run, a fourth behind a marked room — four rooms and a Foreman down.**
+three a run, a fourth behind a marked room once the beacon is lit — four rooms and a Foreman down.**
 
 **Assumed** — the death card shows the room reached and the samples carried (the spoken lines
 no longer name numbers); the draft count is not shown anywhere now. **Assumed** — the
@@ -388,8 +426,9 @@ swings. Each is a small addition once the base read is judged by hand.
 
 ## Enemies and pressure
 
-Two kinds so far, on the Hades pattern of a chaser and a caster, and the room only works
-with both: the chasers make you move, the caster punishes moving badly.
+Three kinds: a chaser, a caster and, once the beacon is lit, a denier. The room works because
+of the mix: the chasers make you move, the caster punishes moving badly, and the Welder takes
+away floor to move on.
 
 **Breaker** — the chaser. Runs just under the player's speed, so distance is
 earned, not free. Its attack is a committed lunge: it locks its aim, paints its landing lane
@@ -404,41 +443,42 @@ charge, and fires a straight bolt that never turns. A sidestep with a little dis
 dash through it beats it; standing still does not. It is fragile — closing on it is the
 reward for reading the room.
 
-At most two enemies attack at once, of either kind; the rest hold at arm's length and
-circle, so there is always one tell to read. Stagger is rationed: a few quick hits stun,
-then the enemy shrugs the next ones off and finishes its swing through them. A stunned
-Surveyor drops its charge.
+**Welder** — the denier, in rooms three and four once the beacon is lit. It is slow and never
+chases: it holds four to seven units away. Its tell is the longest of the three. For 0.8 s it paints
+a lane 4 m long from its own feet toward you, then walks that lane with its torch down and leaves a
+burning **seam** that lasts three seconds. At its working distance the lane stops short of you,
+because it is not aiming at you: it is cutting the floor between you and itself. Get closer than
+four metres and the lane goes through you. Touching the seam costs 1, so walking across it costs 1
+and dashing across it costs nothing. It blocks nothing, and other machines cross it unharmed. The
+Welder's body hurts (1) only while it walks. It has four health: one full chain.
+
+At most two enemies attack at once, of any kind; the rest hold at arm's length and
+circle, so there is always one tell to read. A Welder's turn lasts from its tell to the end of its
+walk. Stagger is rationed: a few quick hits stun, then the enemy shrugs the next ones off and
+finishes its swing through them. A stunned Surveyor drops its charge. A stunned Welder drops its
+tell, or stops its walk where it is, and what it has already laid keeps burning. Seams go out when
+the room is cleared.
 
 **The opening is fair by rule.** Nothing moves until the player has pressed something, and
 then there is a beat (1.5 s) before any enemy leaves its spot; each new wave gets the same
 beat as it materialises. An enemy's first swing always comes after a chase, never off the
 spawn. On a phone held upright the "turn sideways" prompt holds the world. The first wave
-is three Breakers; the Surveyor arrives in the second.
+is two Breakers and the second three; the Surveyor arrives in room two, and the Welder, once the
+beacon is lit, in room three.
 
 Death holds the frame for a beat, then the arena reloads fresh. Clearing the room brings the
 next wave after a short pause.
 
-Both enemies are animated from rendered sheets like the player: idle, move, one attack whose
+The enemies are animated from rendered sheets like the player: idle, move, one attack whose
 wind-up/strike/follow-through frames are stretched over the attack's real timing, hit, death.
+The Welder's attack is 16 frames, split 6 / 6 / 4 over tell, walk and recovery, so the walk (the
+part that moves) runs at 10 fps. **Assumed**; one re-render.
 
-**Undecided** — **the Breaker's chase speed against its gait.** The move clip is 8 frames at
-12 fps, so one cycle lasts 0.667 s, and at the assumed 5 u/s chase that cycle has to cover
-**3.33 m of ground**. The source walk it is built from moves its feet 0.193 m per cycle, and a
-1.4 m six-legged machine cannot be made to stride seventeen times further — amplifying that far
-pulls the legs off the body. The shipped clip is a constructed *bound* with the feet clear of
-the floor for most of the cycle, which is the only gait whose feet cannot be seen to slip,
-and it hides the gap rather than closing it. Three ways out, and this one is a real choice
-rather than a rendering detail:
-
-1. **Drop the chase to roughly 1.5 u/s** and let the Breaker be a slow, heavy thing the player
-   outruns and has to choose to engage. Cheapest, and it changes what the enemy *is*.
-2. **Raise the move clip's fps** in the sidecar so the cycle is shorter than 0.667 s. Costs
-   nothing to render, but above about 20 fps an eight-frame cycle reads as a vibration.
-3. **Keep 5 u/s and accept a skate.** Defensible for a machine — it is not an animal, and
-   something that heavy moving that fast can read as driven rather than walked.
-
-This blocks nothing today: the sheet ships and plays at any of the three. It decides whether
-the Breaker reads as a bruiser you can outrun or a thing that runs you down.
+**The Breaker skates** (decided). It keeps its chase speed (5 u/s base, 4.5 to 5.5 by room).
+Its move clip, an 8-frame bound at 12 fps, cannot stride the 3.3 m a cycle that speed needs. The
+feet are clear of the floor for most of the cycle, which hides the slip rather than closing it. It
+is a machine, and something that heavy moving that fast reads as driven rather than walked: a
+thing that runs you down, not a bruiser you outrun.
 
 **Pacing ramps.** Playtesters said room one went from nothing to everything at once, and that
 the pace would suit a later room — so it does. Room one is two then three Breakers at 4.5 u/s
@@ -448,7 +488,7 @@ is one table (`RunPlan.Difficulty`).
 
 **Assumed** — the numbers: Breaker chase 4.5 → 5.0 → 5.0 → 5.5 across the rooms, attack cooldown
 1.3 → 1.0 → 0.9 → 0.8 s, concurrent attackers 1 then 2, wave grace 1.2 → 0.8 → 0.8 → 0.6 s;
-waves 2·0/3·0, 3·1/4·1, 4·2/5·2, 5·2/5·3 (Breakers·Surveyors); base Breaker chase 5 vs run 5.5, wind-up 0.28 s with the lunge in its
+waves as in The run; base Breaker chase 5 vs run 5.5, wind-up 0.28 s with the lunge in its
 last 0.14 s at 18 u/s, active 0.10 s; Surveyor band 6–9 u (retreat under 5, approach over 10,
 backing off at 3.2 × the room's pace),
 charge 0.6 s, bolt 9 u/s with 11 u of reach, cooldown 2.2 s; damage 2 of 10 for both; two
@@ -462,6 +502,28 @@ the chain's step, and at 0.45 players aimed at the body and missed the circle un
 wind-up and bolts are unchanged; incidentally Nova now reaches a Surveyor 0.15 m further. Not
 reviewed by you; one builder const each (`docs/design/slash.md` §5).
 
+**Assumed** — the Welder's numbers:
+
+- 3.0 u/s at room three's pace, scaled as the Surveyor's is. Band 4–7, retreating under 3 and
+  approaching over 8.
+- Tell 0.8 s, with the aim locked at its start.
+- Lane 4 × 0.6 m, clipped at the first blocker, with no attack if the lane is under 2 m.
+- Walk 0.6 s, recovery 0.4 s, cooldown 3.5 s.
+- Seam: 1 damage with a 0.5 s re-hit lock, lasting 3.0 s and dimming over its last half second. It
+  hurts only her.
+- Body: 1 while walking, and it shoves her sideways out of the lane.
+- 4 health. Its turn holds an attack slot for 1.4 s.
+
+Not reviewed by you. They are one table (`docs/design/welder.md`).
+
+**Elites** (decided: in marked rooms, once the beacon is tuned). One machine in a marked room's
+last wave is **marked**. It has twice the health, is 15 % larger, telegraphs 20 % faster, glows
+bright violet and carries its name over it: MARKED BREAKER, MARKED SURVEYOR or MARKED WELDER. Its
+kind comes from the run seed: Breaker, Surveyor or Welder, at even odds. **Assumed** — the numbers;
+the last wave rather than the first; the marked Breaker's lunge running faster so that its wedge
+still covers the same 3.5 m. Size scales the body and the hurtbox, never the hitbox or its wedge.
+Not reviewed by you; `SpawnMods` constants.
+
 **Undecided** — what the machines were: the wreck's crew, the world's own machinery, or the
 AI's earlier attempt. All three fictions below are written to survive either answer.
 
@@ -469,7 +531,8 @@ AI's earlier attempt. All three fictions below are written to survive either ans
 to do, one or two words, no honorifics (Breaker, Surveyor, Foreman; free slots that already fit:
 Cutter, Hauler, Dredger, Rigger, Welder). Not reviewed by you. Cheap to change now, expensive
 after a dozen enemies, items and barks are written against it. In code they are still
-`Brute`/`Sentry`/`Warden`; only the boss shows its name on screen (bar and name card).
+`Brute`/`Sentry`/`Warden`, and the Welder is `Welder`. Only the boss and a marked machine show their
+names on screen.
 
 ## World and fiction
 
@@ -494,6 +557,12 @@ a distance, steps out of reach when crowded, calls a pair of Breakers down when 
 away from it, and when there is nothing left to call it burns three lines across the silt and
 makes the cut itself.
 
+**Welder.** It closed what the Breakers opened. Once the Foreman had taken what was fit to go
+up, the Welder ran a seam along the plate and sealed the hull behind it. There are no hulls left
+to close, so it welds the floor: it paints a line from its feet toward whatever is standing,
+walks it with the torch down, and leaves the seam burning behind it. The ground it has worked
+is the ground to stay off.
+
 **The Fabricator** was the expedition's manufacturing intelligence. Its crew is gone; it
 stayed at the Landing, and it wants to go home. It builds Units from what the shelf gives back
 — you are the latest, its Tender — and sends each down for Core Samples. A lost Unit's samples
@@ -502,10 +571,18 @@ Beacon, which lights at three, tunes at six and fires at twelve to call the flee
 dry, patient, a little too fond of you. Nothing the Foreman has marked has gone up in a long
 time; the Fabricator sends Tenders down to fetch what the Foreman will not pass.
 
-**Undecided** — whether the beacon does what the Fabricator says. It never lies; it chooses
-what to say. Affects: the ending, what answers at twelve. **Assumed** — "the crew went down the
-shaft" is the Fabricator's line, not the doc's fact; the wreck on the shelf may or may not be
-its ship.
+**The answer.** The shelf hears the beacon before anything else does. Once it is lit, the
+Foreman marks rooms again and sends out a Welder; once it is tuned, it marks machines too.
+When it fires it is answered within the minute — the fleet's acknowledgement, on the fleet's
+frequency, from under the shelf rather than the sky. The Fabricator reports exactly that, and
+says nothing about what it thinks sent it.
+
+**Assumed** — what answers at twelve, and that the answer comes on the firing visit. Not
+reviewed by you. Cost to change: seven strings, five of them voiced (`docs/design/beacon_text.md`).
+**Undecided** — what sent the reply, and whether the beacon does what the Fabricator says. It
+never lies; it chooses what to say. Affects: the next arc, and the objective card after firing.
+**Assumed** — "the crew went down the shaft" is the Fabricator's line, not the doc's fact; the
+wreck on the shelf may or may not be its ship.
 
 **Undecided** — the AI that sent the robot (voice, motive, whether it can be trusted),
 what the earlier expedition was, and what lives here. `world-builder` owns these next.
@@ -522,8 +599,8 @@ ruin, copper machinery, violet energy, mint crystal glow (2026-09-28: the floor 
 green to ash so that hue itself says what blocks — everything that stands is metal or rock,
 everything walkable is ash). A static floor lightmap darkens the walls and corners and pools
 light at the centre of every room; each room seeds its own pool and one hero floor seal, and
-dresses its side walls. Red belongs to enemy telegraphs and blue to the player; scenery is
-forbidden those hues. Details: `docs/ART.md`.
+dresses its side walls. Red belongs to enemy harm (telegraphs, and the Welder's burning seam) and blue to the
+player; scenery is forbidden those hues. Details: `docs/ART.md`.
 
 **Assumed** — the specific palette values and the 35° tilt. Reviewed by you only as
 "isometric like Hades"; both are single values in the render script and the camera rig.

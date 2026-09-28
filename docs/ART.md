@@ -66,7 +66,7 @@ Tartarus transposed to sci-fi.
 | Copper machinery / highlight | `#C8762E` / `#F2B15C` (vertical surfaces only) |
 | Energy violet / bright | `#C23BD6` / `#E45BFF` (glowing seams, at most 4% of floor pixels) |
 | Mint glow | `#7BE8A4` (crystals, all 2D lights) |
-| Hazard red | `#FF3A2E` — **the enemy danger wedge only** |
+| Hazard red | `#FF3A2E` — **enemy harm only**: the danger wedges and lanes, and the Welder's burning seam (0.35 alpha with a hot core; `docs/design/welder.md` §1.8) |
 | Player blue | `#7ED0FF` — the slash arc, the aim pointer, the health ring, her energy lines and rim |
 | Player gold | `#B8901E` / `#E0B93A` / `#F5D96A` — her hull, and nothing else: the one warm bright body in a cold pale room (playtest 2026-09-23: slate blended with the enemies) |
 | UI-safe | `#EDE7F2` |
@@ -94,8 +94,8 @@ Saturation is not capped. Instead:
 - Flat surfaces stay within L\* 16–26 (ornament to 34); ornament brighter than L\* 45 covers
   less than 8% of the floor. Vertical surfaces may reach L\* 55 and 60% saturation — they are at the frame's edge,
   not under the fight.
-- Hues 0–25° and 200–230° are forbidden to scenery above 25% saturation: red means a strike is
-  coming, blue means you. The ash floor sits at hue 207 and 21% saturation — under the bar,
+- Hues 0–25° and 200–230° are forbidden to scenery above 25% saturation: red means enemy harm,
+  a strike coming or a seam burning; blue means you. The ash floor sits at hue 207 and 21% saturation — under the bar,
   which is what makes an ash floor legal at all.
 - The wedge at 0.55 alpha is checked against both floor plates; the arc against the brightest
   plate and against copper. Per biome.
@@ -112,8 +112,8 @@ it visibly sits on the floor instead of floating over it.
 ## Layering
 
 Floor −100 · **floor light −95** · decals −90 · wall base shade −85 · cast shadows −80 · contact shadows −79 · danger
-wedge −70 · slash arc −60 · health ring −56 (track) / −55 (fill) · aim pointer −50 · wall geometry −10 · drawn wall faces −9 · **props,
-player, enemies all at 0, sorted by Y** · spores 22 · sparks 25 · health bars 30 · HUD 50 · touch
+wedge −70 · slash arc −60 · health ring −56 (track) / −55 (fill) · aim pointer −50 · wall geometry −10 · drawn wall faces −9 · door box −8 · drawn door panel −7 · door seam −6 · **props,
+player, enemies all at 0, sorted by Y** · spores 22 · **foreground 24** · sparks 25 · door plates 26 · health bars 30 · HUD 50 · touch
 controls 100. Tall props still fade to 45% while the player stands behind them.
 
 ## Shadows
@@ -135,7 +135,21 @@ lip height (0.4 m) at the south so nothing occludes the player. Only void (`#100
 beyond. The artist's north faces, the south lip faces and the **side faces** (`wall_side_w/e`,
 1 × 15 × 3 m, cap panels on the 2 m lattice, copper clamps and straps, one mint lamp each) are
 billboarded over the geometry. A side face is laid only when its render fits the run within 3%
-in both axes; a stand-in is never stretched. **Assumed** — the side face stands 3 m along its
+in both axes; a stand-in is never stretched. The door is a drawn panel too (`door_panel`, 3 × 2.2 m,
+the north wall's material with a slot for the seam): it stands on the collision box's face and
+shrinks from its foot as the box sinks, so it is *not* a billboard — a billboard child of a box
+scaled to nothing leans. The box's front face goes transparent under it. **Assumed** — the
+render's pivot is the front face's bottom edge; one line moves it if not.
+
+**Foreground.** One or two silhouettes (`fg_crystal_cluster`, `fg_cable_loop`) sit on the south
+lip band (y −7.7 to −7.3, one per south corner, |x| 9–12) and draw over the actors at 24, fading
+to 45% when the player is within a metre. They are the only thing in the room drawn over her,
+and they never enter the playable rect. **Assumed** — the band, the one-corner rule and the fade
+reach; three constants in `RoomGenerator` and `RoomBuilder`.
+
+**The Landing's ring is its own.** Pale hub faces (`hub_wall_north_a/b`, `hub_wall_side_w/e`,
+`hub_wall_lip`; cold alloy, one blue lamp per side, no violet, no copper glow) over pale
+geometry (`#C9D5DC` / `#B9C7D0` / `#8E9CA5`); it never falls back to the shelf's green faces. **Assumed** — the side face stands 3 m along its
 whole length, including the south corner the geometry keeps at lip height; if it occludes the
 player there, the fix is a second, shorter render.
 
@@ -210,10 +224,11 @@ she uses D's `idle` and `run`.
 
 **Constructed, not sampled.** UAL2 has no thrust and `Melee_Hook` sampled is a diving haymaker
 that leaves the frame, so the thrusts, the throw's follow-through and both jabs are posed on the rig
-like Nova. A kit bug found on the way: `ual2_rig.taper(axis="Y")` builds inside-out shapes (the
-boots and pauldrons on A–C lack their outline and shade from the wrong side); the lance recomputes
-its own normals, and fixing the taper re-renders every character, so it waits for the
-`FILL_STRENGTH` pass.
+like Nova. A kit bug found on the way and fixed on 2026-09-28: `ual2_rig.taper(axis="Y")` built
+inside-out shapes (a mirror mapping flipped every winding), so the boots and pauldrons on A–F and
+the sword on A–C lacked their outline and shaded from the wrong side. `taper` now recalculates
+normals on the Y axis; the six sheets re-rendered with 0.5–1.4% of pixels changed, pivots and
+rim unchanged (+19.4 measured).
 
 **Nova is constructed, for a reason worth keeping.** The 43-action pack contains exactly one full
 turn — `Sword_Heavy_Combo` frames 26.5–43.4, a measured 360.0° of pelvis yaw with both ends facing
@@ -366,6 +381,69 @@ centreline, so pulling on them moves the hands 0.09 against a 5.9-unit spread. T
 bound now plants two of its eight frames — all six feet driven down, the chassis dropped 45 mm
 onto them — which is what makes it a lunging gait rather than a hop.
 
+**The Welder** ← `crawler` (`oga_welder_rig.py`, `biome1_actor_welder_sheet`), the third enemy
+(`docs/design/welder.md`): it stops, paints a lane from its feet, then walks the lane with the
+torch down and leaves a burning seam. It is the one enemy that breaks the 32-frame contract:
+the attack is **16 frames at `phase_frames` [6, 6, 4]**, so the sheet is **38 frames on 8 × 5,
+2048 × 1440** (the last two cells empty), same 256 × 288 frame, same pivot 0.22390276 through
+`_actor_lift(1.1)`, seed 7403. Clips: idle 6 @ 8 fps · move 8 @ 12 fps · attack 16 · hit 2 @ 15 ·
+death 6 @ 10. The walk phase is animated **in place** (the sidecar's attack clip says
+`in_place: true`): the sheet keeps the footprint pivot fixed and the game carries the body along
+the lane.
+
+- **What the pack forced.** The crawler ships with **live NLA tracks** — three unmuted, holding
+  `idle.001`, the moves and `attack` — that overwrite every sampled pose on the next depsgraph
+  update, so until they are removed every clip renders as the rest pose. Its four `move`
+  variants are one clip four times. And its width is sideways: 0.84 m long and 1.44 m across
+  the legs and their blades, which the facing turn makes *depth* and the tilt makes screen
+  height — the raw crawler is a taller sprite than it is wide.
+- **What is constructed.** Length, where the tilt cannot touch it: a **welding boom** forward
+  (two new bones, `boom` and `torch`, added at the bind; a beam with the crawler's swept blade
+  carried onto it as a fin, a nozzle, the tip) and a **gas tank** laid behind the chassis. Depth
+  squashed to 0.50 and the feet tucked to 0.70, the Breaker's two tools, because here low *is*
+  the read. The idle is one settled pose with an authored weight shift and a two-frame antenna
+  twitch. The move is the crawler's own walk (source 3–40; −34–3 is a standing hold), re-timed
+  so the planted foot travels equal distances per frame: its 1.00 m stride over 4 frames at
+  12 fps stays put under a 3.0 u/s body, the Welder's room-3 pace. The chassis rock and hop are
+  damped to 40% and 60% (the source rocks 30° a step, and with a 1.9 m boom-and-tank on it the
+  walk became a see-saw), and the boom counter-rotates to hold the torch at the idle's reach.
+  The attack is authored whole: the tell lowers the torch onto the floor, **solved per frame**
+  so the tip sits 3 cm off the plate whatever the chassis does; the walk is one gait cycle over
+  six frames with the flame lit and sparks; recover lifts it. Hit is `die3`'s recoil, death is
+  `die1` recentred on its own artwork, like the Surveyor's. The walk's six frames are one full
+  cycle, two 1.0 m steps in 0.6 s, so the legs cover 3.3 u/s against the 6.67 u/s a full lane
+  asks for. It skates at half speed, as welder.md §1.7 rules.
+- **The one warm point** is the torch tip, copper-white `#FFDDB0` (hue 34, above the 0–25 ban)
+  with a `#F2B15C` halo: a pilot glow at rest, full on the weld. There is no copper anywhere
+  else on the machine. The eye is a violet visor line wrapped from the nose back along the
+  camera-facing flank, because a lens on the nose is edge-on to this camera.
+- **Value.** `#787A80`, a gunmetal with a faint violet cast, solved against the **real** light
+  (`solve_steps`' default, not `LEGACY_SOLVE_FILL`) to L\* 28 / 43 / 53. Two first picks were
+  measured and dropped: a cyan steel `#687880` put 2.7% of the sheet in the hue ban (the blue
+  fill turns its shadow step to hue 217 at 29% saturation), and the brief's 30 / 48 / 60 gave a
+  median of 54.5 against the Surveyor's 55.3, so in the mock the two read as one pale grey.
+  Most of this chassis faces the key, so the median tracks the lit step, and bringing that
+  down is the only thing that moves it.
+
+**Measured on the shipped sheet**, against the L\* 19.0 floor: median **48.3 (+29.3)**, p25 39.5,
+p75 51.1; rim band **+20.3** over its own surface at `rim_amount` 0.26; violet **2.73%**; hue ban
+**0.05%**; silhouette **0.64 : 1** height-to-width. The ratio is the median over the six idle
+frames of each frame's opaque box, and by that same measure the Breaker is 0.84 and the
+Surveyor 1.91. Against the same floor the Breaker's median is 52.1 and the Surveyor's 55.3, so
+the three split green-mid / pale / gunmetal by hue and value, and 0.84 / 1.91 / 0.64 by shape.
+Outline 0.012 m. 3 560 triangles. The torch tip rides **0.55–0.65 m ahead of the footprint
+pivot** through the weld.
+
+**The seam** is `biome1_fx_seam_4x0.5`: flat, **4.0 × 0.5 m at 64 PPU (256 × 32)**, pivot
+**(0, 0.5)**, laid from the Welder's feet along +X (`pivot_flat` is an optional field that only
+flat entries read). It is numpy-built and has no outline. Across it: a faint red glow at the
+edges, a charred band, the hazard-red body, and a hot near-white-orange line. Its alpha rises
+toward the centre (red body 0.55, char 0.6, core 0.95), so a runtime fade takes the edges
+first and the core last. Both ends feather over 6 px, so cropping it to the laid length never
+leaves a hard cut. **Assumed**: 0.5 m wide, per the art brief, where welder.md's damage lane is
+0.6 m. Scaling Y by 1.2 at runtime matches the lane; changing it here is a one-number
+re-render. Two live seams are counted in the room roll-up.
+
 **Modular by construction.** In Blender the character is separate objects on one rig —
 `body`, `hair`, `outfit_top`, `outfit_bottom`, `weapon`. `--parts` renders each part alone
 with the others as holdouts, so per-part sheets composite correctly in any stacking order;
@@ -408,10 +486,72 @@ rack, spool, wall lamp with a `mount_z_m` sidecar key so it hangs on the wall, c
 butts into runs). The pale pieces sit above the L\* 55 cap for vertical scenery by design: up
 here she is set apart by hue (gold against cold), not by brightness.
 
-**Known kit bug (2026-09-24, not fixed):** `FILL_STRENGTH` never reaches `toon_material` — it
-multiplies by white — so a top face gets key plus full fill and everything solved with
-`albedo_for_lit` renders bluer than its target. The Landing floor is solved against the real
-light; fixing the graph would re-render every sprite, so it waits for its own pass.
+**The fill light (fixed in code 2026-09-28, at zero byte change):** `FILL_STRENGTH` never
+reached `toon_material` — it multiplied by white — so every sprite was lit by KEY + FILL at 1.0,
+not the 0.30 the constant claimed. That light is the look now and every measured value above was
+tuned against it, so the constant was set to 1.0 (the shipped light), the graph wired so it is
+real, and the whole kit proven byte-identical. `solve_steps` and `albedo_for_lit` now default to
+the real light; the existing hull solves pass `LEGACY_SOLVE_FILL` (0.30) explicitly because their
+targets and rim amounts were measured, not derived. New colours are solved against the real light.
+
+## Biome 1 — the Foreman's yard
+
+The boss arena's variant kit (`Tools/blender/boss_kit.py`, stems `biome1_*yard*`): the yard
+where the Foreman marked and cut what the Breakers opened. It uses the shelf's construction,
+with the same cornice, 0.25 m base course, 2 m panel rhythm, and an 8 m sheet of four 4 m
+plates, in the Foreman's colours. The walls are `biome1.build_wall` with the yard's materials, as the
+Landing's are, so frames and pivots are the shelf's by construction (the audit checks it).
+
+**The rule: red-violet `#EA3A8C` is the only light.** No violet and no mint anywhere, including
+the scenery rim, which is pale copper `#E3C6A4` here where the shelf's is mint. Every glow is
+flat paint at the authored byte, because the toon graph's blue fill would walk a shaded lamp
+toward violet. Hue 332 sits outside the 0–25 band the wedge owns and outside the 265–325 window
+the audit calls violet. The audit gates all of this.
+
+| Role | Colour (rendered) |
+|---|---|
+| Yard plate / alternate / seam | `#262B2F` / `#202529` / `#0E1011` (L\* 17 / 14 / 5; hue 207, 19–22% sat, two steps under the shelf's 21 / 17.6) |
+| Groove lit half / lip / marked plate | `#171A1C` / `#30363B` / `#191D20` (L\* 9 / 22 / 10.5) |
+| Cut line: copper score / measuring ticks / scorch | `#584630` / `#4B3A29` / `#1A1715` (L\* 31 / 26 / 8; the score stays under the 34 cap) |
+| Red-violet lens / hot core / wall spill / floor spill | `#EA3A8C` / `#FFA3D2` / `#53253B` / `#462031` |
+| Dark alloy (albedo `#213A33`: alloy_dark's hue at 43% sat) | lit top L\* 54 (~`#5B8B71`), face 28 (~`#2C483C`) |
+| Copper plating (albedo `#8A6739`) / straps and edges (albedo `#C87D32`) | face L\* 42, hue 32 / L\* 56–58, hue 30 |
+
+The floor sheet has four plates. One carries a long burnt cut broken at its centre seam, one a
+dark stamped hex with a single red-violet tick, one a measured diagonal cut with three ticks
+across it, and one is plain. North runs (`wall_yard_north_a/b`) carry riveted copper plating
+in three staggered courses around the shelf's strap and one red-violet lamp per 8 m on a bay
+reveal; `b` turns one bay into cut plates stacked behind a grille. The side runs
+(`wall_yard_side_w/e`, 128 × 1796, pivot 0.4387, as the shelf's) carry two lamps each, and
+`wall_yard_lip` is plain. Blockers: `yard_plate_stack_a/b` (1.6 × 1.6 × 1.4, cut hull plates with
+copper edges; `a` has the red-violet tick on top, `b` a burnt cut) and `yard_cleaver_rack` (1.2 ×
+3.0 × 2.0, against a side wall, eight heads hung point-down beside the rail and turned 40°,
+because anything hung under a rail running along Y is hidden by it under this camera). Foreground:
+`fg_yard_hook` (2.0 × 0.6 × 1.6, dark crane hook and chain on a jib, casts nothing).
+
+**Measured** (full build, 2026-09-28). Yard plate L\* 17.2 / 14.0, hue 208, median sat 19%.
+Cut lines median L\* 28.3, p99 31.3. Yard ash paint p99.5 is +4.1 over the plate. Red-violet
+covers 0.11% of a 26 × 16 yard floor (0.46 m², budget 4%), all of it at hue 332–334. Blocker
+medians over the yard plate: north walls +24.3 / +15.4, side walls +19.8 / +20.5, lip +36.7,
+stacks +29.7 / +29.7, rack +30.1. Hue deltas are 56–104°. At most 0.03% of any yard piece is
+in the scenery hue ban. The hook's median is L\* 26.2 (foreground band 20–35). The Warden
+sheets measure a median of **+38.4 / +38.2 / +41.1** over the yard plate (gated at +25); the
+lady measures +49.4 and the Breaker +34.9 (printed, not gated). The kit adds 1.9 MB of PNG,
+which puts the environment group at 7694 KB of its 8192 KB budget.
+
+**Assumed**: every hex above; the alloy pulled to 43% saturation (at alloy_dark's 60% a top
+lit to L\* 55 *is* alloy_lit, and the yard read as the shelf); the yard copper turned 2° yellower
+than the shelf's so that, lit by the warm key, it renders above hue 25; two lamps per 15 m side run;
+the rack's eight heads and its symmetric build (it stands against either wall unmirrored). Each
+is a constant in `boss_kit.py`. Not reviewed by you.
+
+**Not wired yet.** `Biome1BossLayout` still lays the shelf's plate, walls and decals; switching
+it to the yard is `gameplay-engineer`/`scene-builder` work. When it switches, the shelf decals
+it lays today sit too bright on this floor: the conduits and cracks peak at +9.5 over the yard
+plate (the paint rule is 8) and the silt sweeps at +20. The audit prints these as WARN. Drop
+them from the yard, or give the yard its own decals.
+
+**Wired (2026-09-28).** `Biome1BossLayout` lays the yard plate, the yard faces on all four runs over geometry in `#3E5A50` / `#213A33` / `#142420`, the shelf's door panel on its one door, two plate stacks where the pillars stood (±8, 0), one cleaver rack flush in the north-west corner, the hook at the south-east lip, and **no floor decals**: the shelf's conduits and cracks measure +9.5 and silt +20 over the yard plate, past the 8 L\* paint rule, so the yard's cut lines are its only paint. Until a piece's render resolves it stands in as geometry in yard colours, never as shelf art; the floor alone falls back to the shelf plate. The boss ambience slot exists and falls back to the shelf bed while empty. **Assumed** — the wall colours, the corner rack, the four corner crystals removed.
 
 ## Light and post
 
