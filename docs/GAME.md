@@ -81,7 +81,10 @@ goes down the stick if there is none. Inside 22.5° of the stick every target co
 ahead and the nearer wins; outside it, angle decides. The lance's **throw** has its own, narrower
 assist: 35° of the stick and the throw's full range, so a line of enemies is threaded through the
 nearest. Nova and the spin are rings and go down the stick. Thrown things now **point where they
-fly** on screen, foreshortened by the camera's tilt, so a spear thrown south reads as a spear. Hits two and three **track** the enemy the
+fly** on screen, foreshortened by the camera's tilt, so a spear thrown south reads as a spear.
+**Assumed** — that foreshortening is exaggerated past the true projection (length ratio cubed:
+straight down the screen 0.55 long rather than 0.82, diagonals 0.76) so the south throw reads
+strongly; one constant, `IsoView.ForeshortenExponent` = 3, and 1 restores the honest view. Hits two and three **track** the enemy the
 chain last struck while it is within 3.5 m and not behind the stick. A chain hit with a target
 takes a **closing step** instead of its short step: fast enough to bring the target to the middle
 of the blade by the end of the swing, leading where it is moving, never more than 1.2 m (1.6 m
