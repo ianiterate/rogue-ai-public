@@ -418,19 +418,28 @@ the lane.
   else on the machine. The eye is a violet visor line wrapped from the nose back along the
   camera-facing flank, because a lens on the nose is edge-on to this camera.
 - **Value.** `#787A80`, a gunmetal with a faint violet cast, solved against the **real** light
-  (`solve_steps`' default, not `LEGACY_SOLVE_FILL`) to L\* 28 / 43 / 53. Two first picks were
-  measured and dropped: a cyan steel `#687880` put 2.7% of the sheet in the hue ban (the blue
-  fill turns its shadow step to hue 217 at 29% saturation), and the brief's 30 / 48 / 60 gave a
-  median of 54.5 against the Surveyor's 55.3, so in the mock the two read as one pale grey.
-  Most of this chassis faces the key, so the median tracks the lit step, and bringing that
-  down is the only thing that moves it.
+  (`solve_steps`' default, not `LEGACY_SOLVE_FILL`) to L\* **24 / 38 / 47**, its frames a step
+  under at 18 / 30 / 40. It sits on the **dark side** of the ladder: three picks were measured
+  and dropped. A cyan steel `#687880` put 2.7% of the sheet in the hue ban (the blue fill turns
+  its shadow step to hue 217 at 29% saturation). The brief's 30 / 48 / 60 gave a median of 54.5
+  against the Surveyor's 55.3. And 28 / 43 / 53 measured 48.3, which in the capture review
+  (2026-09-29) still read as the Surveyor's pale grey. 24 / 38 / 48 measured 43.5, 11.8 under the
+  Surveyor, so the lit step came down one more. Most of this chassis faces the key, so the
+  median tracks the lit step, and bringing that down is the only thing that moves it.
+  **Assumed**: the dark-side placement and the 12 L\* gap to the Surveyor; changing either is
+  one tuple in `oga_welder_rig.py` and a `--only actor_welder_sheet` re-render.
 
-**Measured on the shipped sheet**, against the L\* 19.0 floor: median **48.3 (+29.3)**, p25 39.5,
-p75 51.1; rim band **+20.3** over its own surface at `rim_amount` 0.26; violet **2.73%**; hue ban
-**0.05%**; silhouette **0.64 : 1** height-to-width. The ratio is the median over the six idle
-frames of each frame's opaque box, and by that same measure the Breaker is 0.84 and the
-Surveyor 1.91. Against the same floor the Breaker's median is 52.1 and the Surveyor's 55.3, so
-the three split green-mid / pale / gunmetal by hue and value, and 0.84 / 1.91 / 0.64 by shape.
+**Measured on the shipped sheet**, against the L\* 19.0 floor: median **42.7 (+23.7)**, p25 35.0,
+p75 44.7; rim band **+19.4** over its own surface at `rim_amount` **0.21**. The rim had to come
+down from 0.26: on the darker surface 0.26 measured +23.1, because the lift is added in linear
+light and a dark surface moves further per unit. Violet **2.81%**, hue ban **0.07%**, silhouette
+**0.64 : 1** height-to-width. The ratio is the median over the six idle frames of each frame's
+opaque box, and by that same measure the Breaker is 0.84 and the Surveyor 1.91. Against the
+same floor the Breaker's median is 52.1 and the Surveyor's 55.3, so the three split by hue and
+value (green-mid / pale / dark gunmetal, the Welder 12.6 under the Surveyor) and 0.84 / 1.91 /
+0.64 by shape. The median clears the floor by 23.7, **under the contrast rule's 25**; its p75
+clears it by 25.7. **Assumed**: the ≥ +20 floor the capture review set for this re-solve, where
+the rule says 25. Meeting 25 on the median needs about 44, which is 11.3 from the Surveyor, inside the 12 gap.
 Outline 0.012 m. 3 560 triangles. The torch tip rides **0.55–0.65 m ahead of the footprint
 pivot** through the weld.
 
@@ -516,6 +525,7 @@ the audit calls violet. The audit gates all of this.
 | Red-violet lens / hot core / wall spill / floor spill | `#EA3A8C` / `#FFA3D2` / `#53253B` / `#462031` |
 | Dark alloy (albedo `#213A33`: alloy_dark's hue at 43% sat) | lit top L\* 54 (~`#5B8B71`), face 28 (~`#2C483C`) |
 | Copper plating (albedo `#8A6739`) / straps and edges (albedo `#C87D32`) | face L\* 42, hue 32 / L\* 56–58, hue 30 |
+| South lip: cap (plating albedo) / face (alloy albedo) | cap L\* 47, ~`#8F6739` / face L\* 22, ~`#223932` (the `#213A33` stand-in's byte) |
 
 The floor sheet has four plates. One carries a long burnt cut broken at its centre seam, one a
 dark stamped hex with a single red-violet tick, one a measured diagonal cut with three ticks
@@ -523,7 +533,10 @@ across it, and one is plain. North runs (`wall_yard_north_a/b`) carry riveted co
 in three staggered courses around the shelf's strap and one red-violet lamp per 8 m on a bay
 reveal; `b` turns one bay into cut plates stacked behind a grille. The side runs
 (`wall_yard_side_w/e`, 128 × 1796, pivot 0.4387, as the shelf's) carry two lamps each, and
-`wall_yard_lip` is plain. Blockers: `yard_plate_stack_a/b` (1.6 × 1.6 × 1.4, cut hull plates with
+`wall_yard_lip` is plain: a plating-copper cap over a dark-alloy face, **no green**. It used to
+be the cornice's lit alloy (L\* 55, rendered `#5B8B71`), and a 0.4 m lip is almost all cap under
+this camera, so in the capture it was a band of shelf green (screen ~RGB 50, 94, 77) along the
+yard's south edge. Re-solved 2026-09-29 (`YA_LIP_CAP_L` / `YA_LIP_FACE_L`). Blockers: `yard_plate_stack_a/b` (1.6 × 1.6 × 1.4, cut hull plates with
 copper edges; `a` has the red-violet tick on top, `b` a burnt cut) and `yard_cleaver_rack` (1.2 ×
 3.0 × 2.0, against a side wall, eight heads hung point-down beside the rail and turned 40°,
 because anything hung under a rail running along Y is hidden by it under this camera). Foreground:
@@ -532,12 +545,12 @@ because anything hung under a rail running along Y is hidden by it under this ca
 **Measured** (full build, 2026-09-28). Yard plate L\* 17.2 / 14.0, hue 208, median sat 19%.
 Cut lines median L\* 28.3, p99 31.3. Yard ash paint p99.5 is +4.1 over the plate. Red-violet
 covers 0.11% of a 26 × 16 yard floor (0.46 m², budget 4%), all of it at hue 332–334. Blocker
-medians over the yard plate: north walls +24.3 / +15.4, side walls +19.8 / +20.5, lip +36.7,
-stacks +29.7 / +29.7, rack +30.1. Hue deltas are 56–104°. At most 0.03% of any yard piece is
+medians over the yard plate: north walls +24.3 / +15.4, side walls +19.8 / +20.5, lip +29.2 (was +36.7 in green; re-measured 2026-09-29),
+stacks +29.7 / +29.7, rack +30.1. Hue deltas are 60–163° (the lip's 163, a copper cap against the ash). At most 0.03% of any yard piece is
 in the scenery hue ban. The hook's median is L\* 26.2 (foreground band 20–35). The Warden
 sheets measure a median of **+38.4 / +38.2 / +41.1** over the yard plate (gated at +25); the
 lady measures +49.4 and the Breaker +34.9 (printed, not gated). The kit adds 1.9 MB of PNG,
-which puts the environment group at 7694 KB of its 8192 KB budget.
+which puts the environment group at 7696 KB of its 8192 KB budget.
 
 **Assumed**: every hex above; the alloy pulled to 43% saturation (at alloy_dark's 60% a top
 lit to L\* 55 *is* alloy_lit, and the yard read as the shelf); the yard copper turned 2° yellower
