@@ -464,8 +464,22 @@ above them from their first hit. The player's health is a ring at her feet — b
 orange under 60 %, then a pulsing red-orange under 30 % — because in the fight there is no
 time to look at a screen edge (playtest, 2026-09-21); the top-left bar stays for the number.
 
-Deliberately not yet: a directional wipe on the arc, a red hurt vignette, an arc on enemy
-swings. Each is a small addition once the base read is judged by hand.
+A hit on her reddens the rim of the screen (the enemy red-orange), which drains in about a
+third of a second; while she is critical the rim holds a faint red that breathes with the
+ring. A Breaker's swing — a marked one's too — and each hit of the Foreman's combo draw the
+same arc hers do, in the hostile violet, over the wedge that warned of it and under hers;
+the lanes (Welder, Surveyor, the Foreman's fan and lash) are their own picture and get none.
+Going through a door wipes the screen black from that door's side — the west door left to
+right, the east right to left — and the next room is revealed carrying on the same way; a
+room with one door, the climb, a death and the Landing keep the plain fade.
+
+**Assumed** — the hurt rim is a screen overlay rather than the post-processing vignette
+(cheaper on the web build); its peak 0.55, 0.35 s drain, and 0.18 ± 0.08 critical idle at 3 Hz;
+the enemy arc's violet `#E45BFF`; the wipe on room-to-room transitions only, 0.25 s each way.
+Not reviewed by you. All are numbers or single call sites — cheap to change.
+
+Still deferred: a directional wipe *along* the swing arc itself — it needs per-vertex alpha, which
+the WebGL material path drops (the arc is tinted through `_Color` for that reason).
 
 ## Enemies and pressure
 
@@ -666,10 +680,26 @@ over about a second as the scene changes: the shelf, the Foreman's room, the Lan
 and fabrication ticks above). Music ducks under a voice line and comes back after it. All of it
 is gesture-gated for the web and preloaded.
 
+**The Foreman's yard has its own** loop and its own bed (a heavier trance loop, a steam-boiler
+bed), crossfaded in under the black as the room is built. **The beacon has a voice**: a hum
+under each stage change, and a chime as it fires, before SIGNAL SENT, with the music ducked
+6 dB for the chime's length. **The small moments have cues**: a sample and a repair crystal
+each sound different on pickup (a crystal's heal is not sounded twice), a sting on the frame a
+room is cleared, the door panels sinking (one sound for a pair), a heal by any other route, an
+enemy arriving (one sound per wave), and a heartbeat that loops quietly while she is critical
+and stops the moment she is healed over the line, dies or reaches the Landing. Every cue is
+silent rather than broken when its clips are missing.
+
+Clips are found by file-name prefix, so a new or replaced clip needs no code: `pickupSample`,
+`pickupRepair`, `roomClear`, `doorOpen`, `heal`, `spawn`, `beaconHum`, `beaconFire` under
+`Assets/ThirdParty/Kenney/Audio` or `…/Kenney/AudioPolish`; `heartbeat` there or under
+`Assets/ThirdParty/OpenGameArt/Heartbeat` (the first by name is the loop); `music_boss*` and
+`ambience_boss*` under `Assets/Audio/Music` and `Assets/Audio/Ambience`.
+
 **Assumed** — one loop per place rather than layered or adaptive music; the crossfade and duck
-times; CC0-only sourcing for the tracks (the specific tracks are recorded in
-`Assets/ThirdParty/ATTRIBUTION.md`). Not reviewed by you. **Undecided** — whether the boss gets
-its own track or a variation of the shelf's, and a sound for the beacon firing.
+times; CC0-only sourcing for the tracks and cues (recorded in `Assets/ThirdParty/ATTRIBUTION.md`);
+the heartbeat at 0.3 volume (ceiling 0.35); the beacon's 6 dB duck; which moments get a cue.
+Not reviewed by you. Each is a clip swap or a number — cheap to change.
 
 ---
 
