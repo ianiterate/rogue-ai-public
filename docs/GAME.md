@@ -268,7 +268,7 @@ the run's modules.
 Samples are spent at the Fabricator's bench on **Revisions**, which are permanent. Tier I is
 there from the start: *Gauge* (+2 max health, 1), *Gauge II* (+2 more, 2), *Reserve* (start every run
 holding one module, 2), *Lattice* (dash cooldown −25 %, 2), *Retention* (keep your first module
-between runs, 3). Tier II sits below it, locked and greyed until the beacon is tuned: *Capacitor* (the Special recovers a
+between runs, 3). Tier II sits below it, hidden until the beacon is tuned (then greyed while unaffordable, like any card): *Capacitor* (the Special recovers a
 quarter sooner, 2), *Cladding* (the first hit she takes in each room deals nothing, 4), *Failsafe*
 (once a run, a hit that would destroy her leaves her at 1 health, 3), *Patchwork* (the Foreman drops
 two samples, 4). Each is bought once. They are folded into the next run before its own modules.
@@ -377,7 +377,7 @@ was). Ram stuns rather than deals 2, which was faster and safer than the chain; 
 capped at two a room, which uncapped out-healed an enemy's hits. Edge never touches the
 dash-strike. Retention keeps the rarity the first module was **taken** at, never what a Refit
 made of it. The Refit is a choose-one panel. The tier colours; Common prints no rarity word.
-The four new Fabricator lines are not yet voiced. Not reviewed by you. The numbers are the
+Not reviewed by you. The numbers are the
 sim-designer's; the wording is in `docs/design/depth_text.md`. **Undecided** — whether weapons
 get their own module pools. Blocks nothing yet.
 
