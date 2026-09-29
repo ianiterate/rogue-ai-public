@@ -246,8 +246,22 @@ floating label (REVISIONS NEW, LANCE AFFORDABLE). If she passes one she can affo
 Fabricator points her to it; with nothing to buy, it points at the shaft. **Assumed:** each
 nudge plays once a visit, after eight or twenty seconds, bench before rack, as a caption she
 keeps walking through rather than a line that stops her. **Assumed:** the card holds five
-seconds, and the shaft carries no label of its own. The strings and the rules are in
-`docs/design/landing_guidance.md`; each timing is one constant.
+seconds. The shaft carries one label only, HEAT  NEW, from the arrival that first puts the dial
+on its card until she opens the card with the dial on it; otherwise it has none of its own. The
+strings and the rules are in `docs/design/landing_guidance.md` and `docs/design/pressure_text.md`
+§5; each timing is one constant.
+
+**Heat.** Once she has walked up past the Foreman, the shaft card carries a dial, HEAT 0 to 5.
+The Fabricator runs the shaft hotter to reach further down, and the shelf pushes back. Each step
+adds a condition on top of those below it: **Tempered** (every machine tougher), **Hot shelf**
+(each room fights like the next), **Thin repair** (crystals and Salvage heal less), **Marked
+waves** (a marked machine in every wave past room one), **Foreman's temper** (more health, less
+patience). An ascent at heat *n* pays *n* more samples, as one more pickup where the Foreman
+falls. The dial offers one level past the best heat she has cleared, and a run keeps the heat it
+went down at. The status line names the dialled heat (HEAT 3) before the weapon; the ascent tally
+adds HEAT *n*  +*m* SAMPLES, and FIRST CLEAR AT HEAT *n* when it sets the record. **Assumed** — the
+name, conditions and payout; numbers in `docs/design/pressure.md`, words in
+`docs/design/pressure_text.md`.
 
 The Fabricator speaks — a typewriter line, attack to continue, dash to skip — and is **voiced**:
 every line without a run-specific number has a clip, generated offline with Piper TTS from a
@@ -268,11 +282,21 @@ the run's modules.
 Samples are spent at the Fabricator's bench on **Revisions**, which are permanent. Tier I is
 there from the start: *Gauge* (+2 max health, 1), *Gauge II* (+2 more, 2), *Reserve* (start every run
 holding one module, 2), *Lattice* (dash cooldown −25 %, 2), *Retention* (keep your first module
-between runs, 3). Tier II sits below it, hidden until the beacon is tuned (then greyed while unaffordable, like any card): *Capacitor* (the Special recovers a
+between runs, 3). Tier II sits below it, greyed with NEEDS THE BEACON TUNED until the beacon is tuned: *Capacitor* (the Special recovers a
 quarter sooner, 2), *Cladding* (the first hit she takes in each room deals nothing, 4), *Failsafe*
 (once a run, a hit that would destroy her leaves her at 1 health, 3), *Patchwork* (the Foreman drops
 two samples, 4). Each is bought once. They are folded into the next run before its own modules.
-The bench and the rack together cost 27 samples.
+The bench and the rack together cost 27 samples, before tier III.
+
+**Tier III** opens one Revision at a time: the first ascent at each heat opens one more, and the
+bench says REVISIONS NEW. The heat taught them to the Fabricator, so they are named for what heat
+does to metal: *Flux* (the dash stays untouchable 0.05 s longer, and the dash's shortest cooldown
+rises with it, 5), *Anneal* (+2 max health, each cleared room repairs 1, 8), *Preheat* (Reserve's
+module comes up at least Rare; needs Reserve, 6), *Quench* (the first hit each room that gets past
+Cladding deals half, 6), *Braze* (more doors lead to a Refit, 5). Thirty samples in all, opened in
+that order at heats 1 to 5. The row is off the bench until the shaft carries the dial; after that
+each card shows greyed, CLEAR HEAT *n* in its corner, until its heat is cleared. **Assumed** — the
+five, costs and order, and the row's visibility. A name is permanent once a build sells it.
 
 ### Weapons
 
@@ -330,13 +354,32 @@ would take go to module 70 and Refit 30. The tier II effects and prices are Capa
 Failsafe 3 and Patchwork 4; the brief had 3 for the first two, and they moved because Cladding is
 worth more health per sample than anything else on the bench. Capacitor is read as a shorter Special
 tail, because no Special has a charge. Failsafe is the once-a-run save rather than a faster lance
-return. Tier II is hidden, not greyed, until the beacon is tuned. A player who wins every run fires
+return. Tier II is greyed, not hidden, until the beacon is tuned, so the player sees what the beacon buys. A player who wins every run fires
 the beacon in four to six runs and owns everything in seven to twelve
 (`docs/design/beacon_and_unlocks.md` §3.5). Not reviewed by you. Each is a constant or one
 comparison, but a Revision's name is permanent once a build that sells it ships.
 
-**Undecided** — what samples buy once all 27 are spent. It blocks nothing for the first seven to
-fifteen runs. Affects: the Landing's objective card, and whether the bank still shows.
+Past the first 27, samples buy tier III, and heat opens it: each new level cleared puts one more
+Revision on the bench, and the Foreman pays one more sample per level. **Undecided** — what samples
+buy once tier III is spent too, at about 57.
+
+**Assumed** (the heat, `docs/design/pressure.md`; not reviewed by you):
+- The dial is gated at one past the record, and the status line shows the dialled level. Free now;
+  once shipped without the gate, adding it strands records.
+- Tempered: every machine ×1.3 health, the Foreman too, from heat 1 (Breakers and Surveyors 4,
+  Welders 5, marked machines 8 and 10, the Foreman 39). One constant.
+- Hot shelf: every room one ramp step later, with a fifth step past room 4's for room 4 and the
+  yard (chase 6.0, cooldown 0.7, two attackers, 0.4 s breath). One row.
+- Thin repair: a crystal heals 2, and SALVAGE repairs once a room. Two constants.
+- Marked waves: the marked machine takes a Breaker's place in every wave of rooms 2 to 4, at every
+  beacon stage. A rule change to undo; adding one instead would need a sixth spawn point.
+- Foreman's temper: 45 health (not 58), and every cooldown ×0.85 on top of the phases'. Two
+  constants.
+- The payout: +*n* as one pickup, paid on the kill, tallied on its own row.
+- Tier III: the five effects, their order and costs 5 / 8 / 6 / 6 / 5. The save names Flux, Anneal,
+  Preheat, Quench and Braze are permanent once a build sells them. Preheat raises Reserve's module
+  rather than adding one; Quench acts after Cladding; Braze takes its 15 from Module.
+- The win rates and hit counts in `pressure.md` §2 and §3.6 are illustrative, not measured.
 
 **Inside a run: modules**. When you walk through the exit of the first room, and of every
 module or marked room after it, the world holds and you are offered two of eight upgrades —
@@ -361,7 +404,7 @@ module a step; Plating heals the extra points. Four pairs are **synergies**, liv
 held at any rarity: **Aftershock** (Momentum + Shock: the finisher's stun reaches every enemy
 within 1.5 m of what it hit), **Ram** (Blink + Strike: the strike out of a dash stuns for half a
 second; its damage is unchanged), **Cadence** (Tempo + Blink: a dash mid-chain keeps your place
-in it) and **Salvage** (Reach + Plating: a Special that hits repairs 1, twice a room). A card
+in it) and **Salvage** (Reach + Plating: a Special that hits repairs 1, up to twice a room — once from heat 3). A card
 that would complete one says so on a third line, `+ AFTERSHOCK with MOMENTUM`, and the HUD's
 module row names the live ones after the modules. The Fabricator remarks, once ever, on the
 first two doors, the first marked room cleared, the first pair and the first Refit.
