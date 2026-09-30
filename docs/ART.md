@@ -462,8 +462,11 @@ time because `GameFlow` freezes the clock.
 
 ## Door markers
 
-Six plates, `biome1_marker_{module,refit,hard,boss,sample,repair}`, tell the player what the room
-behind a door pays. Rendered at 1.2 m and drawn at **0.9 m**, they are one family: a framed hex or
+Eight plates — six `biome1_marker_{module,refit,hard,boss,sample,repair}` and, since the Cut,
+`biome2_marker_{descend,operator}` (the yard's way down: chartreuse chevrons, the one chartreuse
+thing in the yard on purpose; the Operator's door: a chamfered octagon, not a hex, so a boss door is
+never mistaken for a reward, with a red-violet band inside the frame and a chartreuse headset glyph)
+— tell the player what the room behind a door pays. Rendered at 1.2 m and drawn at **0.9 m**, they are one family: a framed hex or
 diamond plate with a dark face, a pale frame and one accent — player blue (module), copper (refit),
 red `#FF3050` (a marked room), red-violet (the Foreman), the pickups' own violet and mint (sample,
 repair). Each accent sits on the plate's dark face, never on the wall paint: red on the wall green is
@@ -475,6 +478,70 @@ opens** and draws above actors (`RoomSorting.DoorMarker` 26): the player decides
 open, and must be able to read it then. The pivot is the plate's bottom edge, placed at (door x, y 7),
 the wall's inner face. The seam is lifted from the same face. Renders are byte-reproducible
 (`marker_kit.py`, seeds 9101–9106).
+
+## Biome 2 — the Cut
+
+The crew's coring works under the Foreman's yard: rooms 6–8 and the Operator's camp (room 9).
+It is the shelf's warm counterpart, built by `Tools/blender/biome2.py` (which borrows biome1's rig,
+camera and toon graph, and owns its palette, manifest, `biome2_` prefix, audit tables and an 8 MB
+group of its own: 4.4 MB used) and installed by `Tools/build_assets.sh biome2` to
+`Assets/Art/Biome2/`. The importer already covers all of `Assets/Art`.
+
+**Palette.** The floor is bone dust: plate `#39352E` / alternate `#332F28` / seam `#171513` (L* 22 /
+20 / 7, hue 38, 20 % saturation), the camp plate two steps darker (`#302D26`, L* 19). Paint, stain
+and bevel sit within 5 L* of the plate; the shelf's decals do not, so the Cut has its own (bore
+rings, cable runs, dust drift, core stubs) and the camp lays none. Verticals are basalt (`#5F5C6C`
+faces, `#797583` lit, `#312F38` shade; hue ~250, 10–16 %) and steel (`#5E5B79` / `#7D7798`), which
+clear the plate by 14–33 L* and 114–147° of hue; copper stays vertical-only and is stepped (three
+chosen tones) because a single albedo under the blue fill light slid into the banned red band on a
+leaning face. The crew's tarps are a stepped teal (`#466366`, hue ~180). **Chartreuse `#AFED34`
+(hue 80) is the Cut's only light** — wall lights at `mount_z_m` 1.2, the survey pins, the mast's
+head — replacing mint's role; it covers 0.01 % of a room's floor. No violet in scenery, so violet
+stays the enemies' and the Sample's. The scenery rim is `#E6EDD2`.
+
+**Reads that were measured.** The player at +44 L* over the plate (her gold is only 8° from the
+floor's hue, so value and saturation carry her now, not temperature); Breaker +30, Surveyor +33,
+Welder +20 (below the +25 line: a Cut-floor watch item). The reused HP crystal is +17 and the Sample
++6 on either floor, no worse than the shelf; their hues sit 56° and 156° from chartreuse.
+
+**Kit.** Floor plates main/camp (8 × 8), north walls a/b, lip, side walls w/e (1 × 15), corner, door
+panel, wall light; blockers core rack, winch head, lance stack, spoil heap (round), bore casing
+(round, 2.6 m); inlays a/b; foreground sheave and core boxes; the camp: transmitter mast (5 m),
+tents a/b, crate row, fallen lance rack, camp walls. Renders are byte-reproducible (seeds 9501–9542,
+9601–9625). **Assumed** — every hex; the hue-ban gate now counts a pixel only when its 3 × 3
+neighbourhood is in the ban (the raw figure is printed beside it) because copper-on-basalt edge
+blends pass through the band one pixel wide; the runtime cast-shadow tint is still the shelf's
+cool `#0C1013` on a warm floor.
+
+**The Cut's machines and the Operator.** Same contract as the shelf's enemies (256 × 288, 8 columns,
+32 frames: idle 6, move 8, attack 10, hit 2, death 6; pivots on the shared actor line), gated at
++25 L* over the bone plate, the camp plate *and* the shelf's ash so a Cut machine sent up the shaft
+still reads. **Cutter** (`biome2_actor_cutter_sheet`, KayKit Skeleton_Rogue restyled: a crew-suit
+frame in steel turned 10° toward violet, a cut-down teal tarp hood with chartreuse eye slits, copper
+straps at hue 36 so the rim never lifts them into the red warning band, a 0.47 m hook; 1.30 m,
+thinned 0.80–0.86; median L* 48.9, +26.6 over bone, +27.7 over ash — the thinnest margin in the cast,
+carried by hue 238 against the Breaker's 127 and a 1.59 biped against a 0.84 hexapod; attack [3,4,3]
+with the leap airborne on all four active frames and `in_place: true`, the game moving the body).
+**Rigger** (`biome2_actor_rigger_sheet`, OGA drone with the gun deleted, the rotor flattened at the
+bind, a copper winch spool and a chartreuse charge on a cable; 1.7 m at hover, the Surveyor's
+height, because at 1.5 m it read as a toy against its 1.2 m hurtbox; pale cold gunmetal `#7A8080`,
+median L* 59.1, +36.8 — "dark gunmetal" and +25 over an L* 22 floor cannot both hold, the Warden's
+lesson; attack [4,2,4], the charge released on frame 18; idle, move and hit are authored because
+the pack's idle does not loop and its move leans the wrong way). The **fuse** (`biome2_fx_fuse`,
+lit, and `biome2_fx_fusearmed`, the burn-down ring; 1.6 m flat, centre pivot) is **hazard red**, not
+chartreuse: red is enemy harm and chartreuse is the Cut's scenery light, so a chartreuse fuse would
+read as a lamp. **The Operator** (`biome2_actor_operator_sheet`, `_b`, `_c`: the Warden's contract,
+320 × 352 at 96 PPU, 6 columns, 24/22/20 frames with padding left out of `clips`; 3.97 MB): KayKit
+Skeleton_Mage with the hat gone, a headset and three chartreuse-tipped antennas, a radio pack, the
+staff reworked as a 2.74 m transmitter pole whose lamp is the sweep's dial; 2.40 m; steel lifted to
+steps 30/49/61 as the Warden's was; median L* 50–51, +27 to +33 over both plates; told from the
+Foreman by silhouette (0.90 m² against 1.60, 0.60 m wide against 1.08), hue (blue-violet steel and
+teal against pale grey-green) and light (chartreuse against violet). Clips: idle, move, `sweep` 10
+[3,4,3] (the pole turns one way through the fist, down → forward → up), `field` 8 [3,2,3] (the pole
+planted), `summon`, `blink` (streak ×1.42), `awaken` (Skeletons_Awaken_Standing), hit, death (Death_B,
+the pole tips first). The sprite's sweep turns anticlockwise facing right; a clockwise cast flips
+the sprite. **Assumed** — every value above; the fuse's red; the Rigger's height; the Operator's
+blob shadow overridden to 1.0 × 0.8; the Cutter's run still skates (stride amplified only 1.10).
 
 ## The Landing (hub)
 

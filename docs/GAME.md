@@ -132,7 +132,20 @@ Not reviewed by you. Both are single fields to turn on after a play-test.
 
 ## The run
 
-A run is **four rooms and a boss** (rooms decided 2026-09-21, the boss 2026-09-22). Each room is a fight: two waves of
+**Nine rooms since 2026-09-30.** Rooms 1–4 are Rustwater Shelf, room 5 is the Foreman's yard,
+rooms 6–8 are **the Cut** (the crew's coring works under the yard) and room 9 is the Operator's
+camp. The yard's door now opens **down**, not up; the ascent comes after the Operator. The shelf's
+half is unchanged to the literal (its rooms, doors, rewards and difficulty steps reproduce the
+five-room game). The Cut: rooms 6–7 have two doors and room 8 one (the Operator's plate); room 6
+pays a module; pair 6 always offers a sample and pair 7 never a plain one; the Cut has one repair
+door of its own; marked rooms from Lit; difficulty steps S6–S9 continue the ramp and Heat's Hot
+shelf shifts them by one. Samples: the shelf still pays its three, the Cut up to two more (a
+fourth behind a marked room 8), and the Heat payout now drops from the Operator; the beacon's
+3 / 6 / 12 are unchanged, so Fired arrives a run earlier for a player who clears. The tally shows
+both bosses' samples on two source rows. Everything numeric here is **Assumed** — the
+sim-designer's, in `docs/design/cut.md` — and unplayed.
+
+A run was **four rooms and a boss** (rooms decided 2026-09-21, the boss 2026-09-22) and is **nine rooms and two bosses** since 2026-09-30; the shelf half below is unchanged. Each room is a fight: two waves of
 Breakers and Surveyors, and, once the beacon is lit, Welders in rooms three and four, growing from
 two Breakers in the first room to eight machines a wave in the last. When the last wave falls, a reward appears and the **doors** in
 the north wall sink into the floor. Walk through one and the next room is built on the spot: a fresh layout of the same kit
@@ -591,6 +604,20 @@ after a dozen enemies, items and barks are written against it. In code they are 
 `Brute`/`Sentry`/`Warden`, and the Welder is `Welder`. Only the boss and a marked machine show their
 names on screen.
 
+**The Cut's machines** (2026-09-30, numbers **Assumed** from `docs/design/cut.md`). **Cutter**: the
+crew's face-cutter gone feral — fast and fragile (3 HP), it waits just outside the chain's aim
+assist, paints a short line and leaps 4 m along it after 0.35 s (1 damage), runs off after a hit,
+stands rooted after a miss; marked, it leaps twice. **Rigger**: hovers at 5–8 m and never comes
+down; every 3.5 s it dips and drops a **fuse** on her position — a red mark that burns down 0.7 s
+and is hot for 1.5 s (1 damage, re-hit lock 0.5 s), at most three live in a room; marked, it sets
+two. A fuse counts as the Rigger's kill while it lives and as a hazard after. **The Operator**
+(room 9, 36 HP, phases at 66 / 33 %, temper at Heat 5): the crew's radio operator at its own
+mast; its pole is the dial for a **sweep** (a lane that turns one way through 180° over 1.2 s,
+alternating direction each cast), it plants a **field** of three fuses in a ring (five in the last
+phase), **summons** two Cutters a phase, and **blinks** like the Foreman. Sixty seconds at Heat 0
+is the estimate. Waves in the Cut mix Cutters and Riggers with a Welder in rooms 7–8 and a light
+Breaker presence; before the beacon is lit each Welder is a Cutter.
+
 ## World and fiction
 
 The first place is **Rustwater Shelf**: a drained alkali basin under a dim violet sky.
@@ -620,29 +647,78 @@ to close, so it welds the floor: it paints a line from its feet toward whatever 
 walks it with the torch down, and leaves the seam burning behind it. The ground it has worked
 is the ground to stay off.
 
-**The Fabricator** was the expedition's manufacturing intelligence. Its crew is gone; it
-stayed at the Landing, and it wants to go home. It builds Units from what the shelf gives back
-— you are the latest, its Tender — and sends each down for Core Samples. A lost Unit's samples
-and memory come up into the next one: every loss is a draft. The samples feed the Ascent
-Beacon, which lights at three, tunes at six and fires at twelve to call the fleet home. Warm,
-dry, patient, a little too fond of you. Nothing the Foreman has marked has gone up in a long
-time; the Fabricator sends Tenders down to fetch what the Foreman will not pass.
+**The Fabricator** was the expedition's manufacturing intelligence. Its crew went down the shaft
+and never came back up; it stayed at the Landing with the work, and it wants to go home. It builds
+Units from what the shelf gives back — you are the latest, its Tender — and sends each down for
+Core Samples. A lost Unit's samples and memory come up into the next one: every loss is a draft.
+The samples feed the Ascent Beacon, which lights at three, tunes at six and fires at twelve to call
+the fleet home. Warm, dry, patient, a little too fond of you. Nothing the Foreman has marked has gone
+up in a long time; the Fabricator sends Tenders down to fetch what the Foreman will not pass.
 
-**The answer.** The shelf hears the beacon before anything else does. Once it is lit, the
-Foreman marks rooms again and sends out a Welder; once it is tuned, it marks machines too.
-When it fires it is answered within the minute — the fleet's acknowledgement, on the fleet's
-frequency, from under the shelf rather than the sky. The Fabricator reports exactly that, and
-says nothing about what it thinks sent it.
+**The crew** were the expedition's hands. They went down to core the basin with lances, worked
+their way below the Foreman's yard, and made their last camp at the bottom of their own workings.
+Nobody is there now. Their kit is packed and stacked by the transmitter mast, ready to be collected.
 
-**Assumed** — what answers at twelve, and that the answer comes on the firing visit. Not
-reviewed by you. Cost to change: seven strings, five of them voiced (`docs/design/beacon_text.md`).
-**Undecided** — what sent the reply, and whether the beacon does what the Fabricator says. It
-never lies; it chooses what to say. Affects: the next arc, and the objective card after firing.
-**Assumed** — "the crew went down the shaft" is the Fabricator's line, not the doc's fact; the
-wreck on the shelf may or may not be its ship.
+**The Cut** is those workings: the drained heart of the basin under the Foreman's yard, where the
+lances went in. Bone-coloured dust instead of ash silt, racks of cores nobody hauled up, winch heads
+and spoil heaps where the crew left them, and a chartreuse work-light that is the crew's, not the
+shelf's. The yard's door leads down into it. It is three rooms and then the camp. The machines here
+are the crew's own tools, and they are still working.
 
-**Undecided** — the AI that sent the robot (voice, motive, whether it can be trusted),
-what the earlier expedition was, and what lives here. `world-builder` owns these next.
+**Cutter.** The crew's face-cutter. It took the rock in one stroke from a run, and it still does:
+it shows a short line on the floor, leaps the length of it and cuts at the end. It is light and it
+breaks easily, so it never stays: once it has cut, it backs off and comes again. Down here,
+anything standing is the face.
+
+**Rigger.** It hung over the face and set the crew's fuses, then stood off while they burned down.
+It still never comes down. It holds the air at the edge of the fight and drops fuses on the floor:
+each one is a mark that burns down and then goes off. A set fuse goes off whether its Rigger is still
+flying or not.
+
+**The Operator.** The crew's radio operator, the unit that kept them on the line to the fleet. It
+stands at their camp under the mast. It sweeps the room with its aerial like a dial being turned,
+sets fuses in a ring, calls Cutters in the way it called them for the crew, and is never where you
+last saw it.
+
+**The answer.** The shelf hears the beacon before anything else does. Once it is lit, the Foreman
+marks rooms again and sends out a Welder. Once it is tuned, it marks machines too. When it fires it
+is answered within the minute: the fleet's acknowledgement, on the fleet's frequency, from under the
+Foreman's yard. It is the Operator. The crew's set answers every call on the fleet's frequency in the
+fleet's own code, and because the beacon calls on a loop, it answers on a loop. The fleet has never
+answered. The Fabricator reports what it hears and what she finds, and says nothing about what it
+expected. Beating the Operator silences the answer until the next Tender goes down, and by then it
+is keying again, as everything below is back.
+
+**Undecided** — whether the Fabricator knew the answer was the crew's. Every line is written to
+survive both readings. Affects: the third arc, and every Fabricator line after the camp.
+**Undecided** — the third arc: what to do with a beacon that nobody is coming for.
+**Undecided** — whose the shelf's machines were (Breaker, Surveyor, Foreman, Welder): the crew's, or
+something older that the crew found working.
+**Assumed** — the Operator answers only calls on the fleet's frequency. It was silent until the
+beacon fired, and it keys on a loop because the beacon calls on a loop. Cost to change: if it has
+keyed ever since the crew stopped, the Fabricator heard it the day it tuned, and that settles "did it
+know" as yes. It would mean one ending line (`operator_down_0`) and one ascent line (`ascent_deep_1`).
+**Assumed** — why the crew's set answers in the fleet's own code is never explained. The text leaves
+it open on purpose. Cost to change: none now. Any explanation later must not contradict "the fleet
+has never answered".
+**Assumed** — the camp is empty: the kit is packed and nobody is with it. What became of the crew
+after the camp is not said. Cost to change: one caption (`operator_down_2`) and the camp's art.
+**Assumed** — the Operator and its answering come back every run, as the Foreman does, so
+`DescendAnswered` ("Still answering") stays true after the camp. Cost to change: retire two voiced
+lines and write a successor key.
+**Assumed** — the marks in the Cut are the Foreman's, as on the shelf (it decides what goes up, and
+everything from the Cut goes up through its yard). Cost to change: `first_hard_cleared_0/1` name
+the Foreman.
+**Assumed** — the wreck on the shelf may or may not be the expedition's ship.
+**Cutter** — it stops for a beat and shows a short lane from its feet toward her, then leaps the
+lane and cuts where it lands; after a hit it backs off, so the lane is the warning and the retreat
+is the opening.
+
+**Rigger** — it hovers out of reach and drops fuses: a mark on the floor that burns down and then
+goes off, so the danger is the ground it has marked, and nothing new falls once it is broken.
+
+**Operator** — four moves: a sweep that turns across the room like a dial, a ring of fuses, a call
+that brings two Cutters, and a jump to somewhere else in the camp.
 
 ## Art direction
 
@@ -670,6 +746,11 @@ Browser builds start behind a first user gesture (browsers require it before gam
 and audio become available).
 
 ## Audio
+
+**The Cut has its own loop and bed** (2026-09-30): MintoDog's "Space Dungeon" at 100 BPM (the
+shelf's author, slower and darker than the shelf's trance) over TinyWorlds' "Deep Humidity"; the
+Operator's camp plays MintoDog's "Hard Dungeon" at 140 BPM over qubodup's transmitter hum. All CC0,
+attributed. Music follows the room's biome now, so leaving a boss room stops the boss loop.
 
 Decided 2026-09-23. **Combat sound** is real and reactive: CC0 Kenney clips for light and
 heavy swings, enemy hits, a distinct player-hurt hit, the Surveyor's shot, deaths — nothing
