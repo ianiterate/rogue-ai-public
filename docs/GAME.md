@@ -474,7 +474,7 @@ right, the east right to left — and the next room is revealed carrying on the 
 room with one door, the climb, a death and the Landing keep the plain fade.
 
 **Assumed** — the hurt rim is a screen overlay rather than the post-processing vignette
-(cheaper on the web build); its peak 0.55, 0.35 s drain, and 0.18 ± 0.08 critical idle at 3 Hz;
+(cheaper on the web build); its peak 0.55, 0.35 s drain, and a muted 0.09 ± 0.03 critical idle breathing at 1.2 Hz (was 0.18 ± 0.08 at 3 Hz; the user found the flash too constant);
 the enemy arc's violet `#E45BFF`; the wipe on room-to-room transitions only, 0.25 s each way.
 Not reviewed by you. All are numbers or single call sites — cheap to change.
 
