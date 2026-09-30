@@ -43,6 +43,21 @@ a run naming the buttons for your scheme; each item disappears once you have use
 the line goes away two seconds after all three have been. It comes back, shortened, on the
 death card.
 
+**First run.** The very first run of a save (never died, never walked up, never gone down the
+shaft) teaches the four buttons one card at a time, from playtest feedback that the plunge into
+combat was confusing (2026-10-01). A card in the upper middle of the screen names the action and
+the button, with your layout's letters and your scheme's words, and goes the moment you do it:
+**MOVE** (the Breakers stay asleep until you have walked a metre), **SLASH** (still asleep until
+you swing; the run's objective line follows it), **DODGE THE RED WEDGE** (the world stops on the
+first Breaker's wind-up with the wedge on the floor; the dash you press at the card is the dash
+you get, and if that swing still catches you the next wind-up asks again), and **SPECIAL** (the
+world stops once more as the dodge comes off; the press is the Special). The hint line stays down
+for the whole of it and does not come back that session. A run that ends before SPECIAL ends the
+lesson; nothing asks again. **Assumed** — all of it: first run only, no skip (each step is
+seconds), these four steps in this order, the centre card lifted clear of her rather than a
+panel, no Fabricator voice, and existing saves never seeing it. Each is cheap to change: the
+rules and words are `Tutorial` / `ControlHints.Tutorial*`, the playing is `TutorialDirector`.
+
 **Two attacks.** The **Attack** is the three-hit chain (below). The **Special** is the
 weapon's (see Weapons). With the sword it is *Nova*: a
 full circle of blade around the character that hits everything within about two units once,
@@ -263,6 +278,14 @@ seconds. The shaft carries one label only, HEAT  NEW, from the arrival that firs
 on its card until she opens the card with the dial on it; otherwise it has none of its own. The
 strings and the rules are in `docs/design/landing_guidance.md` and `docs/design/pressure_text.md`
 §5; each timing is one constant.
+
+On the **first climb**, until she has gone back down the shaft once, the card is replaced by the
+same kind of card the first run uses, one at a time over a room she can still walk: **WALK TO
+REVISIONS** (the bench, east), **OPEN IT** at the bench, **THE ARMOURY** only if the lance is
+already affordable, and **DESCEND** (the shaft, south); opening the shaft card finishes it from
+any step. No nudges while it runs; the card goes while a panel is up and comes back when it
+closes. **Assumed** — the steps, skipping the rack when she cannot buy there, and that a tab
+closed mid-lesson asks again next climb.
 
 **Heat.** Once she has walked up past the Foreman, the shaft card carries a dial, HEAT 0 to 5.
 The Fabricator runs the shaft hotter to reach further down, and the shelf pushes back. Each step
